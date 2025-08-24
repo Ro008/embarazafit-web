@@ -1,0 +1,96 @@
+/*
+ * Importamos la fuente de Google Fonts.
+ */
+ @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+ /*
+  * Estilos generales para toda la página.
+  */
+ :root {
+     --beige: #eef4d4ff;
+     --rusty-red: #d64550ff;
+     --gunmetal: #1c2826ff;
+     --baby-powder: #f7f7f2ff;
+ }
+ 
+ body {
+     font-family: 'Poppins', sans-serif;
+     margin: 0;
+     padding: 0;
+     background-color: var(--beige);
+     color: var(--gunmetal);
+ }
+ 
+ /*
+  * Estilos para el encabezado de la página.
+  */
+ header {
+     text-align: center;
+     padding: 40px 20px;
+     background-color: var(--rusty-red);
+ }
+ 
+ header h1 {
+     font-size: 2.5em;
+     color: #fff;
+     margin-bottom: 5px;
+ }
+ 
+ header p {
+     font-size: 1.2em;
+     color: #fff;
+     margin-top: 0;
+ }
+ 
+ /*
+  * Estilos para las secciones principales de la web.
+  */
+ main {
+     max-width: 800px;
+     margin: 20px auto;
+     padding: 0 20px;
+ }
+ 
+ section {
+     background-color: var(--baby-powder);
+     padding: 30px;
+     margin-bottom: 20px;
+     border-radius: 8px;
+     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+ }
+ 
+ section h2 {
+     font-size: 1.8em;
+     color: var(--gunmetal);
+     border-bottom: 2px solid var(--rusty-red);
+     padding-bottom: 10px;
+     margin-bottom: 15px;
+ }
+ 
+ /*
+  * Estilos para el botón de descarga.
+  */
+ .btn-descarga {
+     display: inline-block;
+     padding: 12px 25px;
+     background-color: var(--rusty-red);
+     color: #fff;
+     text-decoration: none;
+     border-radius: 50px;
+     font-weight: bold;
+     transition: background-color 0.3s ease;
+ }
+ 
+ .btn-descarga:hover {
+     background-color: #b33941; /* Un tono más oscuro del rojo */
+ }
+ 
+ /*
+  * Estilos para el pie de página.
+  */
+ footer {
+     text-align: center;
+     padding: 20px;
+     background-color: var(--gunmetal);
+     color: #fff;
+ }
