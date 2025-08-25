@@ -6,7 +6,6 @@
     <title>Embarazafit - Proteína y mancuernas</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-<!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-JH42E8BZQK"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -27,7 +26,8 @@
                 <h2>¿Te han diagnosticado diabetes gestacional? Mi menú semanal es para ti.</h2>
                 <div class="acordeon-content">
                     <p>Recibir el diagnóstico de diabetes gestacional puede ser abrumador. Yo pasé por ahí y sé lo que se siente. Por eso, he creado una guía gratuita con el menú semanal que a mí me ayudó a controlar mis niveles de glucosa de forma deliciosa y sin sentirme limitada.</p>
-                    <a href="https://raw.githubusercontent.com/Ro008/embarazafit-web/main/Menu-diabetes-gestacional.pdf" class="btn-descarga" id="btn-descarga-menu" target="_blank">Descargar mi guía gratuita</a>                </div>
+                    <a href="https://raw.githubusercontent.com/Ro008/embarazafit-web/main/Menu-diabetes-gestacional.pdf" class="btn-descarga" id="btn-descarga-menu" target="_blank">Descargar mi guía gratuita</a>
+                </div>
             </div>
     
             <div class="column">
@@ -61,20 +61,10 @@
         botonesAcordeon.forEach(function(boton) {
             boton.addEventListener('click', function() {
                 var contenido = this.nextElementSibling;
-                
                 contenido.classList.toggle('active');
             });
         });
-    </script>
-    <script>
-        var botonesAcordeon = document.querySelectorAll('.column h2');
-        botonesAcordeon.forEach(function(boton) {
-            boton.addEventListener('click', function() {
-                var contenido = this.nextElementSibling;
-                contenido.classList.toggle('active');
-            });
-        });
-        // NUEVO CÓDIGO para registrar la descarga en Google Analytics
+
         var botonDescarga = document.getElementById('btn-descarga-menu');
         if (botonDescarga) {
             botonDescarga.addEventListener('click', function() {
