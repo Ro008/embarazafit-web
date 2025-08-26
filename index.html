@@ -94,13 +94,12 @@
 
         // Script para el banner deslizable en móviles
         window.onload = function() {
-            // El banner aparecerá 2 segundos después de que la página se cargue
             setTimeout(function() {
                 var banner = document.getElementById('banner-movil');
                 if (banner) {
                     banner.classList.add('visible');
                 }
-            }, 2000); 
+            }, 500); 
         };
 
         // Evento para cerrar el banner
