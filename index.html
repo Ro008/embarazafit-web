@@ -8,12 +8,17 @@
 </head>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-JH42E8BZQK"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-JH42E8BZQK');
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-JH42E8BZQK');
 </script>
 <body>
+
+    <div class="banner-movil" id="banner-movil">
+        <p>¿Diabetes gestacional? 👉 <a href="https://raw.githubusercontent.com/Ro008/embarazafit-web/main/Menu-diabetes-gestacional.pdf" class="btn-descarga-banner" id="btn-descarga-banner-link" target="_blank">Descarga mi menú gratis</a></p>
+        <button class="cerrar-banner" id="cerrar-banner">×</button>
+    </div>
 
     <header>
         <h1>EmbarazaFit</h1>
@@ -29,7 +34,7 @@
                     <a href="https://raw.githubusercontent.com/Ro008/embarazafit-web/main/Menu-diabetes-gestacional.pdf" class="btn-descarga" id="btn-descarga-menu" target="_blank">Descargar mi guía gratuita</a>
                 </div>
             </div>
-    
+        
             <div class="column">
                 <h2>Pack Suplementos</h2>
                 <div class="acordeon-content">
@@ -65,6 +70,7 @@
             });
         });
 
+        // Evento de Google Analytics para el botón de descarga principal
         var botonDescarga = document.getElementById('btn-descarga-menu');
         if (botonDescarga) {
             botonDescarga.addEventListener('click', function() {
@@ -72,6 +78,39 @@
                     'event_category': 'descargas',
                     'event_label': 'menu_diabetes'
                 });
+            });
+        }
+        
+        // Evento de Google Analytics para el nuevo botón del banner
+        var botonDescargaBanner = document.getElementById('btn-descarga-banner-link');
+        if (botonDescargaBanner) {
+            botonDescargaBanner.addEventListener('click', function() {
+                gtag('event', 'descarga_menu_gratuito_banner', {
+                    'event_category': 'descargas',
+                    'event_label': 'menu_diabetes_banner'
+                });
+            });
+        }
+
+        // Script para el banner deslizable en móviles
+        window.onload = function() {
+            // El banner aparecerá 2 segundos después de que la página se cargue
+            setTimeout(function() {
+                var banner = document.getElementById('banner-movil');
+                if (banner) {
+                    banner.classList.add('visible');
+                }
+            }, 2000); 
+        };
+
+        // Evento para cerrar el banner
+        var botonCerrar = document.getElementById('cerrar-banner');
+        if (botonCerrar) {
+            botonCerrar.addEventListener('click', function() {
+                var banner = document.getElementById('banner-movil');
+                if (banner) {
+                    banner.classList.remove('visible');
+                }
             });
         }
     </script>
