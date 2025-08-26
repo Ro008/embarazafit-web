@@ -279,3 +279,10 @@
         display: none;
     }
 }
+
+/* Estilos para el aviso de afiliado */
+.afiliado-disclaimer {
+    font-size: 0.8em;
+    color: #999;
+    margin-top: 10px;
+}
