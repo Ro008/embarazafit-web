@@ -349,3 +349,22 @@ html {
   text-decoration: none;
   color: inherit;
 }
+
+/* Nuevo estilo para el contenido del footer */
+.footer-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Estilo para el enlace de Instagram */
+.social-link {
+  color: var(--pale-sand);
+  font-size: 1.5em;
+  transition: color 0.3s ease;
+}
+
+.social-link:hover {
+  color: var(--vibrant-coral);
+}
