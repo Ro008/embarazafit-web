@@ -1,5 +1,11 @@
 ---
 import '../styles.css';
+
+interface Props {
+	title?: string;
+}
+
+const { title = 'Embarazafit' } = Astro.props;
 ---
 
 <!DOCTYPE html>
@@ -7,7 +13,7 @@ import '../styles.css';
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Embarazafit - Proteína y mancuernas</title>
+    <title>{title}</title>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
@@ -16,7 +22,6 @@ import '../styles.css';
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap"
     />
-
     <script
       async
       src="https://www.googletagmanager.com/gtag/js?id=G-JH42E8BZQK"
@@ -31,10 +36,25 @@ import '../styles.css';
     </script>
   </head>
   <body>
+    <header class="main-header" id="main-header">
+      <a href="/" class="home-link">
+        <h1>EmbarazaFit</h1>
+        <p>Ni antojos ni cuentos: 🥩 Proteína y mancuernas 🏋️‍♀️</p>
+      </a>
+      <nav class="main-nav" id="main-nav">
+        <ul>
+          <li><a href="/fuentes">Fuentes</a></li>
+        </ul>
+      </nav>
+      <button class="hamburger" id="hamburger">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+    </header>
     <main>
       <slot />
     </main>
-
     <footer>
       <div class="footer-content">
         <p>&copy; 2025 Embarazafit. Todos los derechos reservados.</p>
@@ -62,5 +82,238 @@ import '../styles.css';
       type="text/javascript"
       src="https://assets.ipzmarketing.com/assets/signup_form/v1.js"
     ></script>
+
+    <script>
+      // Lógica para el efecto sticky del menú
+      document.addEventListener("DOMContentLoaded", function () {
+        const header = document.getElementById("main-header");
+        if (header) {
+          window.addEventListener("scroll", function () {
+            if (window.scrollY > 50) {
+              header.classList.add("scrolled");
+            } else {
+              header.classList.remove("scrolled");
+            }
+          });
+        }
+      });
+
+      // Lógica para el menú de hamburguesa
+      const hamburger = document.getElementById("hamburger");
+      const navMenu = document.getElementById("main-nav");
+
+      hamburger.addEventListener("click", () => {
+        navMenu.classList.toggle("active");
+        hamburger.classList.toggle("active");
+      });
+    </script>
   </body>
 </html>
+
+<style>
+  /*
+	 * ESTILOS DEL ENCABEZADO
+	 */
+  .main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--deep-teal);
+    color: var(--pale-sand);
+    padding: 20px 40px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .main-header .home-link {
+    text-decoration: none;
+    color: var(--pale-sand);
+  }
+
+  .main-header h1 {
+    margin: 0;
+    font-size: 1.8em;
+  }
+
+  .main-header p {
+    margin: 0;
+    font-size: 0.9em;
+    opacity: 0.8;
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  .main-header.scrolled {
+    padding: 15px 40px;
+    background-color: rgba(50, 163, 152, 0.75);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .main-header.scrolled .home-link p {
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+  }
+
+  .main-nav ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 20px;
+  }
+
+  .main-nav a {
+    text-decoration: none;
+    color: var(--pale-sand);
+    font-weight: bold;
+    transition: color 0.3s ease;
+  }
+
+  .main-nav a:hover {
+    color: var(--vibrant-coral);
+  }
+
+  /*
+	 * ESTILOS DEL HAMBURGER Y MENÚ MÓVIL
+	 */
+  .hamburger {
+    display: none; /* Por defecto oculto en escritorio */
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    z-index: 1001;
+  }
+
+  .hamburger .bar {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: var(--pale-sand);
+    margin: 5px auto;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .main-nav.active {
+    transform: translateX(0);
+  }
+
+  /* Animación del ícono de hamburguesa a "X" */
+  .hamburger.active .bar:nth-child(2) {
+    opacity: 0;
+  }
+  .hamburger.active .bar:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+  .hamburger.active .bar:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+
+  /*
+	 * Media Query para móviles
+	 */
+  @media (max-width: 768px) {
+    .main-header {
+      position: relative; /* Desactivamos el sticky en móviles */
+      padding: 15px 20px;
+    }
+
+    .main-header .home-link p {
+      display: none; /* Ocultamos la frase en móviles */
+    }
+
+    .main-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(46, 48, 51, 0.95);
+      backdrop-filter: blur(10px);
+      transform: translateX(100%);
+      transition: transform 0.4s ease-in-out;
+      z-index: 999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .main-nav ul {
+      flex-direction: column;
+      gap: 30px;
+      font-size: 1.5em;
+    }
+
+    .main-nav a {
+      color: var(--pale-sand);
+    }
+
+    .hamburger {
+      display: block;
+    }
+  }
+
+  /*
+	 * ESTILOS DEL FOOTER
+	 */
+  footer {
+    background-color: var(--gunmetal);
+    color: var(--pale-sand);
+    padding: 40px 20px;
+    font-size: 0.9em;
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .footer-content p {
+    margin: 0;
+  }
+
+  .social-link {
+    color: var(--pale-sand);
+    font-size: 1.5em;
+    transition: color 0.3s ease;
+  }
+
+  .social-link:hover {
+    color: var(--vibrant-coral);
+  }
+
+  .afiliado-disclaimer {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    opacity: 0.5;
+  }
+
+  @media (min-width: 768px) {
+    footer {
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-content {
+      flex-direction: row;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 800px;
+    }
+
+    .afiliado-disclaimer {
+      margin-top: 10px;
+    }
+  }
+</style>

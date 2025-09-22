@@ -1,0 +1,158 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Fuentes Diabetes Gestacional | Embarazafit">
+  <section class="fuentes-page">
+    <div class="fuentes-content">
+      <h2>Fuentes de información sobre Diabetes Gestacional</h2>
+      <p class="intro-text">
+        En esta sección, comparto las fuentes de información que he consultado
+        para mi experiencia y contenido sobre diabetes gestacional. Mi objetivo
+        es ofrecer información fiable y basada en la evidencia. Siéntete libre
+        de consultarlas para profundizar en el tema.
+      </p>
+      <div class="fuentes-container">
+        <div class="fuente-card">
+          <h3>Podcast "Diabetes gestacional I con Paula Lavandeira"</h3>
+          <p class="fuente-descripcion">
+            Episodio de podcast que aborda la diabetes gestacional centrándose
+            en la evidencia científica, los tipos de cribado y las alternativas
+            de pruebas disponibles.
+          </p>
+          <a
+            href="https://open.spotify.com/episode/0s80XaxNC98SWb0FyBiDoy"
+            class="btn-fuente"
+            >Ir a la fuente</a
+          >
+        </div>
+        <div class="fuente-card">
+          <h3>Entrevista con la matrona Paula Lavandeira</h3>
+          <p class="fuente-descripcion">
+            Entrevista que busca desmitificar los riesgos de la diabetes
+            gestacional, centrándose en el impacto en el embarazo y el bebé, y
+            cuestionando la evidencia detrás de las prácticas actuales.
+          </p>
+          <a
+            href="https://www.youtube.com/watch?v=nokyRZ3coHY&ab_channel=myBabymyBirth-Hipnoparto"
+            class="btn-fuente"
+            >Ir a la fuente</a
+          >
+        </div>
+        <div class="fuente-card">
+          <h3>Suplementos para la sensibilidad a la insulina</h3>
+          <p class="fuente-descripcion">
+            Podcast que explora suplementos como la berberina y el vinagre de
+            sidra de manzana, destacando su eficacia para mejorar la
+            sensibilidad a la insulina y controlar el azúcar en sangre.
+          </p>
+          <a
+            href="https://www.youtube.com/watch?v=GcCL4NxmMVc&ab_channel=FoundMyFitnessClips"
+            class="btn-fuente"
+            >Ir a la fuente</a
+          >
+        </div>
+        <div class="fuente-card">
+          <h3>¿Qué harina es mejor para mi diabetes?</h3>
+          <p class="fuente-descripcion">
+            Artículo que clasifica las harinas en cuatro grupos (cereales,
+            pseudocereales, legumbres y fuentes grasas) y ofrece pautas para
+            elegir opciones de menor índice glucémico y manejar mejor la
+            glucemia.
+          </p>
+          <a
+            href="https://diabify.com/blog/harinas-diabeticos-integrales-bajas-hidratos/"
+            class="btn-fuente"
+            >Ir a la fuente</a
+          >
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .fuentes-page {
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+    border-radius: 0;
+    background-color: transparent;
+  }
+
+  .fuentes-content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .fuentes-content h2 {
+    color: var(--gunmetal);
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  .intro-text {
+    text-align: center;
+    font-size: 1.1em;
+    color: var(--dark-charcoal);
+    margin-bottom: 40px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .fuentes-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+  }
+
+  .fuente-card {
+    background-color: var(--pale-sand);
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .fuente-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  }
+
+  .fuente-card h3 {
+    font-size: 1.5em;
+    color: var(--deep-teal);
+    margin-top: 0;
+    margin-bottom: 10px;
+  }
+
+  .fuente-descripcion {
+    font-size: 1em;
+    line-height: 1.6;
+    color: var(--dark-charcoal);
+    flex-grow: 1;
+  }
+
+  .btn-fuente {
+    display: inline-block;
+    padding: 12px 25px;
+    margin-top: 20px;
+    background-color: var(--vibrant-coral);
+    color: var(--pale-sand);
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    text-align: center;
+    transition: background-color 0.3s ease;
+  }
+
+  .btn-fuente:hover {
+    background-color: var(--rusty-red);
+  }
+</style>

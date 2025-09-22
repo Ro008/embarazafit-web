@@ -1,0 +1,94 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Fuentes | Embarazafit">
+  <main>
+    <section>
+      <h2>Mis fuentes de información</h2>
+      <p class="intro-text-fuentes">
+        Aquí puedes encontrar las fuentes de información que consulto para crear
+        mi contenido. No soy ni nutricionista ni entrenadora personal, pero soy
+        una curiosa empedernida y todo lo que comparto está basado en evidencia
+        científica y en fuentes rigurosas. Explora las distintas secciones para
+        profundizar en los temas que te interesen.
+      </p>
+
+      <div class="sources-index-container">
+        <a href="/fuentes-diabetes-gestacional" class="source-category-card">
+          <h3>Diabetes gestacional</h3>
+          <p>Información y recursos sobre la diabetes durante el embarazo.</p>
+        </a>
+
+        <a href="/proximamente" class="source-category-card coming-soon">
+          <h3>Embarazo y deporte de fuerza (próximamente)</h3>
+          <p>Guías y estudios sobre el ejercicio de fuerza en el embarazo.</p>
+        </a>
+
+        <a href="/proximamente" class="source-category-card coming-soon">
+          <h3>Tu parto respetado (próximamente)</h3>
+          <p>Información y recursos para un parto respetado.</p>
+        </a>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  .intro-text-fuentes {
+    text-align: center;
+    font-size: 1.1em;
+    color: var(--dark-charcoal);
+    margin-bottom: 40px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .sources-index-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
+  }
+
+  .source-category-card {
+    display: block;
+    background-color: var(--pale-sand);
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    text-decoration: none;
+    color: var(--dark-charcoal);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .source-category-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  }
+
+  .source-category-card h3 {
+    color: var(--deep-teal);
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 1.3em;
+  }
+
+  .source-category-card p {
+    font-size: 0.95em;
+    line-height: 1.5;
+    margin-bottom: 0;
+  }
+
+  .source-category-card.coming-soon {
+    opacity: 0.7;
+    pointer-events: none; /* Deshabilita el clic */
+    background-color: #f0f0f0;
+    border: 1px dashed var(--dusty-rose);
+  }
+
+  .source-category-card.coming-soon h3 {
+    color: var(--dusty-rose);
+  }
+</style>

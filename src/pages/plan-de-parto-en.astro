@@ -3,559 +3,632 @@ import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout title="Birth Plan | Embarazafit">
-  <main>
-    <div class="language-switcher">
-      <a href="/plan-de-parto" class="lang-link active" data-lang="es">ES</a>
-      /
-      <a href="/plan-de-parto-en" class="lang-link" data-lang="en">EN</a>
-    </div>
+  <div class="language-switcher">
+    <a href="/plan-de-parto" class="lang-link active" data-lang="es">ES</a>
+    /
+    <a href="/plan-de-parto-en" class="lang-link" data-lang="en">EN</a>
+  </div>
 
-    <section class="birth-plan-container">
-      <h2>My Birth Plan</h2>
+  <section class="birth-plan-container">
+    <h2>My Birth Plan</h2>
 
-      <p class="intro-text">
-        We have completed this birth plan in accordance with our wishes for the
-        birth of our child, after attending prenatal childbirth preparation
-        sessions and having been informed of our options. Our choices were made
-        jointly, thoughtfully, and based on guidelines from recognized
-        organizations promoting natural childbirth and breastfeeding. We would
-        like to collaborate with you to ensure a calm and safe birth experience
-        that supports the physical and emotional health of our child. We are
-        happy to discuss any questions or concerns you may have.
-      </p>
+    <p class="intro-text">
+      We have completed this birth plan in accordance with our wishes for the
+      birth of our child, after attending prenatal childbirth preparation
+      sessions and having been informed of our options. Our choices were made
+      jointly, thoughtfully, and based on guidelines from recognized
+      organizations promoting natural childbirth and breastfeeding. We would
+      like to collaborate with you to ensure a calm and safe birth experience
+      that supports the physical and emotional health of our child. We are happy
+      to discuss any questions or concerns you may have.
+    </p>
 
-      <form id="birthPlanForm">
-        <div id="personal-info-section" class="plan-section">
-          <h3>Personal Information</h3>
-          <div class="input-group">
-            <label for="mother-name">Mother's Name:</label>
-            <input type="text" id="mother-name" name="mother-name" />
-          </div>
-          <div class="input-group">
-            <label for="name-pronunciation">Name Pronunciation:</label>
-            <input
-              type="text"
-              id="name-pronunciation"
-              name="name-pronunciation"
-              placeholder="e.g. ro-SEE-oh"
+    <form id="birthPlanForm">
+      <div id="personal-info-section" class="plan-section">
+        <h3>Personal Information</h3>
+        <div class="input-group">
+          <label for="mother-name">Mother's Name:</label>
+          <input type="text" id="mother-name" name="mother-name" />
+        </div>
+        <div class="input-group">
+          <label for="name-pronunciation">Name Pronunciation:</label>
+          <input
+            type="text"
+            id="name-pronunciation"
+            name="name-pronunciation"
+            placeholder="e.g. ro-SEE-oh"
+          />
+        </div>
+        <div class="input-group">
+          <label for="hospital">Hospital:</label>
+          <input type="text" id="hospital" name="hospital" />
+        </div>
+        <div class="input-group">
+          <label for="gynecologist">Gynecologist:</label>
+          <input type="text" id="gynecologist" name="gynecologist" />
+        </div>
+        <div class="input-group">
+          <label for="pediatrician">Pediatrician:</label>
+          <input type="text" id="pediatrician" name="pediatrician" />
+        </div>
+      </div>
+
+      <div id="delivery-type-section" class="plan-section">
+        <h3>Type of Delivery</h3>
+        <div class="option-list">
+          <label
+            ><input
+              type="checkbox"
+              name="delivery"
+              value="Natural birth without medical interventions"
             />
-          </div>
-          <div class="input-group">
-            <label for="hospital">Hospital:</label>
-            <input type="text" id="hospital" name="hospital" />
-          </div>
-          <div class="input-group">
-            <label for="gynecologist">Gynecologist:</label>
-            <input type="text" id="gynecologist" name="gynecologist" />
-          </div>
-          <div class="input-group">
-            <label for="pediatrician">Pediatrician:</label>
-            <input type="text" id="pediatrician" name="pediatrician" />
-          </div>
-        </div>
-
-        <div id="delivery-type-section" class="plan-section">
-          <h3>Type of Delivery</h3>
-          <div class="option-list">
-            <label
-              ><input
-                type="checkbox"
-                name="delivery"
-                value="Natural birth without medical interventions"
-              />
-              Natural birth without medical interventions</label
-            >
-            <label
-              ><input
-                type="checkbox"
-                name="delivery"
-                value="Normal vaginal birth"
-              />
-              Normal vaginal birth</label
-            >
-            <label
-              ><input
-                type="checkbox"
-                name="delivery"
-                value="Cesarean with epidural"
-              />
-              Cesarean with epidural</label
-            >
-            <label
-              ><input
-                type="checkbox"
-                name="delivery"
-                value="Cesarean with general anesthesia"
-              />
-              Cesarean with general anesthesia</label
-            >
-            <label
-              ><input
-                type="checkbox"
-                name="delivery"
-                value="VBAC (Vaginal Birth After Cesarean)"
-              />
-              VBAC (Vaginal Birth After Cesarean)</label
-            >
-          </div>
-        </div>
-
-        <div id="people-present-section" class="plan-section">
-          <h3>People Present During Delivery</h3>
-          <div class="option-list">
-            <label
-              ><input type="checkbox" name="present" value="Partner/Spouse" />
-              Partner/Spouse</label
-            >
-            <label
-              ><input type="checkbox" name="present" value="Family Member" />
-              Family Member:</label
-            >
-            <input
-              type="text"
-              name="family-member-details"
-              placeholder="Specify"
+            Natural birth without medical interventions</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="delivery"
+              value="Normal vaginal birth"
             />
-            <label
-              ><input type="checkbox" name="present" value="Other" />
-              Other:</label
-            >
-            <input type="text" name="other-details" placeholder="Specify" />
-          </div>
+            Normal vaginal birth</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="delivery"
+              value="Cesarean with epidural"
+            />
+            Cesarean with epidural</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="delivery"
+              value="Cesarean with general anesthesia"
+            />
+            Cesarean with general anesthesia</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="delivery"
+              value="VBAC (Vaginal Birth After Cesarean)"
+            />
+            VBAC (Vaginal Birth After Cesarean)</label
+          >
         </div>
+      </div>
 
-        <div id="preparation-section" class="plan-section">
-          <h3>Preparation for Delivery</h3>
-          <div class="option-list">
-            <label
-              ><input
-                type="checkbox"
-                name="preparation"
-                value="I do not wish for shaving of the genital area"
-              />
-              I do not wish for shaving of the genital area.</label
-            >
-            <label
-              ><input
-                type="checkbox"
-                name="preparation"
-                value="I do not want an enema"
-              />
-              I do not want an enema.</label
-            >
-            <label
-              ><input
-                type="checkbox"
-                name="preparation"
-                value="I prefer not to have an IV drip if movement is possible"
-              />
-              I prefer not to have an IV drip if movement is possible, though a
-              saline-locked IV is acceptable if necessary.</label
-            >
-          </div>
+      <div id="people-present-section" class="plan-section">
+        <h3>People Present During Delivery</h3>
+        <div class="option-list">
+          <label
+            ><input type="checkbox" name="present" value="Partner/Spouse" />
+            Partner/Spouse</label
+          >
+          <label
+            ><input type="checkbox" name="present" value="Family Member" />
+            Family Member:</label
+          >
+          <input
+            type="text"
+            name="family-member-details"
+            placeholder="Specify"
+          />
+          <label
+            ><input type="checkbox" name="present" value="Other" />
+            Other:</label
+          >
+          <input type="text" name="other-details" placeholder="Specify" />
         </div>
+      </div>
 
-        <div id="monitoring-section" class="plan-section">
-          <h3>Fetal Monitoring</h3>
-          <div class="option-list">
-            <label
-              ><input
-                type="checkbox"
-                name="monitoring"
-                value="I prefer intermittent cardiotocography"
-              />
-              I prefer intermittent cardiotocography.</label
-            >
-            <label
-              ><input
-                type="checkbox"
-                name="monitoring"
-                value="I prefer continuous cardiotocography"
-              />
-              I prefer continuous cardiotocography.</label
-            >
-          </div>
+      <div id="preparation-section" class="plan-section">
+        <h3>Preparation for Delivery</h3>
+        <div class="option-list">
+          <label
+            ><input
+              type="checkbox"
+              name="preparation"
+              value="I do not wish for shaving of the genital area"
+            />
+            I do not wish for shaving of the genital area.</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="preparation"
+              value="I do not want an enema"
+            />
+            I do not want an enema.</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="preparation"
+              value="I prefer not to have an IV drip if movement is possible"
+            />
+            I prefer not to have an IV drip if movement is possible, though a
+            saline-locked IV is acceptable if necessary.</label
+          >
         </div>
+      </div>
 
-        <div id="environment-section" class="plan-section">
-          <h3>Environment and Personal Preferences</h3>
-          <div class="option-list">
-            <label
-              ><input
-                type="checkbox"
-                name="environment"
-                value="I would like a warm and calm atmosphere in the delivery room"
-              />
-              I would like a warm and calm atmosphere in the delivery
-              room.</label
-            >
-            <label
-              ><input
-                type="checkbox"
-                name="environment"
-                value="Minimize clinic staff presence"
-              />
-              Minimize clinic staff presence.</label
-            >
-            <label
-              ><input type="checkbox" name="environment" value="Low lighting" />
-              Low lighting.</label
-            >
-            <label
-              ><input
-                type="checkbox"
-                name="environment"
-                value="Personal music"
-              />
-              Personal music.</label
-            >
-            <label
-              ><input
-                type="checkbox"
-                name="environment"
-                value="Wear my own clothing"
-              />
-              Wear my own clothing.</label
-            >
-            <label
-              ><input
-                type="checkbox"
-                name="environment"
-                value="Birth ball/pillows"
-              />
-              Birth ball/pillows.</label
-            >
-            <label
-              ><input
-                type="checkbox"
-                name="environment"
-                value="Option to photograph/film freely"
-              />
-              Option to photograph/film freely.</label
-            >
-            <label
-              ><input
-                type="checkbox"
-                name="environment"
-                value="Bath or shower, if available"
-              />
-              Bath or shower, if available.</label
-            >
-          </div>
+      <div id="monitoring-section" class="plan-section">
+        <h3>Fetal Monitoring</h3>
+        <div class="option-list">
+          <label
+            ><input
+              type="checkbox"
+              name="monitoring"
+              value="I prefer intermittent cardiotocography"
+            />
+            I prefer intermittent cardiotocography.</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="monitoring"
+              value="I prefer continuous cardiotocography"
+            />
+            I prefer continuous cardiotocography.</label
+          >
         </div>
+      </div>
 
-        <div id="pain-relief-section" class="plan-section">
-          <h3>Pain Relief During Labor</h3>
-          <div class="option-list">
-            <label
-              ><input
-                type="checkbox"
-                name="pain-relief"
-                value="Natural pain relief methods"
-              />
-              Natural pain relief methods (movement, body position, massage,
-              breathing, heat packs, etc.)</label
-            >
-            <label
-              ><input
-                type="checkbox"
-                name="pain-relief"
-                value="Support from midwife/partner"
-              />
-              Support from midwife/partner.</label
-            >
-            <label
-              ><input
-                type="checkbox"
-                name="pain-relief"
-                value="Freedom for spontaneous expression"
-              />
-              Freedom for spontaneous expression (vocalizing, movement).</label
-            >
-            <label
-              ><input
-                type="checkbox"
-                name="pain-relief"
-                value="Walking epidural"
-              />
-              Walking epidural.</label
-            >
-            <label
-              ><input
-                type="checkbox"
-                name="pain-relief"
-                value="Epidural only if I request it and after being informed of possible effects on baby and labor"
-              />
-              Epidural only if I request it and after being informed of possible
-              effects on baby and labor.</label
-            >
-          </div>
+      <div id="environment-section" class="plan-section">
+        <h3>Environment and Personal Preferences</h3>
+        <div class="option-list">
+          <label
+            ><input
+              type="checkbox"
+              name="environment"
+              value="I would like a warm and calm atmosphere in the delivery room"
+            />
+            I would like a warm and calm atmosphere in the delivery room.</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="environment"
+              value="Minimize clinic staff presence"
+            />
+            Minimize clinic staff presence.</label
+          >
+          <label
+            ><input type="checkbox" name="environment" value="Low lighting" />
+            Low lighting.</label
+          >
+          <label
+            ><input type="checkbox" name="environment" value="Personal music" />
+            Personal music.</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="environment"
+              value="Wear my own clothing"
+            />
+            Wear my own clothing.</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="environment"
+              value="Birth ball/pillows"
+            />
+            Birth ball/pillows.</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="environment"
+              value="Option to photograph/film freely"
+            />
+            Option to photograph/film freely.</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="environment"
+              value="Bath or shower, if available"
+            />
+            Bath or shower, if available.</label
+          >
         </div>
+      </div>
 
-        <div id="labor-onset-section" class="plan-section">
-          <h3>Labor Onset and Progression</h3>
-          <div class="option-list">
-            <label
-              ><input
-                type="checkbox"
-                name="labor-onset"
-                value="I prefer spontaneous labor onset and am willing to wait"
-              />
-              I prefer spontaneous labor onset and am willing to wait.</label
-            >
-            <label
-              ><input
-                type="checkbox"
-                name="labor-onset"
-                value="If induction or augmentation is necessary, I wish to be informed of the exact reasons"
-              />
-              If induction or augmentation is necessary, I wish to be informed
-              of the exact reasons and that it only proceed, if medically
-              necessary.</label
-            >
-          </div>
+      <div id="pain-relief-section" class="plan-section">
+        <h3>Pain Relief During Labor</h3>
+        <div class="option-list">
+          <label
+            ><input
+              type="checkbox"
+              name="pain-relief"
+              value="Natural pain relief methods"
+            />
+            Natural pain relief methods (movement, body position, massage,
+            breathing, heat packs, etc.)</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="pain-relief"
+              value="Support from midwife/partner"
+            />
+            Support from midwife/partner.</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="pain-relief"
+              value="Freedom for spontaneous expression"
+            />
+            Freedom for spontaneous expression (vocalizing, movement).</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="pain-relief"
+              value="Walking epidural"
+            />
+            Walking epidural.</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="pain-relief"
+              value="Epidural only if I request it and after being informed of possible effects on baby and labor"
+            />
+            Epidural only if I request it and after being informed of possible
+            effects on baby and labor.</label
+          >
         </div>
+      </div>
 
-        <div id="active-labor-section" class="plan-section">
-          <h3>Active Labor and Pushing</h3>
-          <div class="option-list">
-            <label
-              ><input
-                type="checkbox"
-                name="active-labor"
-                value="Minimize staff presence to essential personnel only"
-              />
-              Minimize staff presence to essential personnel only (partner,
-              midwife, doctor, pediatrician).</label
-            >
-            <label
-              ><input
-                type="checkbox"
-                name="active-labor"
-                value="I wish to start pushing when I feel the need"
-              />
-              I wish to start pushing when I feel the need.</label
-            >
-            <label
-              ><input
-                type="checkbox"
-                name="active-labor"
-                value="I would like guidance on when to push"
-              />
-              I would like guidance on when to push.</label
-            >
-            <label
-              ><input
-                type="checkbox"
-                name="active-labor"
-                value="I prefer to choose the most comfortable pushing position"
-              />
-              I prefer to choose the most comfortable pushing position.</label
-            >
-            <label
-              ><input
-                type="checkbox"
-                name="active-labor"
-                value="I prefer to avoid an episiotomy unless absolutely necessary"
-              />
-              I prefer to avoid an episiotomy unless absolutely
-              necessary.</label
-            >
-            <label
-              ><input
-                type="checkbox"
-                name="active-labor"
-                value="To prevent perineal trauma, I prefer gentle pushing with oil massage, supported perineum, and positional adjustments"
-              />
-              To prevent perineal trauma, I prefer gentle pushing with oil
-              massage, supported perineum, and positional adjustments.</label
-            >
-          </div>
+      <div id="labor-onset-section" class="plan-section">
+        <h3>Labor Onset and Progression</h3>
+        <div class="option-list">
+          <label
+            ><input
+              type="checkbox"
+              name="labor-onset"
+              value="I prefer spontaneous labor onset and am willing to wait"
+            />
+            I prefer spontaneous labor onset and am willing to wait.</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="labor-onset"
+              value="If induction or augmentation is necessary, I wish to be informed of the exact reasons"
+            />
+            If induction or augmentation is necessary, I wish to be informed of
+            the exact reasons and that it only proceed, if medically
+            necessary.</label
+          >
         </div>
+      </div>
 
-        <div id="after-birth-section" class="plan-section">
-          <h3>Immediately After Birth</h3>
-          <div class="option-list">
-            <label
-              ><input
-                type="checkbox"
-                name="after-birth"
-                value="Place my baby on my chest, skin-to-skin"
-              />
-              Place my baby on my chest, skin-to-skin.</label
-            >
-            <label
-              ><input
-                type="checkbox"
-                name="after-birth"
-                value="Delayed cord clamping (at least 3-5 minutes)"
-              />
-              Delayed cord clamping (at least 3-5 minutes).</label
-            >
-            <label
-              ><input
-                type="checkbox"
-                name="after-birth"
-                value="My partner will cut the cord"
-              />
-              My partner will cut the cord.</label
-            >
-            <label
-              ><input
-                type="checkbox"
-                name="after-birth"
-                value="Hold baby during placental delivery and any perineal sutures"
-              />
-              Hold baby during placental delivery and any perineal
-              sutures.</label
-            >
-            <label
-              ><input
-                type="checkbox"
-                name="after-birth"
-                value="First breastfeeding within the first hour"
-              />
-              First breastfeeding within the first hour.</label
-            >
-            <label
-              ><input
-                type="checkbox"
-                name="after-birth"
-                value="Collection of stem cells from the umbilical cord"
-              />
-              Collection of stem cells from the umbilical cord (I have the
-              collection kit).</label
-            >
-          </div>
+      <div id="active-labor-section" class="plan-section">
+        <h3>Active Labor and Pushing</h3>
+        <div class="option-list">
+          <label
+            ><input
+              type="checkbox"
+              name="active-labor"
+              value="Minimize staff presence to essential personnel only"
+            />
+            Minimize staff presence to essential personnel only (partner,
+            midwife, doctor, pediatrician).</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="active-labor"
+              value="I wish to start pushing when I feel the need"
+            />
+            I wish to start pushing when I feel the need.</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="active-labor"
+              value="I would like guidance on when to push"
+            />
+            I would like guidance on when to push.</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="active-labor"
+              value="I prefer to choose the most comfortable pushing position"
+            />
+            I prefer to choose the most comfortable pushing position.</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="active-labor"
+              value="I prefer to avoid an episiotomy unless absolutely necessary"
+            />
+            I prefer to avoid an episiotomy unless absolutely necessary.</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="active-labor"
+              value="To prevent perineal trauma, I prefer gentle pushing with oil massage, supported perineum, and positional adjustments"
+            />
+            To prevent perineal trauma, I prefer gentle pushing with oil
+            massage, supported perineum, and positional adjustments.</label
+          >
         </div>
+      </div>
 
-        <div id="cesarean-section" class="plan-section">
-          <h3>In Case of Cesarean Delivery</h3>
-          <div class="option-list">
-            <label
-              ><input
-                type="checkbox"
-                name="cesarean"
-                value="I would like to avoid cesarean unless absolutely necessary"
-              />
-              I would like to avoid cesarean unless absolutely necessary.</label
-            >
-            <label
-              ><input
-                type="checkbox"
-                name="cesarean"
-                value="Prefer epidural over general anesthesia"
-              />
-              Prefer epidural over general anesthesia.</label
-            >
-            <label
-              ><input
-                type="checkbox"
-                name="cesarean"
-                value="I wish to be informed throughout the procedure if I am conscious"
-              />
-              I wish to be informed throughout the procedure if I am
-              conscious.</label
-            >
-            <label
-              ><input
-                type="checkbox"
-                name="cesarean"
-                value="Keep my hands free to hold my baby"
-              />
-              Keep my hands free to hold my baby.</label
-            >
-            <label
-              ><input
-                type="checkbox"
-                name="cesarean"
-                value="Skin-to-skin contact and breastfeeding in the operating room"
-              />
-              Skin-to-skin contact and breastfeeding in the operating
-              room.</label
-            >
-          </div>
+      <div id="after-birth-section" class="plan-section">
+        <h3>Immediately After Birth</h3>
+        <div class="option-list">
+          <label
+            ><input
+              type="checkbox"
+              name="after-birth"
+              value="Place my baby on my chest, skin-to-skin"
+            />
+            Place my baby on my chest, skin-to-skin.</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="after-birth"
+              value="Delayed cord clamping (at least 3-5 minutes)"
+            />
+            Delayed cord clamping (at least 3-5 minutes).</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="after-birth"
+              value="My partner will cut the cord"
+            />
+            My partner will cut the cord.</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="after-birth"
+              value="Hold baby during placental delivery and any perineal sutures"
+            />
+            Hold baby during placental delivery and any perineal sutures.</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="after-birth"
+              value="First breastfeeding within the first hour"
+            />
+            First breastfeeding within the first hour.</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="after-birth"
+              value="Collection of stem cells from the umbilical cord"
+            />
+            Collection of stem cells from the umbilical cord (I have the
+            collection kit).</label
+          >
         </div>
+      </div>
 
-        <div id="newborn-care-section" class="plan-section">
-          <h3>Newborn Care</h3>
-          <div class="option-list">
-            <label
-              ><input
-                type="checkbox"
-                name="newborn-care"
-                value="Gently wipe the baby and place on my chest"
-              />
-              Gently wipe the baby and place on my chest.</label
-            >
-            <label
-              ><input
-                type="checkbox"
-                name="newborn-care"
-                value="Delay baby's bath for at least 24 hours"
-              />
-              Delay baby's bath for at least 24 hours.</label
-            >
-            <label
-              ><input
-                type="checkbox"
-                name="newborn-care"
-                value="We will perform the first bath at home"
-              />
-              We will perform the first bath at home.</label
-            >
-            <label
-              ><input
-                type="checkbox"
-                name="newborn-care"
-                value="Do not give vitamin K injection"
-              />
-              Do not give vitamin K injection.</label
-            >
-            <label
-              ><input
-                type="checkbox"
-                name="newborn-care"
-                value="No pacifiers or bottles"
-              />
-              No pacifiers or bottles.</label
-            >
-          </div>
+      <div id="cesarean-section" class="plan-section">
+        <h3>In Case of Cesarean Delivery</h3>
+        <div class="option-list">
+          <label
+            ><input
+              type="checkbox"
+              name="cesarean"
+              value="I would like to avoid cesarean unless absolutely necessary"
+            />
+            I would like to avoid cesarean unless absolutely necessary.</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="cesarean"
+              value="Prefer epidural over general anesthesia"
+            />
+            Prefer epidural over general anesthesia.</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="cesarean"
+              value="I wish to be informed throughout the procedure if I am conscious"
+            />
+            I wish to be informed throughout the procedure if I am
+            conscious.</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="cesarean"
+              value="Keep my hands free to hold my baby"
+            />
+            Keep my hands free to hold my baby.</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="cesarean"
+              value="Skin-to-skin contact and breastfeeding in the operating room"
+            />
+            Skin-to-skin contact and breastfeeding in the operating room.</label
+          >
         </div>
+      </div>
 
-        <div id="feeding-plan-section" class="plan-section">
-          <h3>Feeding Plan</h3>
-          <div class="option-list">
-            <label
-              ><input
-                type="checkbox"
-                name="feeding-plan"
-                value="I plan to exclusively breastfeed, so do not provide formula, tea, etc"
-              />
-              I plan to exclusively breastfeed, so do not provide formula, tea,
-              etc.</label
-            >
-            <label
-              ><input
-                type="checkbox"
-                name="feeding-plan"
-                value="If supplementation is needed, I prefer to use my expressed milk"
-              />
-              If supplementation is needed, I prefer to use my expressed
-              milk.</label
-            >
-            <label
-              ><input
-                type="checkbox"
-                name="feeding-plan"
-                value="If formula is necessary, please consult me and explain the reasons"
-              />
-              If formula is necessary, please consult me and explain the
-              reasons.</label
-            >
-          </div>
+      <div id="newborn-care-section" class="plan-section">
+        <h3>Newborn Care</h3>
+        <div class="option-list">
+          <label
+            ><input
+              type="checkbox"
+              name="newborn-care"
+              value="Gently wipe the baby and place on my chest"
+            />
+            Gently wipe the baby and place on my chest.</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="newborn-care"
+              value="Delay baby's bath for at least 24 hours"
+            />
+            Delay baby's bath for at least 24 hours.</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="newborn-care"
+              value="We will perform the first bath at home"
+            />
+            We will perform the first bath at home.</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="newborn-care"
+              value="Do not give vitamin K injection"
+            />
+            Do not give vitamin K injection.</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="newborn-care"
+              value="No pacifiers or bottles"
+            />
+            No pacifiers or bottles.</label
+          >
         </div>
-      </form>
-    </section>
-  </main>
+      </div>
+
+      <div id="feeding-plan-section" class="plan-section">
+        <h3>Feeding Plan</h3>
+        <div class="option-list">
+          <label
+            ><input
+              type="checkbox"
+              name="feeding-plan"
+              value="I plan to exclusively breastfeed, so do not provide formula, tea, etc"
+            />
+            I plan to exclusively breastfeed, so do not provide formula, tea,
+            etc.</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="feeding-plan"
+              value="If supplementation is needed, I prefer to use my expressed milk"
+            />
+            If supplementation is needed, I prefer to use my expressed
+            milk.</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="feeding-plan"
+              value="If formula is necessary, please consult me and explain the reasons"
+            />
+            If formula is necessary, please consult me and explain the
+            reasons.</label
+          >
+        </div>
+      </div>
+    </form>
+  </section>
 </Layout>
+
+<style>
+  /*
+   * Estilos para el selector de idioma.
+   */
+  .language-switcher {
+    text-align: right;
+    margin-right: 20px;
+    margin-top: 20px;
+  }
+
+  .language-switcher a {
+    text-decoration: none;
+    color: var(--gunmetal);
+    font-weight: bold;
+    padding: 5px;
+  }
+
+  /*
+   * Estilos del plan de parto.
+   */
+  .birth-plan-container {
+    padding: 30px;
+  }
+
+  .intro-text {
+    line-height: 1.6;
+    margin-bottom: 40px;
+    font-style: italic;
+  }
+
+  .plan-section {
+    background-color: var(--pale-sand);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  .plan-section h3 {
+    border-bottom: 2px solid var(--deep-teal);
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+    color: var(--dark-charcoal);
+  }
+
+  .input-group {
+    margin-bottom: 15px;
+  }
+
+  .input-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  .input-group input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--dusty-rose);
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+  }
+
+  .option-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .option-list label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+  }
+
+  .option-list input[type="checkbox"] {
+    accent-color: var(--deep-teal);
+    transform: scale(1.2);
+  }
+</style>

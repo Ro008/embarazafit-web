@@ -3,13 +3,6 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout>
-  <header>
-    <a href="index.html" class="home-link">
-      <h1>Embarazafit</h1>
-      <p>Ni antojos ni cuentos: 🥩 Proteína y mancuernas 🏋️‍♀️</p>
-    </a>
-  </header>
-
   <section class="birth-plan-container">
     <h2>Mi Plan de Parto</h2>
     <p class="intro-text">
@@ -24,6 +17,79 @@ import Layout from '../layouts/Layout.astro';
       encantados de discutir cualquier pregunta o preocupación que pueda surgir.
     </p>
 
-    <form id="birthPlanForm"></form>
+    <form id="birthPlanForm">
+      <div class="plan-section">
+        <h3>Información Personal</h3>
+        <div class="input-group">
+          <label for="nombre">Nombre de la madre:</label>
+          <input type="text" id="nombre" name="nombre" />
+        </div>
+      </div>
+    </form>
   </section>
 </Layout>
+
+<style>
+  /* Estilos para el plan de parto */
+  .birth-plan-container {
+    padding: 30px;
+  }
+
+  .intro-text {
+    line-height: 1.6;
+    margin-bottom: 40px;
+    font-style: italic;
+  }
+
+  .plan-section {
+    background-color: var(--pale-sand);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  .plan-section h3 {
+    border-bottom: 2px solid var(--deep-teal);
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+    color: var(--dark-charcoal);
+  }
+
+  .input-group {
+    margin-bottom: 15px;
+  }
+
+  .input-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  .input-group input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--dusty-rose);
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+  }
+
+  .option-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .option-list label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+  }
+
+  .option-list input[type="checkbox"] {
+    accent-color: var(--deep-teal);
+    transform: scale(1.2);
+  }
+</style>
