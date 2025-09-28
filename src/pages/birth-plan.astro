@@ -2,12 +2,12 @@
 import Layout from "../layouts/Layout.astro";
 ---
 
-<Layout title="Plan de Parto | Embarazafit">
+<Layout title="Birth Plan | Embarazafit">
   <section class="birth-plan-container" id="birth-plan-container">
-    <h2 class="pdf-title">Mi Plan de Parto</h2>
+    <h2 class="pdf-title">My Birth Plan</h2>
     <div class="language-selector">
-      <a href="/plan-de-parto" class="lang-btn active">Español</a>
-      <a href="/birth-plan" class="lang-btn">English</a>
+      <a href="/plan-de-parto" class="lang-btn">Español</a>
+      <a href="/birth-plan" class="lang-btn active">English</a>
     </div>
 
     <div class="instructions">
@@ -20,12 +20,11 @@ import Layout from "../layouts/Layout.astro";
         comentes con tu equipo médico. Si te queda alguna duda o tienes alguna
         sugerencia de mejora, puedes dejarme un comentario en
         <a
-          href="https://www.instagram.com/reel/DNGKE7jtsKD/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
+          href="https://www.instagram.com/reel/DNGKE9jtsKD/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
           target="_blank"
           rel="noopener noreferrer"
           >este vídeo</a
-        >
-        .
+        >.
       </p>
 
       <p>
@@ -38,34 +37,33 @@ import Layout from "../layouts/Layout.astro";
     </div>
 
     <p class="intro-text">
-      Hemos redactado este plan de parto de acuerdo con nuestros deseos para el
-      nacimiento de nuestro/a hijo/a, después de asistir a sesiones prenatales
-      de preparación al parto y de haber sido informados de nuestras opciones.
-      Nuestras elecciones han sido tomadas conjuntamente y basadas en las
-      directrices de organizaciones reconocidas que promueven el parto natural y
-      la lactancia materna. Nos gustaría colaborar con nuestro equipo médico
-      para garantizar una experiencia de parto tranquila y segura que apoye la
-      salud física y emocional de la madre y de nuestro/a hijo/a. Estaremos
-      encantados de discutir cualquier pregunta o inquietud que podáis tener.
+      We have completed this birth plan in accordance with our wishes for the
+      birth of our child, after attending prenatal childbirth preparation
+      sessions and having been informed of our options. Our choices were made
+      jointly, thoughtfully, and based on guidelines from recognized
+      organizations promoting natural childbirth and breastfeeding. We would
+      like to collaborate with you to ensure a calm and safe birth experience
+      that supports the physical and emotional health of our child. We are happy
+      to discuss any questions or concerns you may have.
     </p>
 
     <div id="personal-info-section" class="plan-section">
-      <h3>Información Personal</h3>
+      <h3>Personal Information</h3>
       <div class="input-group">
-        <label for="mother-name">Nombre de la Madre:</label>
+        <label for="mother-name">Mother's Name:</label>
         <input type="text" id="mother-name" name="mother-name" />
       </div>
       <div class="input-group">
-        <label for="name-pronunciation">Pronunciación del Nombre:</label>
+        <label for="name-pronunciation">Name Pronunciation:</label>
         <input
           type="text"
           id="name-pronunciation"
           name="name-pronunciation"
-          placeholder="ej. ro-SEE-oh"
+          placeholder="e.g. ro-SEE-oh"
         />
       </div>
       <div class="input-group">
-        <label for="companion-name">Nombre del Acompañante:</label>
+        <label for="companion-name">Companion's Name:</label>
         <input type="text" id="companion-name" name="companion-name" />
       </div>
       <div class="input-group">
@@ -73,11 +71,11 @@ import Layout from "../layouts/Layout.astro";
         <input type="text" id="hospital" name="hospital" />
       </div>
       <div class="input-group">
-        <label for="gynecologist">Ginecólogo/a:</label>
+        <label for="gynecologist">Gynecologist:</label>
         <input type="text" id="gynecologist" name="gynecologist" />
       </div>
       <div class="input-group">
-        <label for="pediatrician">Pediatra:</label>
+        <label for="pediatrician">Pediatrician:</label>
         <input type="text" id="pediatrician" name="pediatrician" />
       </div>
     </div>
@@ -91,37 +89,37 @@ import Layout from "../layouts/Layout.astro";
     <div
       id="delivery-type-section"
       class="plan-section"
-      data-section-title="Tipo de Parto"
+      data-section-title="Type of Delivery"
     >
-      <h3>Tipo de Parto</h3>
+      <h3>Type of Delivery</h3>
       <div class="option-list">
         <div
           class="option-item"
-          data-option-text="Parto natural sin intervenciones médicas"
+          data-option-text="Natural birth without medical interventions"
         >
-          <span>Parto natural sin intervenciones médicas</span>
+          <span>Natural birth without medical interventions</span>
           <button class="add-btn">Añadir al plan</button>
         </div>
-        <div class="option-item" data-option-text="Parto vaginal normal">
-          <span>Parto vaginal normal</span>
+        <div class="option-item" data-option-text="Normal vaginal birth">
+          <span>Normal vaginal birth</span>
           <button class="add-btn">Añadir al plan</button>
         </div>
-        <div class="option-item" data-option-text="Cesárea con epidural">
-          <span>Cesárea con epidural</span>
+        <div class="option-item" data-option-text="Cesarean with epidural">
+          <span>Cesarean with epidural</span>
           <button class="add-btn">Añadir al plan</button>
         </div>
         <div
           class="option-item"
-          data-option-text="Cesárea con anestesia general"
+          data-option-text="Cesarean with general anesthesia"
         >
-          <span>Cesárea con anestesia general</span>
+          <span>Cesarean with general anesthesia</span>
           <button class="add-btn">Añadir al plan</button>
         </div>
         <div
           class="option-item"
-          data-option-text="PVDC (Parto Vaginal Después de Cesárea)"
+          data-option-text="VBAC (Vaginal Birth After Cesarean)"
         >
-          <span>PVDC (Parto Vaginal Después de Cesárea)</span>
+          <span>VBAC (Vaginal Birth After Cesarean)</span>
           <button class="add-btn">Añadir al plan</button>
         </div>
       </div>
@@ -130,20 +128,20 @@ import Layout from "../layouts/Layout.astro";
     <div
       id="people-present-section"
       class="plan-section"
-      data-section-title="Personas Presentes Durante el Parto"
+      data-section-title="People Present During Delivery"
     >
-      <h3>Personas Presentes Durante el Parto</h3>
+      <h3>People Present During Delivery</h3>
       <div class="option-list">
-        <div class="option-item" data-option-text="Pareja/Cónyuge">
-          <span>Pareja/Cónyuge</span>
+        <div class="option-item" data-option-text="Partner/Spouse">
+          <span>Partner/Spouse</span>
           <button class="add-btn">Añadir al plan</button>
         </div>
-        <div class="option-item" data-option-text="Familiar">
-          <span>Familiar</span>
+        <div class="option-item" data-option-text="Family Member">
+          <span>Family Member</span>
           <button class="add-btn">Añadir al plan</button>
         </div>
-        <div class="option-item" data-option-text="Otra persona de apoyo">
-          <span>Otra persona de apoyo</span>
+        <div class="option-item" data-option-text="Other">
+          <span>Other</span>
           <button class="add-btn">Añadir al plan</button>
         </div>
       </div>
@@ -152,28 +150,28 @@ import Layout from "../layouts/Layout.astro";
     <div
       id="preparation-section"
       class="plan-section"
-      data-section-title="Preparación para el Parto"
+      data-section-title="Preparation for Delivery"
     >
-      <h3>Preparación para el Parto</h3>
+      <h3>Preparation for Delivery</h3>
       <div class="option-list">
         <div
           class="option-item"
-          data-option-text="No deseo rasurado de la zona genital"
+          data-option-text="I do not wish for shaving of the genital area"
         >
-          <span>No deseo rasurado de la zona genital</span>
+          <span>I do not wish for shaving of the genital area</span>
           <button class="add-btn">Añadir al plan</button>
         </div>
-        <div class="option-item" data-option-text="No quiero un enema">
-          <span>No quiero un enema</span>
+        <div class="option-item" data-option-text="I do not want an enema">
+          <span>I do not want an enema</span>
           <button class="add-btn">Añadir al plan</button>
         </div>
         <div
           class="option-item"
-          data-option-text="Prefiero no tener una vía IV si es posible moverme, aunque una vía sellada con suero es aceptable si es necesario"
+          data-option-text="I prefer not to have an IV drip if movement is possible"
         >
           <span
-            >Prefiero no tener una vía IV si es posible moverme, aunque una vía
-            sellada con suero es aceptable si es necesario</span
+            >I prefer not to have an IV drip if movement is possible, though a
+            saline-locked IV is acceptable if necessary</span
           >
           <button class="add-btn">Añadir al plan</button>
         </div>
@@ -183,22 +181,22 @@ import Layout from "../layouts/Layout.astro";
     <div
       id="monitoring-section"
       class="plan-section"
-      data-section-title="Monitorización Fetal"
+      data-section-title="Fetal Monitoring"
     >
-      <h3>Monitorización Fetal</h3>
+      <h3>Fetal Monitoring</h3>
       <div class="option-list">
         <div
           class="option-item"
-          data-option-text="Prefiero cardiotocografía intermitente"
+          data-option-text="I prefer intermittent cardiotocography"
         >
-          <span>Prefiero cardiotocografía intermitente</span>
+          <span>I prefer intermittent cardiotocography</span>
           <button class="add-btn">Añadir al plan</button>
         </div>
         <div
           class="option-item"
-          data-option-text="Prefiero cardiotocografía continua"
+          data-option-text="I prefer continuous cardiotocography"
         >
-          <span>Prefiero cardiotocografía continua</span>
+          <span>I prefer continuous cardiotocography</span>
           <button class="add-btn">Añadir al plan</button>
         </div>
       </div>
@@ -207,65 +205,64 @@ import Layout from "../layouts/Layout.astro";
     <div
       id="environment-section"
       class="plan-section"
-      data-section-title="Ambiente y Preferencias Personales"
+      data-section-title="Environment and Personal Preferences"
     >
-      <h3>Ambiente y Preferencias Personales</h3>
+      <h3>Environment and Personal Preferences</h3>
       <div class="option-list">
         <div
           class="option-item"
-          data-option-text="Solicitar a todo el personal que se presente y explique su rol antes de cualquier procedimiento"
+          data-option-text="Request all staff to introduce themselves and their role before any procedure"
         >
           <span
-            >Me gustaría que el personal que entre en la sala se presente y
-            explique su rol antes de cualquier procedimiento</span
+            >Request all staff to introduce themselves and their role before any
+            procedure</span
           >
           <button class="add-btn">Añadir al plan</button>
         </div>
         <div
           class="option-item"
-          data-option-text="Me gustaría un ambiente cálido y tranquilo en la sala de partos"
+          data-option-text="I would like a warm and calm atmosphere in the delivery room"
         >
           <span
-            >Me gustaría un ambiente cálido y tranquilo en la sala de
-            partos</span
+            >I would like a warm and calm atmosphere in the delivery room</span
           >
           <button class="add-btn">Añadir al plan</button>
         </div>
         <div
           class="option-item"
-          data-option-text="Minimizar la presencia de personal de la clínica"
+          data-option-text="Minimize clinic staff presence"
         >
-          <span>Minimizar la presencia de personal de la clínica</span>
+          <span>Minimize clinic staff presence</span>
           <button class="add-btn">Añadir al plan</button>
         </div>
-        <div class="option-item" data-option-text="Iluminación tenue">
-          <span>Iluminación tenue</span>
+        <div class="option-item" data-option-text="Low lighting">
+          <span>Low lighting</span>
           <button class="add-btn">Añadir al plan</button>
         </div>
-        <div class="option-item" data-option-text="Música personal">
-          <span>Música personal</span>
+        <div class="option-item" data-option-text="Personal music">
+          <span>Personal music</span>
           <button class="add-btn">Añadir al plan</button>
         </div>
-        <div class="option-item" data-option-text="Vestir mi propia ropa">
-          <span>Vestir mi propia ropa</span>
+        <div class="option-item" data-option-text="Wear my own clothing">
+          <span>Wear my own clothing</span>
           <button class="add-btn">Añadir al plan</button>
         </div>
-        <div class="option-item" data-option-text="Pelota de parto/almohadas">
-          <span>Pelota de parto/almohadas</span>
+        <div class="option-item" data-option-text="Birth ball/pillows">
+          <span>Birth ball/pillows</span>
           <button class="add-btn">Añadir al plan</button>
         </div>
         <div
           class="option-item"
-          data-option-text="Opción de fotografiar/filmar libremente"
+          data-option-text="Option to photograph/film freely"
         >
-          <span>Opción de fotografiar/filmar libremente</span>
+          <span>Option to photograph/film freely</span>
           <button class="add-btn">Añadir al plan</button>
         </div>
         <div
           class="option-item"
-          data-option-text="Baño o ducha, si están disponibles"
+          data-option-text="Bath or shower, if available"
         >
-          <span>Baño o ducha, si están disponibles</span>
+          <span>Bath or shower, if available</span>
           <button class="add-btn">Añadir al plan</button>
         </div>
       </div>
@@ -274,45 +271,45 @@ import Layout from "../layouts/Layout.astro";
     <div
       id="pain-relief-section"
       class="plan-section"
-      data-section-title="Alivio del Dolor Durante el Trabajo de Parto"
+      data-section-title="Pain Relief During Labor"
     >
-      <h3>Alivio del Dolor Durante el Trabajo de Parto</h3>
+      <h3>Pain Relief During Labor</h3>
       <div class="option-list">
         <div
           class="option-item"
-          data-option-text="Métodos naturales de alivio del dolor (movimiento, posición corporal, masaje, respiración, compresas de calor, etc.)"
+          data-option-text="Natural pain relief methods (movement, body position, massage, breathing, heat packs, etc.)"
         >
           <span
-            >Métodos naturales de alivio del dolor (movimiento, posición
-            corporal, masaje, respiración, compresas de calor, etc.)</span
+            >Natural pain relief methods (movement, body position, massage,
+            breathing, heat packs, etc.)</span
           >
-          <button class="add-btn">Añadir al plan</button>
-        </div>
-        <div class="option-item" data-option-text="Apoyo de la matrona/pareja">
-          <span>Apoyo de la matrona/pareja</span>
           <button class="add-btn">Añadir al plan</button>
         </div>
         <div
           class="option-item"
-          data-option-text="Libertad para la expresión espontánea (vocalización, movimiento)"
+          data-option-text="Support from midwife/partner"
         >
-          <span
-            >Libertad para la expresión espontánea (vocalización,
-            movimiento)</span
-          >
-          <button class="add-btn">Añadir al plan</button>
-        </div>
-        <div class="option-item" data-option-text="Epidural 'caminante'">
-          <span>Epidural 'caminante'</span>
+          <span>Support from midwife/partner</span>
           <button class="add-btn">Añadir al plan</button>
         </div>
         <div
           class="option-item"
-          data-option-text="Epidural solo si la solicito y después de haber sido informada de los posibles efectos en el bebé y el parto"
+          data-option-text="Freedom for spontaneous expression (vocalizing, movement)"
+        >
+          <span>Freedom for spontaneous expression (vocalizing, movement)</span>
+          <button class="add-btn">Añadir al plan</button>
+        </div>
+        <div class="option-item" data-option-text="Walking epidural">
+          <span>Walking epidural</span>
+          <button class="add-btn">Añadir al plan</button>
+        </div>
+        <div
+          class="option-item"
+          data-option-text="Epidural only if I request it and after being informed of possible effects on baby and labor"
         >
           <span
-            >Epidural solo si la solicito y después de haber sido informada de
-            los posibles efectos en el bebé y el parto</span
+            >Epidural only if I request it and after being informed of possible
+            effects on baby and labor</span
           >
           <button class="add-btn">Añadir al plan</button>
         </div>
@@ -322,68 +319,62 @@ import Layout from "../layouts/Layout.astro";
     <div
       id="labor-onset-section"
       class="plan-section"
-      data-section-title="Inicio y Progresión del Parto"
+      data-section-title="Labor Onset and Progression"
     >
-      <h3>Inicio y Progresión del Parto</h3>
+      <h3>Labor Onset and Progression</h3>
       <div class="option-list">
         <div
           class="option-item"
-          data-option-text="Prefiero el inicio espontáneo del parto y estoy dispuesta a esperar"
+          data-option-text="I prefer spontaneous labor onset and am willing to wait"
         >
-          <span
-            >Prefiero el inicio espontáneo del parto y estoy dispuesta a
-            esperar</span
-          >
+          <span>I prefer spontaneous labor onset and am willing to wait</span>
           <button class="add-btn">Añadir al plan</button>
         </div>
         <div
           class="option-item"
-          data-option-text="Si la inducción o aumento es necesaria, deseo ser informada de las razones exactas y que solo se proceda si es médicamente necesario"
+          data-option-text="If induction or augmentation is necessary, I wish to be informed of the exact reasons"
         >
           <span
-            >Si la inducción o aumento es necesaria, deseo ser informada de las
-            razones exactas y que solo se proceda si es médicamente
-            necesario</span
+            >If induction or augmentation is necessary, I wish to be informed of
+            the exact reasons and that it only proceed, if medically
+            necessary</span
           >
           <button class="add-btn">Añadir al plan</button>
         </div>
       </div>
     </div>
-
     <div
       id="interventions-section"
       class="plan-section"
-      data-section-title="Intervenciones y Monitorización Médica"
+      data-section-title="Medical Interventions and Monitoring"
     >
-      <h3>Intervenciones y Monitorización Médica</h3>
+      <h3>Medical Interventions and Monitoring</h3>
       <div class="option-list">
         <div
           class="option-item"
-          data-option-text="Limitar los tactos vaginales a cada 4 horas y requerir consentimiento explícito"
+          data-option-text="Limit vaginal exams to every 4 hours and require explicit consent"
         >
           <span
-            >Limitar los tactos vaginales a cada 4 horas y requerir
-            consentimiento explícito</span
+            >Limit vaginal exams to every 4 hours and require explicit
+            consent</span
           >
           <button class="add-btn">Añadir al plan</button>
         </div>
         <div
           class="option-item"
-          data-option-text="Prefiero evitar el uso de ventosa o fórceps a menos que sea médicamente crítico"
+          data-option-text="Prefer to avoid vacuum or forceps unless medically critical"
         >
           <span
-            >Prefiero evitar el uso de ventosa o fórceps a menos que sea
-            médicamente crítico</span
+            >Prefer to avoid vacuum or forceps unless medically critical</span
           >
           <button class="add-btn">Añadir al plan</button>
         </div>
         <div
           class="option-item"
-          data-option-text="No doy mi consentimiento para la maniobra de Kristeller"
+          data-option-text="I do not consent to the Kristeller maneuver"
         >
           <span
-            >No doy mi consentimiento para la maniobra de Kristeller (presión en
-            el fondo del útero)</span
+            >I do not consent to the Kristeller maneuver (fundal pressure)</span
           >
           <button class="add-btn">Añadir al plan</button>
         </div>
@@ -392,58 +383,57 @@ import Layout from "../layouts/Layout.astro";
     <div
       id="active-labor-section"
       class="plan-section"
-      data-section-title="Pujo y Parto Activo"
+      data-section-title="Active Labor and Pushing"
     >
-      <h3>Pujo y Parto Activo</h3>
+      <h3>Active Labor and Pushing</h3>
       <div class="option-list">
         <div
           class="option-item"
-          data-option-text="Minimizar la presencia de personal al esencial (pareja, matrona, médico, pediatra)"
+          data-option-text="Minimize staff presence to essential personnel only"
         >
           <span
-            >Minimizar la presencia de personal al esencial (pareja, matrona,
-            médico, pediatra)</span
+            >Minimize staff presence to essential personnel only (partner,
+            midwife, doctor, pediatrician)</span
           >
           <button class="add-btn">Añadir al plan</button>
         </div>
         <div
           class="option-item"
-          data-option-text="Deseo empezar a pujar cuando sienta la necesidad"
+          data-option-text="I wish to start pushing when I feel the need"
         >
-          <span>Deseo empezar a pujar cuando sienta la necesidad</span>
+          <span>I wish to start pushing when I feel the need</span>
           <button class="add-btn">Añadir al plan</button>
         </div>
         <div
           class="option-item"
-          data-option-text="Me gustaría que me guíen sobre cuándo pujar"
+          data-option-text="I would like guidance on when to push"
         >
-          <span>Me gustaría que me guíen sobre cuándo pujar</span>
+          <span>I would like guidance on when to push</span>
           <button class="add-btn">Añadir al plan</button>
         </div>
         <div
           class="option-item"
-          data-option-text="Prefiero elegir la posición de pujo más cómoda"
+          data-option-text="I prefer to choose the most comfortable pushing position"
         >
-          <span>Prefiero elegir la posición de pujo más cómoda</span>
+          <span>I prefer to choose the most comfortable pushing position</span>
           <button class="add-btn">Añadir al plan</button>
         </div>
         <div
           class="option-item"
-          data-option-text="Prefiero evitar la episiotomía a menos que sea absolutamente necesaria"
+          data-option-text="I prefer to avoid an episiotomy unless absolutely necessary"
         >
           <span
-            >Prefiero evitar la episiotomía a menos que sea absolutamente
-            necesaria</span
+            >I prefer to avoid an episiotomy unless absolutely necessary</span
           >
           <button class="add-btn">Añadir al plan</button>
         </div>
         <div
           class="option-item"
-          data-option-text="Para prevenir trauma perineal, prefiero pujo suave con masaje con aceite, soporte del perineo y ajustes de posición"
+          data-option-text="To prevent perineal trauma, I prefer gentle pushing with oil massage, supported perineum, and positional adjustments"
         >
           <span
-            >Para prevenir trauma perineal, prefiero pujo suave con masaje con
-            aceite, soporte del perineo y ajustes de posición</span
+            >To prevent perineal trauma, I prefer gentle pushing with oil
+            massage, supported perineum, and positional adjustments</span
           >
           <button class="add-btn">Añadir al plan</button>
         </div>
@@ -453,52 +443,54 @@ import Layout from "../layouts/Layout.astro";
     <div
       id="after-birth-section"
       class="plan-section"
-      data-section-title="Inmediatamente Después del Parto"
+      data-section-title="Immediately After Birth"
     >
-      <h3>Inmediatamente Después del Parto</h3>
+      <h3>Immediately After Birth</h3>
       <div class="option-list">
         <div
           class="option-item"
-          data-option-text="Colocar a mi bebé en mi pecho, piel con piel"
+          data-option-text="Place my baby on my chest, skin-to-skin"
         >
-          <span>Colocar a mi bebé en mi pecho, piel con piel</span>
+          <span>Place my baby on my chest, skin-to-skin</span>
           <button class="add-btn">Añadir al plan</button>
         </div>
         <div
           class="option-item"
-          data-option-text="Pinzamiento tardío del cordón (al menos 3-5 minutos)"
+          data-option-text="Delayed cord clamping (at least 3-5 minutes)"
         >
-          <span>Pinzamiento tardío del cordón (al menos 3-5 minutos)</span>
-          <button class="add-btn">Añadir al plan</button>
-        </div>
-        <div class="option-item" data-option-text="Mi pareja cortará el cordón">
-          <span>Mi pareja cortará el cordón</span>
+          <span>Delayed cord clamping (at least 3-5 minutes)</span>
           <button class="add-btn">Añadir al plan</button>
         </div>
         <div
           class="option-item"
-          data-option-text="Sostener al bebé durante la expulsión de la placenta y cualquier sutura perineal"
+          data-option-text="My partner will cut the cord"
+        >
+          <span>My partner will cut the cord</span>
+          <button class="add-btn">Añadir al plan</button>
+        </div>
+        <div
+          class="option-item"
+          data-option-text="Hold baby during placental delivery and any perineal sutures"
         >
           <span
-            >Sostener al bebé durante la expulsión de la placenta y cualquier
-            sutura perineal</span
+            >Hold baby during placental delivery and any perineal sutures</span
           >
           <button class="add-btn">Añadir al plan</button>
         </div>
         <div
           class="option-item"
-          data-option-text="Primera toma al pecho dentro de la primera hora"
+          data-option-text="First breastfeeding within the first hour"
         >
-          <span>Primera toma al pecho dentro de la primera hora</span>
+          <span>First breastfeeding within the first hour</span>
           <button class="add-btn">Añadir al plan</button>
         </div>
         <div
           class="option-item"
-          data-option-text="Recolección de células madre del cordón umbilical (tengo el kit de recolección)"
+          data-option-text="Collection of stem cells from the umbilical cord"
         >
           <span
-            >Recolección de células madre del cordón umbilical (tengo el kit de
-            recolección)</span
+            >Collection of stem cells from the umbilical cord (I have the
+            collection kit)</span
           >
           <button class="add-btn">Añadir al plan</button>
         </div>
@@ -508,50 +500,49 @@ import Layout from "../layouts/Layout.astro";
     <div
       id="cesarean-section"
       class="plan-section"
-      data-section-title="En Caso de Cesárea"
+      data-section-title="In Case of Cesarean Delivery"
     >
-      <h3>En Caso de Cesárea</h3>
+      <h3>In Case of Cesarean Delivery</h3>
       <div class="option-list">
         <div
           class="option-item"
-          data-option-text="Me gustaría evitar la cesárea a menos que sea absolutamente necesaria"
+          data-option-text="I would like to avoid cesarean unless absolutely necessary"
         >
           <span
-            >Me gustaría evitar la cesárea a menos que sea absolutamente
-            necesaria</span
+            >I would like to avoid cesarean unless absolutely necessary</span
           >
           <button class="add-btn">Añadir al plan</button>
         </div>
         <div
           class="option-item"
-          data-option-text="Prefiero la epidural a la anestesia general"
+          data-option-text="Prefer epidural over general anesthesia"
         >
-          <span>Prefiero la epidural a la anestesia general</span>
+          <span>Prefer epidural over general anesthesia</span>
           <button class="add-btn">Añadir al plan</button>
         </div>
         <div
           class="option-item"
-          data-option-text="Deseo ser informada durante todo el procedimiento si estoy consciente"
+          data-option-text="I wish to be informed throughout the procedure if I am conscious"
         >
           <span
-            >Deseo ser informada durante todo el procedimiento si estoy
-            consciente</span
+            >I wish to be informed throughout the procedure if I am
+            conscious</span
           >
           <button class="add-btn">Añadir al plan</button>
         </div>
         <div
           class="option-item"
-          data-option-text="Mantener mis manos libres para sostener a mi bebé"
+          data-option-text="Keep my hands free to hold my baby"
         >
-          <span>Mantener mis manos libres para sostener a mi bebé</span>
+          <span>Keep my hands free to hold my baby</span>
           <button class="add-btn">Añadir al plan</button>
         </div>
         <div
           class="option-item"
-          data-option-text="Contacto piel con piel y lactancia materna en el quirófano"
+          data-option-text="Skin-to-skin contact and breastfeeding in the operating room"
         >
           <span
-            >Contacto piel con piel y lactancia materna en el quirófano</span
+            >Skin-to-skin contact and breastfeeding in the operating room</span
           >
           <button class="add-btn">Añadir al plan</button>
         </div>
@@ -561,43 +552,40 @@ import Layout from "../layouts/Layout.astro";
     <div
       id="newborn-care-section"
       class="plan-section"
-      data-section-title="Cuidado del Recién Nacido"
+      data-section-title="Newborn Care"
     >
-      <h3>Cuidado del Recién Nacido</h3>
+      <h3>Newborn Care</h3>
       <div class="option-list">
         <div
           class="option-item"
-          data-option-text="Secar suavemente al bebé y colocarlo en mi pecho"
+          data-option-text="Gently wipe the baby and place on my chest"
         >
-          <span>Secar suavemente al bebé y colocarlo en mi pecho</span>
+          <span>Gently wipe the baby and place on my chest</span>
           <button class="add-btn">Añadir al plan</button>
         </div>
         <div
           class="option-item"
-          data-option-text="Retrasar el baño del bebé al menos 24 horas"
+          data-option-text="Delay baby's bath for at least 24 hours"
         >
-          <span>Retrasar el baño del bebé al menos 24 horas</span>
+          <span>Delay baby's bath for at least 24 hours</span>
           <button class="add-btn">Añadir al plan</button>
         </div>
         <div
           class="option-item"
-          data-option-text="Realizaremos el primer baño en casa"
+          data-option-text="We will perform the first bath at home"
         >
-          <span>Realizaremos el primer baño en casa</span>
+          <span>We will perform the first bath at home</span>
           <button class="add-btn">Añadir al plan</button>
         </div>
         <div
           class="option-item"
-          data-option-text="No administrar inyección de vitamina K"
+          data-option-text="Do not give vitamin K injection"
         >
-          <span>No administrar inyección de vitamina K</span>
+          <span>Do not give vitamin K injection</span>
           <button class="add-btn">Añadir al plan</button>
         </div>
-        <div
-          class="option-item"
-          data-option-text="No usar chupetes ni biberones"
-        >
-          <span>No usar chupetes ni biberones</span>
+        <div class="option-item" data-option-text="No pacifiers or bottles">
+          <span>No pacifiers or bottles</span>
           <button class="add-btn">Añadir al plan</button>
         </div>
       </div>
@@ -606,37 +594,37 @@ import Layout from "../layouts/Layout.astro";
     <div
       id="feeding-plan-section"
       class="plan-section"
-      data-section-title="Plan de Alimentación"
+      data-section-title="Feeding Plan"
     >
-      <h3>Plan de Alimentación</h3>
+      <h3>Feeding Plan</h3>
       <div class="option-list">
         <div
           class="option-item"
-          data-option-text="Planeo la lactancia materna exclusiva, por lo que no proporcionar fórmula, infusiones, etc."
+          data-option-text="I plan to exclusively breastfeed, so do not provide formula, tea, etc"
         >
           <span
-            >Planeo la lactancia materna exclusiva, por lo que no proporcionar
-            fórmula, infusiones, etc</span
+            >I plan to exclusively breastfeed, so do not provide formula, tea,
+            etc</span
           >
           <button class="add-btn">Añadir al plan</button>
         </div>
         <div
           class="option-item"
-          data-option-text="Si es necesaria la suplementación, prefiero usar mi leche extraída"
+          data-option-text="If supplementation is needed, I prefer to use my expressed milk"
         >
           <span
-            >Si es necesaria la suplementación, prefiero usar mi leche
-            extraída</span
+            >If supplementation is needed, I prefer to use my expressed
+            milk</span
           >
           <button class="add-btn">Añadir al plan</button>
         </div>
         <div
           class="option-item"
-          data-option-text="Si es necesaria la fórmula, por favor, consúltenme y expliquen las razones"
+          data-option-text="If formula is necessary, please consult me and explain the reasons"
         >
           <span
-            >Si es necesaria la fórmula, por favor, consúltenme y expliquen las
-            razones</span
+            >If formula is necessary, please consult me and explain the
+            reasons</span
           >
           <button class="add-btn">Añadir al plan</button>
         </div>
@@ -644,7 +632,7 @@ import Layout from "../layouts/Layout.astro";
     </div>
 
     <div id="other-section" class="plan-section">
-      <h3>Otras Preferencias</h3>
+      <h3>Other Preferences</h3>
       <div class="input-group">
         <label for="other-preferences"
           >Añade aquí cualquier otra preferencia que no hayas encontrado en las
@@ -660,10 +648,7 @@ import Layout from "../layouts/Layout.astro";
   </section>
   <div id="toast" class="toast"></div>
 </Layout>
-
 <style>
-  /* ... (Mismo CSS que en el archivo original) ... */
-
   .birth-plan-container {
     padding: 30px;
     max-width: 900px;
@@ -856,7 +841,6 @@ import Layout from "../layouts/Layout.astro";
     background-color: var(--dusty-rose);
   }
 </style>
-
 <script>
   import jsPDF from "jspdf";
 
@@ -894,14 +878,13 @@ import Layout from "../layouts/Layout.astro";
           listItem.setAttribute("data-option-text", optionText);
           listItem.setAttribute("data-section-title", sectionTitle);
           listItem.innerHTML = `
-                        <span>${optionItem.querySelector("span").textContent}</span>
-                        <button class="remove-btn">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    `;
+            <span>${optionItem.querySelector("span").textContent}</span>
+            <button class="remove-btn">
+              <i class="fas fa-times"></i>
+            </button>
+          `;
           userPlanList.appendChild(listItem);
 
-          // TEXTO FIJO TRADUCIDO
           button.textContent = "Añadida";
           button.disabled = true;
           button.title = "Preferencia ya añadida a tu lista";
@@ -911,7 +894,6 @@ import Layout from "../layouts/Layout.astro";
             .querySelector(".remove-btn")
             .addEventListener("click", () => {
               listItem.remove();
-              // TEXTO FIJO TRADUCIDO
               button.textContent = "Añadir al plan";
               button.disabled = false;
               button.removeAttribute("title");
@@ -923,7 +905,6 @@ import Layout from "../layouts/Layout.astro";
     if (generatePdfBtn) {
       generatePdfBtn.addEventListener("click", () => {
         generatePdfBtn.disabled = true;
-        // TEXTO FIJO TRADUCIDO
         generatePdfBtn.textContent = "Generando PDF...";
 
         const personalInfo = {};
@@ -970,27 +951,20 @@ import Layout from "../layouts/Layout.astro";
         const margin = 15;
         const maxWidth = doc.internal.pageSize.getWidth() - 2 * margin;
 
-        // TEXTOS FIJOS DEL PDF TRADUCIDOS
-        const pdfTitle = "Mi plan de parto";
-        const introText =
-          "Hemos redactado este plan de parto de acuerdo con nuestros deseos para el nacimiento de nuestro/a hijo/a, después de asistir a sesiones prenatales de preparación al parto y de haber sido informados de nuestras opciones. Nuestras elecciones han sido tomadas conjuntamente y basadas en las directrices de organizaciones reconocidas que promueven el parto natural y la lactancia materna. Nos gustaría colaborar con nuestro equipo médico para garantizar una experiencia de parto tranquila y segura que apoye la salud física y emocional de la madre y de nuestro/a hijo/a. Estaremos encantados de discutir cualquier pregunta o inquietud que podáis tener.";
-        const personalInfoHeading = "Información Personal";
-        const otherPrefsHeading = "Otras Preferencias";
-        const filename = "mi-plan-de-parto.pdf";
-
-        // Generación del PDF (lógica del PDF)
         doc.setFontSize(22);
-        doc.text(pdfTitle, margin, y);
+        doc.text("My Birth Plan", margin, y);
         y += 10;
 
         doc.setFontSize(12);
+        const introText =
+          "We have completed this birth plan in accordance with our wishes for the birth of our child, after attending prenatal childbirth preparation sessions and having been informed of our options. Our choices were made jointly, thoughtfully, and based on guidelines from recognized organizations promoting natural childbirth and breastfeeding. We would like to collaborate with you to ensure a calm and safe birth experience that supports the physical and emotional health of our child. We are happy to discuss any questions or concerns you may have.";
         const introTextLines = doc.splitTextToSize(introText, maxWidth);
         doc.text(introTextLines, margin, y);
         y += introTextLines.length * 5;
         y += 10;
 
         doc.setFontSize(16);
-        doc.text(personalInfoHeading, margin, y);
+        doc.text("Personal Information", margin, y);
         doc.line(margin, y + 2, maxWidth + margin, y + 2);
         y += 7;
 
@@ -1035,7 +1009,7 @@ import Layout from "../layouts/Layout.astro";
             y = 15;
           }
           doc.setFontSize(16);
-          doc.text(otherPrefsHeading, margin, y);
+          doc.text("Other Preferences", margin, y);
           doc.line(margin, y + 2, maxWidth + margin, y + 2);
           y += 7;
 
@@ -1049,10 +1023,9 @@ import Layout from "../layouts/Layout.astro";
           y += 5;
         }
 
-        doc.save(filename);
+        doc.save("my-birth-plan.pdf");
 
         generatePdfBtn.disabled = false;
-        // TEXTO FIJO TRADUCIDO
         generatePdfBtn.textContent = "Generar PDF";
       });
     }
