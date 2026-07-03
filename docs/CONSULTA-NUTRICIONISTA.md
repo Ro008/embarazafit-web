@@ -49,7 +49,7 @@ Comportamiento:
 2. Añade:
 
 ```text
-MARIA_NUTRICIONISTA_EMAIL=hola@mariagonzalvez.com
+MARIA_NUTRICIONISTA_EMAIL=mariagonzalvezbellon@gmail.com
 ```
 
 3. Guarda y redeploy en Vercel (o reinicia `npm run dev` en local)
@@ -186,7 +186,7 @@ Con esto cubres el 80 % del riesgo: caída de web, Supabase roto o variables mal
 - [ ] Variables en Vercel + redeploy
 - [ ] Probar formulario en producción
 - [ ] **Monitorización:** `CRON_SECRET` en Vercel + monitor UptimeRobot en `/api/health/leads`
-- [ ] **LANZAMIENTO:** `MARIA_NUTRICIONISTA_EMAIL=hola@mariagonzalvez.com` en .env + Vercel (aviso amarillo del dashboard debe desaparecer)
+- [ ] **LANZAMIENTO:** `MARIA_NUTRICIONISTA_EMAIL=mariagonzalvezbellon@gmail.com` en .env + Vercel (aviso amarillo del dashboard debe desaparecer)
 
 ---
 
