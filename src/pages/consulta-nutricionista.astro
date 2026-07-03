@@ -16,28 +16,28 @@ const momentos = [
 ---
 
 <Layout title="Consulta con María | Embarazafit">
-  <div class="maria-page">
-    <!-- Sección 1: Hero -->
-    <section class="maria-hero">
-      <div class="maria-hero-content">
-        <h1>Nutrición experta y sin estrés para tu embarazo y posparto</h1>
-        <p class="maria-hero-lead">
-          Siente la seguridad de alimentar bien a tu bebé, mantener tus niveles
-          de energía y cuidar tu salud hormonal de la mano de una profesional
-          especializada.
-        </p>
-        <a href="#formulario" class="btn-cta">Quiero solicitar mi plaza</a>
-      </div>
-      <div class="maria-hero-photo">
-        <img
-          src="/maria-nutricionista.png"
-          alt="María, dietista-nutricionista"
-          width="480"
-          height="560"
-        />
-      </div>
-    </section>
+  <!-- Sección 1: Hero (ancho completo, como el header) -->
+  <section class="maria-hero">
+    <div class="maria-hero-content">
+      <h1>Nutrición experta y sin estrés para tu embarazo y posparto</h1>
+      <p class="maria-hero-lead">
+        Siente la seguridad de alimentar bien a tu bebé, mantener tus niveles
+        de energía y cuidar tu salud hormonal de la mano de una profesional
+        especializada.
+      </p>
+      <a href="#formulario" class="btn-cta">Quiero solicitar mi plaza</a>
+    </div>
+    <div class="maria-hero-photo">
+      <img
+        src="/maria-nutricionista.png"
+        alt="María, dietista-nutricionista"
+        width="480"
+        height="560"
+      />
+    </div>
+  </section>
 
+  <div class="maria-page">
     <!-- Sección 2: Aval de Rocío -->
     <section class="maria-aval">
       <p class="maria-aval-label">Un mensaje de Rocío para ti:</p>
@@ -61,20 +61,18 @@ const momentos = [
 
     <!-- Sección 3: Presentación -->
     <section class="maria-bio">
-      <div class="maria-bio-card">
-        <h2>Conoce a María</h2>
-        <p class="maria-bio-title">
-          Dietista-Nutricionista <span>(Nº de colegiada CV01344)</span>
-        </p>
-        <p>
-          Graduada en Nutrición Humana y Dietética por la Universidad de
-          Alicante, María es una apasionada de la salud hormonal femenina
-          integrativa. Su misión es enseñarte a ser completamente autónoma con
-          tu alimentación a largo plazo, guiándote con herramientas prácticas
-          como la planificación, el batch-cooking y la adaptación a tus horarios
-          para mejorar tu calidad de vida y la de tu bebé.
-        </p>
-      </div>
+      <h2>Conoce a María</h2>
+      <p class="maria-bio-title">
+        Dietista-Nutricionista <span>(Nº de colegiada CV01344)</span>
+      </p>
+      <p>
+        Graduada en Nutrición Humana y Dietética por la Universidad de
+        Alicante, María es una apasionada de la salud hormonal femenina
+        integrativa. Su misión es enseñarte a ser completamente autónoma con
+        tu alimentación a largo plazo, guiándote con herramientas prácticas
+        como la planificación, el batch-cooking y la adaptación a tus horarios
+        para mejorar tu calidad de vida y la de tu bebé.
+      </p>
     </section>
 
     <!-- Sección 4: Programa CÍCLICAS -->
@@ -297,35 +295,51 @@ const momentos = [
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&display=swap');
 
+  :global(main:has(.maria-hero)) {
+    margin-top: 0;
+    max-width: none;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
   .maria-page {
     max-width: 960px;
     margin: 0 auto;
-    padding: 0 16px 40px;
+    padding: 28px 16px 40px;
   }
 
   .maria-page section {
     margin-bottom: 28px;
   }
 
-  /* Hero */
+  /* Hero — ancho completo de pantalla */
   .maria-hero {
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 32px;
-    padding: 40px 32px;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 0;
+    width: 100%;
+    margin-bottom: 0;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+    overflow: hidden;
     background: linear-gradient(
       135deg,
       var(--pale-sand) 0%,
       #eef7f5 50%,
       var(--dusty-rose) 100%
     );
-    border-radius: 12px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
   }
 
   .maria-hero-content {
-    flex: 1 1 280px;
+    flex: 1 1 50%;
+    padding: 48px 32px 48px max(20px, calc((100% - 960px) / 2 + 16px));
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    z-index: 1;
   }
 
   .maria-hero h1 {
@@ -343,21 +357,38 @@ const momentos = [
   }
 
   .maria-hero-photo {
-    flex: 0 1 320px;
-    max-width: 100%;
-    margin: 0 auto;
+    flex: 0 0 44%;
+    max-width: none;
+    margin: 0;
+    position: relative;
+    min-height: 340px;
   }
 
   .maria-hero-photo img {
     display: block;
     width: 100%;
-    max-width: 400px;
-    height: auto;
-    border-radius: 12px;
+    height: 100%;
+    min-height: 340px;
+    max-width: none;
+    border-radius: 0;
     object-fit: cover;
     object-position: center 15%;
-    aspect-ratio: 4 / 5;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    box-shadow: none;
+    aspect-ratio: unset;
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      rgba(0, 0, 0, 0.25) 18%,
+      rgba(0, 0, 0, 0.75) 38%,
+      black 55%
+    );
+    mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      rgba(0, 0, 0, 0.25) 18%,
+      rgba(0, 0, 0, 0.75) 38%,
+      black 55%
+    );
   }
 
   /* CTA buttons */
@@ -434,16 +465,16 @@ const momentos = [
     margin-bottom: 0;
   }
 
-  /* Bio */
-  .maria-bio-card {
-    background-color: var(--pale-sand);
+  /* Bio — una sola caja (como las tarjetas del programa) */
+  .maria-bio {
+    background-color: #fff;
     padding: 32px;
     border-radius: 10px;
-    border: 1px solid rgba(50, 163, 152, 0.2);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    margin-bottom: 28px;
   }
 
-  .maria-bio-card h2 {
+  .maria-bio h2 {
     margin: 0 0 8px;
     font-size: 1.5rem;
     color: var(--deep-teal);
@@ -462,7 +493,7 @@ const momentos = [
     opacity: 0.85;
   }
 
-  .maria-bio-card > p:last-child {
+  .maria-bio > p:last-child {
     margin: 0;
     line-height: 1.7;
     color: var(--dark-charcoal);
@@ -672,12 +703,37 @@ const momentos = [
 
   @media (max-width: 640px) {
     .maria-hero {
-      padding: 28px 20px;
       flex-direction: column-reverse;
     }
 
+    .maria-hero-content {
+      padding: 28px 20px;
+    }
+
+    .maria-hero-photo {
+      flex: none;
+      width: 100%;
+      min-height: 300px;
+    }
+
+    .maria-hero-photo img {
+      min-height: 300px;
+      -webkit-mask-image: linear-gradient(
+        to right,
+        transparent 0%,
+        rgba(0, 0, 0, 0.2) 15%,
+        black 40%
+      );
+      mask-image: linear-gradient(
+        to right,
+        transparent 0%,
+        rgba(0, 0, 0, 0.2) 15%,
+        black 40%
+      );
+    }
+
     .maria-aval,
-    .maria-bio-card,
+    .maria-bio,
     .maria-form-card {
       padding: 24px 20px;
     }
