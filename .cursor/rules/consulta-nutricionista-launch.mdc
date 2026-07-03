@@ -1,0 +1,28 @@
+---
+description: Checklist pre-lanzamiento consulta nutricionista Embarazafit (email María, Vercel, Supabase)
+alwaysApply: true
+---
+
+# Embarazafit — Consulta nutricionista (pendientes de lanzamiento)
+
+Antes de dar por cerrado el formulario de María, comprobar:
+
+## Email de María (IMPORTANTE)
+
+- [ ] `MARIA_NUTRICIONISTA_EMAIL` está **vacío** → modo prueba (emails de María van a `NOTIFICATION_EMAIL` con asunto `[Prueba — iría a María]`)
+- [ ] **Al lanzar:** poner `MARIA_NUTRICIONISTA_EMAIL=hola@mariagonzalvez.com` en `.env` **y** en Vercel Environment Variables, luego redeploy
+- [ ] Verificar en dashboard que desaparece el aviso amarillo de "modo prueba"
+
+Código: `src/lib/launch-status.ts`, `src/pages/api/consulta-nutricionista.ts`
+
+## Vercel (producción)
+
+Las variables **no se crean solas**. Hay que añadirlas manualmente en Vercel → Settings → Environment Variables → "Add Environment Variable" (una por una, copiando desde `.env`).
+
+Mínimo: `ADMIN_PASSWORD`, `NOTIFICATION_EMAIL`, `MAILRELAY_*`, `SUPABASE_*`, `MARIA_NUTRICIONISTA_EMAIL`.
+
+## Supabase
+
+Plan free = máx. 2 proyectos. **Reutilizar un proyecto existente** y ejecutar `supabase/schema.sql` (tablas `embarazafit_leads`, `embarazafit_pagos`).
+
+Guía completa: `docs/CONSULTA-NUTRICIONISTA.md`

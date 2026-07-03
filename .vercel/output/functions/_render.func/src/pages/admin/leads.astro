@@ -1,0 +1,494 @@
+---
+export const prerender = false;
+
+import { isAdminAuthed } from '../../lib/admin-auth';
+import { fetchLeadsWithPagos } from '../../lib/supabase';
+import {
+  COMMISSION_RATE,
+  commissionForAmount,
+  formatEuro,
+  getMomentoLabel,
+} from '../../lib/leads';
+
+const authed = isAdminAuthed(Astro.cookies);
+const mesActual = new Date().toISOString().slice(0, 7);
+
+let leads: Awaited<ReturnType<typeof fetchLeadsWithPagos>> = [];
+let loadError: string | null = null;
+
+if (authed) {
+  try {
+    leads = await fetchLeadsWithPagos();
+  } catch {
+    loadError =
+      'No se pudieron cargar los leads. Revisa Supabase y las variables de entorno.';
+  }
+}
+
+const pagosDelMes = leads.flatMap((l) =>
+  l.pagos.filter((p) => p.mes === mesActual),
+);
+const comisionMes = pagosDelMes.reduce(
+  (sum, p) => sum + commissionForAmount(Number(p.importe)),
+  0,
+);
+
+const statusLabels: Record<string, string> = {
+  nuevo: 'Nuevo',
+  enviado: 'Enviado a María',
+  en_tratamiento: 'En tratamiento',
+  cerrado: 'Cerrado',
+};
+---
+
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Leads — Embarazafit Admin</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap"
+    />
+  </head>
+  <body>
+    <div class="admin-wrap">
+      <header class="admin-header">
+        <h1>Leads — Consulta nutrición</h1>
+        {
+          authed && (
+            <button type="button" id="logout-btn" class="btn-secondary">
+              Cerrar sesión
+            </button>
+          )
+        }
+      </header>
+
+      {
+        !authed ? (
+          <section class="login-card">
+            <h2>Acceso privado</h2>
+            <p id="login-error" class="error-msg" hidden />
+            <form id="login-form">
+              <label for="password">Contraseña</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                required
+                autocomplete="current-password"
+              />
+              <button type="submit" class="btn-primary">Entrar</button>
+            </form>
+          </section>
+        ) : loadError ? (
+          <p class="error-msg">{loadError}</p>
+        ) : (
+          <>
+            <section class="summary-card">
+              <h2>Comisión {mesActual}</h2>
+              <p class="summary-big">{formatEuro(comisionMes)}</p>
+              <p class="summary-note">
+                {Math.round(COMMISSION_RATE * 100)}% sobre {pagosDelMes.length}{' '}
+                pago{pagosDelMes.length === 1 ? '' : 's'} registrado
+                {pagosDelMes.length === 1 ? '' : 's'} este mes
+              </p>
+            </section>
+
+            <section class="leads-section">
+              <h2>Leads ({leads.length})</h2>
+              {leads.length === 0 ? (
+                <p class="empty">Aún no hay solicitudes.</p>
+              ) : (
+                <div class="leads-list">
+                  {leads.map((lead) => (
+                    <article class="lead-card" data-lead-id={lead.id}>
+                      <div class="lead-header">
+                        <div>
+                          <h3>{lead.nombre}</h3>
+                          <p class="lead-date">
+                            {new Date(lead.created_at).toLocaleString('es-ES')}
+                          </p>
+                        </div>
+                        <select
+                          class="status-select"
+                          data-lead-id={lead.id}
+                          aria-label="Estado del lead"
+                        >
+                          {Object.entries(statusLabels).map(([value, label]) => (
+                            <option value={value} selected={lead.status === value}>
+                              {label}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <ul class="lead-details">
+                        <li>
+                          <strong>Email:</strong>{' '}
+                          <a href={`mailto:${lead.email}`}>{lead.email}</a>
+                        </li>
+                        <li>
+                          <strong>Teléfono:</strong>{' '}
+                          <a
+                            href={`https://wa.me/${lead.telefono.replace(/\D/g, '')}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {lead.telefono}
+                          </a>
+                        </li>
+                        <li>
+                          <strong>Momento:</strong> {getMomentoLabel(lead.momento)}
+                        </li>
+                        {lead.situacion && (
+                          <li>
+                            <strong>Situación:</strong> {lead.situacion}
+                          </li>
+                        )}
+                      </ul>
+
+                      {lead.pagos.length > 0 && (
+                        <div class="pagos-list">
+                          <strong>Pagos registrados:</strong>
+                          <ul>
+                            {lead.pagos.map((p) => (
+                              <li>
+                                {p.mes} — {formatEuro(Number(p.importe))} (
+                                {p.tipo}) → comisión{' '}
+                                {formatEuro(commissionForAmount(Number(p.importe)))}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                      <details class="add-pago">
+                        <summary>Registrar pago</summary>
+                        <form class="pago-form" data-lead-id={lead.id}>
+                          <div class="pago-fields">
+                            <label>
+                              Mes
+                              <input
+                                type="month"
+                                name="mes"
+                                value={mesActual}
+                                required
+                              />
+                            </label>
+                            <label>
+                              Importe (€)
+                              <input
+                                type="number"
+                                name="importe"
+                                min="0.01"
+                                step="0.01"
+                                required
+                              />
+                            </label>
+                            <label>
+                              Tipo
+                              <select name="tipo" required>
+                                <option value="fraccionado">Fraccionado</option>
+                                <option value="completo">Completo</option>
+                              </select>
+                            </label>
+                          </div>
+                          <button type="submit" class="btn-secondary">
+                            Guardar pago
+                          </button>
+                        </form>
+                      </details>
+                    </article>
+                  ))}
+                </div>
+              )}
+            </section>
+          </>
+        )
+      }
+    </div>
+
+    <script>
+      const loginForm = document.getElementById('login-form');
+      const loginError = document.getElementById('login-error');
+      const logoutBtn = document.getElementById('logout-btn');
+
+      loginForm?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const password = (
+          document.getElementById('password') as HTMLInputElement
+        ).value;
+
+        const res = await fetch('/api/admin/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password }),
+        });
+
+        if (res.ok) {
+          window.location.reload();
+        } else {
+          if (loginError) {
+            loginError.textContent = 'Contraseña incorrecta';
+            loginError.hidden = false;
+          }
+        }
+      });
+
+      logoutBtn?.addEventListener('click', async () => {
+        await fetch('/api/admin/logout', { method: 'POST' });
+        window.location.reload();
+      });
+
+      document.querySelectorAll('.status-select').forEach((select) => {
+        select.addEventListener('change', async () => {
+          const leadId = (select as HTMLSelectElement).dataset.leadId;
+          const status = (select as HTMLSelectElement).value;
+
+          await fetch('/api/admin/pagos', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              action: 'update_status',
+              lead_id: leadId,
+              status,
+            }),
+          });
+        });
+      });
+
+      document.querySelectorAll('.pago-form').forEach((form) => {
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const leadId = (form as HTMLFormElement).dataset.leadId;
+          const fd = new FormData(form as HTMLFormElement);
+          const mesRaw = fd.get('mes') as string;
+          const mes = mesRaw?.slice(0, 7);
+
+          const res = await fetch('/api/admin/pagos', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              lead_id: leadId,
+              mes,
+              importe: fd.get('importe'),
+              tipo: fd.get('tipo'),
+            }),
+          });
+
+          if (res.ok) {
+            window.location.reload();
+          } else {
+            const body = await res.json().catch(() => ({}));
+            alert(
+              (body as { error?: string }).error ||
+                'No se pudo guardar el pago',
+            );
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    --pale-sand: #f7f4ef;
+    --dark-charcoal: #2e3033;
+    --vibrant-coral: #f76f5e;
+    --deep-teal: #32a398;
+    --dusty-rose: #d2b7bd;
+  }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    background: var(--pale-sand);
+    color: var(--dark-charcoal);
+  }
+
+  .admin-wrap {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 24px 16px 48px;
+  }
+
+  .admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  .admin-header h1 {
+    font-size: 1.4rem;
+    margin: 0;
+    color: var(--deep-teal);
+  }
+
+  .login-card,
+  .summary-card,
+  .lead-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 24px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  }
+
+  .login-card h2,
+  .summary-card h2,
+  .leads-section h2 {
+    margin-top: 0;
+    color: var(--dark-charcoal);
+  }
+
+  .summary-card {
+    margin-bottom: 24px;
+    border-left: 4px solid var(--deep-teal);
+  }
+
+  .summary-big {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--deep-teal);
+    margin: 8px 0;
+  }
+
+  .summary-note {
+    margin: 0;
+    opacity: 0.8;
+    font-size: 0.95rem;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-family: inherit;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .btn-primary {
+    background: var(--vibrant-coral);
+    color: #fff;
+    width: 100%;
+    margin-top: 12px;
+  }
+
+  .btn-secondary {
+    background: var(--deep-teal);
+    color: #fff;
+    font-size: 0.9rem;
+  }
+
+  .login-card label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 6px;
+  }
+
+  .login-card input[type='password'] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-family: inherit;
+  }
+
+  .error-msg {
+    color: var(--vibrant-coral);
+    font-weight: bold;
+  }
+
+  .empty {
+    opacity: 0.7;
+  }
+
+  .leads-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .lead-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .lead-header h3 {
+    margin: 0 0 4px;
+    color: var(--deep-teal);
+  }
+
+  .lead-date {
+    margin: 0;
+    font-size: 0.85rem;
+    opacity: 0.7;
+  }
+
+  .status-select {
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-family: inherit;
+    font-size: 0.85rem;
+  }
+
+  .lead-details {
+    margin: 0 0 12px;
+    padding-left: 18px;
+    line-height: 1.6;
+  }
+
+  .lead-details a {
+    color: var(--deep-teal);
+  }
+
+  .pagos-list {
+    font-size: 0.9rem;
+    margin-bottom: 12px;
+  }
+
+  .pagos-list ul {
+    margin: 6px 0 0;
+    padding-left: 18px;
+  }
+
+  .add-pago summary {
+    cursor: pointer;
+    font-weight: bold;
+    color: var(--deep-teal);
+    margin-bottom: 8px;
+  }
+
+  .pago-fields {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .pago-fields label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 0.85rem;
+    font-weight: bold;
+  }
+
+  .pago-fields input,
+  .pago-fields select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-family: inherit;
+    font-weight: normal;
+  }
+</style>

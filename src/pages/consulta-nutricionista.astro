@@ -220,9 +220,17 @@ const momentos = [
             </label>
           </div>
 
-          <button type="submit" class="btn-cta btn-cta-submit" id="submit-btn">
+          <button
+            type="submit"
+            class="btn-cta btn-cta-submit"
+            id="submit-btn"
+            aria-live="polite"
+          >
             Solicitar mi plaza con María
           </button>
+          <p id="form-sending" class="form-sending" hidden aria-live="polite">
+            Enviando tu solicitud, un momento…
+          </p>
         </form>
       </div>
     </section>
@@ -233,14 +241,18 @@ const momentos = [
   const form = document.getElementById('maria-form') as HTMLFormElement;
   const successEl = document.getElementById('form-success');
   const errorEl = document.getElementById('form-error');
+  const sendingEl = document.getElementById('form-sending');
   const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
 
   if (form) {
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       if (errorEl) errorEl.hidden = true;
+      if (sendingEl) sendingEl.hidden = false;
       submitBtn.disabled = true;
+      submitBtn.classList.add('is-loading');
       submitBtn.textContent = 'Enviando…';
+      submitBtn.setAttribute('aria-busy', 'true');
 
       const data = Object.fromEntries(new FormData(form));
 
@@ -259,11 +271,13 @@ const momentos = [
           );
         }
 
+        if (sendingEl) sendingEl.hidden = true;
         form.hidden = true;
         document.querySelector('.maria-form-intro')?.setAttribute('hidden', '');
         if (successEl) successEl.hidden = false;
         successEl?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       } catch (err) {
+        if (sendingEl) sendingEl.hidden = true;
         if (errorEl) {
           errorEl.textContent =
             err instanceof Error
@@ -272,7 +286,9 @@ const momentos = [
           errorEl.hidden = false;
         }
         submitBtn.disabled = false;
+        submitBtn.classList.remove('is-loading');
         submitBtn.textContent = 'Solicitar mi plaza con María';
+        submitBtn.removeAttribute('aria-busy');
       }
     });
   }
@@ -370,6 +386,19 @@ const momentos = [
   .btn-cta-submit {
     width: 100%;
     margin-top: 8px;
+  }
+
+  .btn-cta-submit.is-loading {
+    opacity: 0.75;
+    cursor: wait;
+  }
+
+  .form-sending {
+    text-align: center;
+    margin: 12px 0 0;
+    color: var(--deep-teal);
+    font-weight: bold;
+    font-size: 0.95rem;
   }
 
   /* Aval */
