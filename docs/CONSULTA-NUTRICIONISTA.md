@@ -142,7 +142,7 @@ Para no enterarte tarde de que el formulario ha dejado de guardar leads:
 | Qué | URL | Cuándo |
 |---|---|---|
 | **Ping ligero** | `https://www.embarazafit.com/api/health/leads` | Lo vigila un servicio externo (tú configuras) |
-| **Prueba de escritura** | `/api/cron/check-lead-form` | Vercel, **8:00 y 20:00** UTC (9:00 y 21:00 hora España en invierno) |
+| **Prueba de escritura** | `/api/cron/check-lead-form` | Vercel, **1×/día** a las 8:00 UTC (~9:00 hora España en invierno). Plan Hobby: máximo un cron diario. |
 
 Si la prueba de escritura falla, recibes un email en `NOTIFICATION_EMAIL` con asunto `[ALERTA Embarazafit]…`.
 

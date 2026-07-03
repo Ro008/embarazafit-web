@@ -12,7 +12,7 @@ El riesgo principal del negocio en este proyecto es **perder leads** (formulario
 |---|---|
 | **Prueba manual** del formulario + dashboard | Antes de cada deploy importante |
 | **`/api/health/leads`** + UptimeRobot | Aviso en minutos si la web o Supabase fallan |
-| **Cron `/api/cron/check-lead-form`** | Prueba de escritura 2×/día + email si falla |
+| **Cron `/api/cron/check-lead-form`** | Prueba de escritura 1×/día + email si falla |
 | **Mailrelay** con pausa y reintentos | 3 emails por lead sin perder el lead en BD |
 
 Los **tests automatizados** (Vitest, Playwright) son el **20 % restante**: útiles, pero no obligatorios mientras lo anterior funcione y el flujo sea estable.

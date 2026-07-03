@@ -7,7 +7,7 @@ import {
 
 export const prerender = false;
 
-/** Prueba real de escritura en Supabase, 2×/día. Solo alerta si falla. */
+/** Prueba real de escritura en Supabase, 1×/día. Solo alerta si falla. */
 export const GET: APIRoute = async ({ request }) => {
   if (!isAuthorizedCron(request)) {
     return new Response(JSON.stringify({ error: 'No autorizado' }), {
