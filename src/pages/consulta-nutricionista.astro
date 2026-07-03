@@ -1,0 +1,741 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const momentos = [
+  { value: 'embarazo-primeras', label: 'Estoy embarazada (primeras semanas)' },
+  {
+    value: 'embarazo-segundo-tercer',
+    label: 'Estoy embarazada (segundo/tercer trimestre)',
+  },
+  { value: 'posparto', label: 'Estoy en pleno posparto' },
+  {
+    value: 'busqueda-embarazo',
+    label: 'Estoy buscando el embarazo / Salud hormonal',
+  },
+];
+---
+
+<Layout title="Consulta con María | Embarazafit">
+  <!-- Sección 1: Hero (ancho completo, como el header) -->
+  <section class="maria-hero">
+    <div class="maria-hero-content">
+      <h1>No tienes que hacerlo sola: Nutrición con calma, ciencia y mucho amor para tu embarazo y posparto.</h1>
+      <p class="maria-hero-lead">
+        Siente la seguridad de alimentar bien a tu bebé, mantener tus niveles
+        de energía y cuidar tu salud hormonal de la mano de una profesional
+        especializada.
+      </p>
+      <a href="#formulario" class="btn-cta">Quiero solicitar mi plaza</a>
+    </div>
+    <div class="maria-hero-photo">
+      <img
+        src="/maria-nutricionista.png"
+        alt="María, dietista-nutricionista"
+        width="480"
+        height="560"
+      />
+    </div>
+  </section>
+
+  <div class="maria-page">
+    <!-- Sección 2: Aval de Rocío -->
+    <section class="maria-aval">
+      <p class="maria-aval-label">Un mensaje de Rocío para ti:</p>
+      <blockquote class="maria-aval-quote">
+        <p>
+          Como creadora de EmbarazaFit, sé perfectamente el bombardeo de
+          información —y de dudas— al que nos enfrentamos cuando decidimos
+          cuidar nuestra alimentación en esta etapa, especialmente si lidiamos
+          con la gestión de la glucosa o alteraciones hormonales. Por ética y
+          responsabilidad, yo no prescribo dietas; por eso he buscado a la
+          mejor profesional para acompañarte.
+        </p>
+        <p>
+          Confío plenamente en María porque no cree en dietas milagro
+          ni en restricciones absurdas. Su enfoque se basa en la ciencia, en la
+          educación nutricional y en ponértelo fácil para que consigas cambios
+          reales que se adapten a tu ritmo de vida de madre.
+        </p>
+      </blockquote>
+    </section>
+
+    <!-- Sección 3: Presentación -->
+    <section class="maria-bio">
+      <h2>Conoce a María</h2>
+      <p class="maria-bio-title">
+        Dietista-Nutricionista <span>(Nº de colegiada CV01344)</span>
+      </p>
+      <p>
+        Graduada en Nutrición Humana y Dietética por la Universidad de
+        Alicante, María es una apasionada de la salud hormonal femenina
+        integrativa. Su misión es enseñarte a ser completamente autónoma con
+        tu alimentación a largo plazo, guiándote con herramientas prácticas
+        como la planificación, el batch-cooking y la adaptación a tus horarios
+        para mejorar tu calidad de vida y la de tu bebé.
+      </p>
+    </section>
+
+    <!-- Sección 4: Programa CÍCLICAS -->
+    <section class="maria-programa">
+      <h2>Programa CÍCLICAS: Tu acompañamiento integral de 12 semanas</h2>
+      <p class="maria-programa-intro">
+        Un método diseñado exclusivamente para cubrir los requerimientos
+        críticos del embarazo y la recuperación del posparto:
+      </p>
+
+      <div class="maria-programa-grid">
+        <div class="maria-programa-item">
+          <div class="maria-programa-icon" aria-hidden="true">
+            <i class="fab fa-whatsapp"></i>
+          </div>
+          <h3>Soporte continuo y cercano</h3>
+          <p>
+            Seguimiento semanal personalizado y contacto continuo por WhatsApp
+            para resolver cualquier duda al instante (olvídate de sentirte sola
+            hasta la siguiente consulta).
+          </p>
+        </div>
+
+        <div class="maria-programa-item">
+          <div class="maria-programa-icon" aria-hidden="true">
+            <i class="fas fa-clipboard-list"></i>
+          </div>
+          <h3>Planes 100% personalizados (Un total de 6)</h3>
+          <p>
+            Tendrás una revisión aproximadamente cada 15 días con cambio de plan
+            nutricional adaptado a tus gustos, aversiones y necesidades físicas.
+          </p>
+        </div>
+
+        <div class="maria-programa-item">
+          <div class="maria-programa-icon" aria-hidden="true">
+            <i class="fas fa-seedling"></i>
+          </div>
+          <h3>Educación Alimentaria Práctica</h3>
+          <p>
+            Aprenderás a gestionar la falta de tiempo para cocinar, diseñar menús
+            equilibrados, interpretar el etiquetado y optimizar tu salud
+            metabólica.
+          </p>
+        </div>
+      </div>
+
+      <p class="maria-programa-alert" role="note">
+        <strong>Plazas limitadas:</strong> Para asegurar la máxima calidad en el
+        soporte individualizado, solo se abren 5 plazas disponibles al mes.
+      </p>
+    </section>
+
+    <!-- Sección 5: Formulario -->
+    <section class="maria-form-section" id="formulario">
+      <div class="maria-form-card">
+        <h2>¿Quieres que María estudie tu caso?</h2>
+        <p class="maria-form-intro">
+          Rellena este breve formulario. María revisará tus datos personalmente
+          y te contactará a través de WhatsApp para contarte cómo podéis empezar
+          a trabajar juntas en tu objetivo.
+        </p>
+
+        <div id="form-success" class="form-success" hidden>
+          <p class="form-success-title">¡Solicitud enviada!</p>
+          <p>
+            María revisará tu caso y te contactará por WhatsApp en los próximos
+            días para contarte cómo podéis empezar a trabajar juntas.
+          </p>
+        </div>
+
+        <p id="form-error" class="form-error" hidden role="alert"></p>
+
+        <form
+          id="maria-form"
+          class="maria-form"
+          method="POST"
+          action="/api/consulta-nutricionista"
+        >
+          <div class="form-group">
+            <label for="nombre">Nombre completo</label>
+            <input
+              type="text"
+              id="nombre"
+              name="nombre"
+              required
+              autocomplete="name"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="telefono">Teléfono (con WhatsApp)</label>
+            <input
+              type="tel"
+              id="telefono"
+              name="telefono"
+              required
+              autocomplete="tel"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="email">Correo electrónico</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              required
+              autocomplete="email"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="momento">¿En qué momento te encuentras?</label>
+            <select id="momento" name="momento" required>
+              <option value="" disabled selected>Selecciona una opción</option>
+              {
+                momentos.map((m) => (
+                  <option value={m.value}>{m.label}</option>
+                ))
+              }
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="situacion">
+              Cuéntanos brevemente tu situación o tus objetivos
+              <span class="optional">(Opcional)</span>
+            </label>
+            <textarea
+              id="situacion"
+              name="situacion"
+              rows="4"
+              placeholder="Por ejemplo: diabetes gestacional, fatiga, SOP…"
+            ></textarea>
+          </div>
+
+          <div class="form-group form-consent">
+            <label class="consent-label">
+              <input type="checkbox" name="consentimiento" required />
+              Acepto que mis datos sean compartidos con María para que pueda
+              contactarme en relación con el programa CÍCLICAS.
+            </label>
+          </div>
+
+          <button
+            type="submit"
+            class="btn-cta btn-cta-submit"
+            id="submit-btn"
+            aria-live="polite"
+          >
+            Solicitar mi plaza con María
+          </button>
+          <p id="form-sending" class="form-sending" hidden aria-live="polite">
+            Enviando tu solicitud, un momento…
+          </p>
+        </form>
+      </div>
+    </section>
+  </div>
+</Layout>
+
+<script>
+  const form = document.getElementById('maria-form') as HTMLFormElement;
+  const successEl = document.getElementById('form-success');
+  const errorEl = document.getElementById('form-error');
+  const sendingEl = document.getElementById('form-sending');
+  const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
+
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (errorEl) errorEl.hidden = true;
+      if (sendingEl) sendingEl.hidden = false;
+      submitBtn.disabled = true;
+      submitBtn.classList.add('is-loading');
+      submitBtn.textContent = 'Enviando…';
+      submitBtn.setAttribute('aria-busy', 'true');
+
+      const data = Object.fromEntries(new FormData(form));
+
+      try {
+        const res = await fetch('/api/consulta-nutricionista', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+
+        if (!res.ok) {
+          const body = await res.json().catch(() => ({}));
+          throw new Error(
+            (body as { error?: string }).error ||
+              'No se pudo enviar la solicitud. Inténtalo de nuevo.',
+          );
+        }
+
+        if (sendingEl) sendingEl.hidden = true;
+        form.hidden = true;
+        document.querySelector('.maria-form-intro')?.setAttribute('hidden', '');
+        if (successEl) successEl.hidden = false;
+        successEl?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } catch (err) {
+        if (sendingEl) sendingEl.hidden = true;
+        if (errorEl) {
+          errorEl.textContent =
+            err instanceof Error
+              ? err.message
+              : 'No se pudo enviar la solicitud. Inténtalo de nuevo.';
+          errorEl.hidden = false;
+        }
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('is-loading');
+        submitBtn.textContent = 'Solicitar mi plaza con María';
+        submitBtn.removeAttribute('aria-busy');
+      }
+    });
+  }
+</script>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&display=swap');
+
+  :global(main:has(.maria-hero)) {
+    margin-top: 0;
+    max-width: none;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .maria-page {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 28px 16px 40px;
+  }
+
+  .maria-page section {
+    margin-bottom: 28px;
+  }
+
+  /* Hero — ancho completo de pantalla */
+  .maria-hero {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 0;
+    width: 100%;
+    margin-bottom: 0;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+    overflow: hidden;
+    background: linear-gradient(
+      135deg,
+      var(--pale-sand) 0%,
+      #eef7f5 50%,
+      var(--dusty-rose) 100%
+    );
+  }
+
+  .maria-hero-content {
+    flex: 1 1 50%;
+    padding: 48px 32px 48px max(20px, calc((100% - 960px) / 2 + 16px));
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    z-index: 1;
+  }
+
+  .maria-hero h1 {
+    font-size: clamp(1.6rem, 4vw, 2.1rem);
+    color: var(--gunmetal);
+    line-height: 1.25;
+    margin: 0 0 16px;
+  }
+
+  .maria-hero-lead {
+    font-size: 1.05rem;
+    line-height: 1.65;
+    color: var(--dark-charcoal);
+    margin: 0 0 24px;
+  }
+
+  .maria-hero-photo {
+    flex: 0 0 44%;
+    max-width: none;
+    margin: 0;
+    position: relative;
+    min-height: 340px;
+  }
+
+  .maria-hero-photo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 340px;
+    max-width: none;
+    border-radius: 0;
+    object-fit: cover;
+    object-position: center 15%;
+    box-shadow: none;
+    aspect-ratio: unset;
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      rgba(0, 0, 0, 0.25) 18%,
+      rgba(0, 0, 0, 0.75) 38%,
+      black 55%
+    );
+    mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      rgba(0, 0, 0, 0.25) 18%,
+      rgba(0, 0, 0, 0.75) 38%,
+      black 55%
+    );
+  }
+
+  /* CTA buttons */
+  .btn-cta {
+    display: inline-block;
+    padding: 14px 28px;
+    background-color: var(--vibrant-coral);
+    color: var(--pale-sand);
+    text-decoration: none;
+    border: none;
+    border-radius: 50px;
+    font-weight: bold;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-align: center;
+  }
+
+  .btn-cta:hover {
+    background-color: var(--deep-teal);
+    color: var(--pale-sand);
+    border-bottom: none;
+  }
+
+  .btn-cta-submit {
+    width: 100%;
+    margin-top: 8px;
+  }
+
+  .btn-cta-submit.is-loading {
+    opacity: 0.75;
+    cursor: wait;
+  }
+
+  .form-sending {
+    text-align: center;
+    margin: 12px 0 0;
+    color: var(--deep-teal);
+    font-weight: bold;
+    font-size: 0.95rem;
+  }
+
+  /* Aval */
+  .maria-aval {
+    padding: 36px 32px;
+    background-color: #fff;
+    border-left: 5px solid var(--deep-teal);
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+
+  .maria-aval-label {
+    font-family: 'Caveat', cursive;
+    font-size: 1.5rem;
+    color: var(--deep-teal);
+    margin: 0 0 12px;
+  }
+
+  .maria-aval-quote {
+    margin: 0;
+    padding: 0;
+    border: none;
+  }
+
+  .maria-aval-quote p {
+    font-size: 1.05rem;
+    line-height: 1.75;
+    color: var(--dark-charcoal);
+    margin: 0 0 16px;
+  }
+
+  .maria-aval-quote p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Bio — una sola caja (como las tarjetas del programa) */
+  .maria-bio {
+    background-color: #fff;
+    padding: 32px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    margin-bottom: 28px;
+  }
+
+  .maria-bio h2 {
+    margin: 0 0 8px;
+    font-size: 1.5rem;
+    color: var(--deep-teal);
+  }
+
+  .maria-bio-title {
+    font-weight: bold;
+    color: var(--gunmetal);
+    margin: 0 0 16px;
+    font-size: 0.95rem;
+  }
+
+  .maria-bio-title span {
+    font-weight: normal;
+    color: var(--dark-charcoal);
+    opacity: 0.85;
+  }
+
+  .maria-bio > p:last-child {
+    margin: 0;
+    line-height: 1.7;
+    color: var(--dark-charcoal);
+  }
+
+  /* Programa */
+  .maria-programa h2 {
+    text-align: center;
+    font-size: clamp(1.3rem, 3.5vw, 1.7rem);
+    color: var(--gunmetal);
+    margin: 0 0 12px;
+  }
+
+  .maria-programa-intro {
+    text-align: center;
+    max-width: 640px;
+    margin: 0 auto 28px;
+    line-height: 1.6;
+    color: var(--dark-charcoal);
+  }
+
+  .maria-programa-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+    margin-bottom: 24px;
+  }
+
+  .maria-programa-item {
+    background-color: #fff;
+    padding: 24px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    text-align: center;
+  }
+
+  .maria-programa-icon {
+    width: 52px;
+    height: 52px;
+    margin: 0 auto 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--deep-teal);
+    color: var(--pale-sand);
+    border-radius: 50%;
+    font-size: 1.4rem;
+  }
+
+  .maria-programa-item h3 {
+    font-size: 1.05rem;
+    color: var(--gunmetal);
+    margin: 0 0 10px;
+  }
+
+  .maria-programa-item p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--dark-charcoal);
+    margin: 0;
+    text-align: left;
+  }
+
+  .maria-programa-alert {
+    background-color: #fff8e6;
+    border: 1px solid #f0d78c;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--dark-charcoal);
+  }
+
+  /* Formulario */
+  .maria-form-section {
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .maria-form-card {
+    background-color: var(--dusty-rose);
+    background: linear-gradient(
+      160deg,
+      rgba(210, 183, 189, 0.45) 0%,
+      rgba(247, 244, 239, 0.95) 100%
+    );
+    padding: 36px 32px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border: 2px solid rgba(50, 163, 152, 0.25);
+  }
+
+  .maria-form-card h2 {
+    text-align: center;
+    margin: 0 0 10px;
+    color: var(--gunmetal);
+    font-size: 1.5rem;
+  }
+
+  .maria-form-intro {
+    text-align: center;
+    max-width: 520px;
+    margin: 0 auto 28px;
+    line-height: 1.6;
+    color: var(--dark-charcoal);
+  }
+
+  .maria-form {
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .form-group {
+    margin-bottom: 18px;
+  }
+
+  .form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 6px;
+    color: var(--gunmetal);
+    font-size: 0.95rem;
+  }
+
+  .optional {
+    font-weight: normal;
+    opacity: 0.75;
+    font-size: 0.85rem;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid rgba(46, 48, 51, 0.2);
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    background-color: #fff;
+    color: var(--dark-charcoal);
+  }
+
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    outline: 2px solid var(--deep-teal);
+    outline-offset: 1px;
+  }
+
+  .form-consent {
+    margin-top: 8px;
+  }
+
+  .consent-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-weight: normal;
+    font-size: 0.88rem;
+    line-height: 1.5;
+    cursor: pointer;
+  }
+
+  .consent-label input {
+    width: auto;
+    margin-top: 3px;
+    flex-shrink: 0;
+  }
+
+  .form-success {
+    max-width: 480px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 24px;
+    background-color: #fff;
+    border-radius: 10px;
+    border: 2px solid var(--deep-teal);
+  }
+
+  .form-success-title {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: var(--deep-teal);
+    margin: 0 0 12px;
+  }
+
+  .form-success p:last-child {
+    margin: 0;
+    line-height: 1.6;
+    color: var(--dark-charcoal);
+  }
+
+  .form-error {
+    max-width: 480px;
+    margin: 0 auto 16px;
+    padding: 12px 16px;
+    background-color: #fdecea;
+    border: 1px solid var(--vibrant-coral);
+    border-radius: 8px;
+    color: var(--dark-charcoal);
+    font-size: 0.95rem;
+    text-align: center;
+  }
+
+  @media (max-width: 640px) {
+    .maria-hero {
+      flex-direction: column-reverse;
+    }
+
+    .maria-hero-content {
+      padding: 28px 20px;
+    }
+
+    .maria-hero-photo {
+      flex: none;
+      width: 100%;
+      min-height: 300px;
+    }
+
+    .maria-hero-photo img {
+      min-height: 300px;
+      -webkit-mask-image: linear-gradient(
+        to right,
+        transparent 0%,
+        rgba(0, 0, 0, 0.2) 15%,
+        black 40%
+      );
+      mask-image: linear-gradient(
+        to right,
+        transparent 0%,
+        rgba(0, 0, 0, 0.2) 15%,
+        black 40%
+      );
+    }
+
+    .maria-aval,
+    .maria-bio,
+    .maria-form-card {
+      padding: 24px 20px;
+    }
+  }
+</style>

@@ -1,0 +1,25 @@
+---
+description: Cuándo añadir o ampliar tests en Embarazafit (regla Pareto)
+alwaysApply: false
+globs:
+  - src/lib/**/*.ts
+  - src/pages/api/**/*.ts
+  - "**/*.test.ts"
+  - "**/*.spec.ts"
+---
+
+# Testing — regla Pareto
+
+Antes de proponer Vitest, Playwright o una suite grande, lee `docs/TESTING.md`.
+
+## Regla rápida
+
+- **No** añadas tests por defecto en cambios de copy, CSS o docs.
+- **Sí** propón tests unitarios cuando toques validación de leads, pagos/comisiones, o lógica de emails en `consulta-nutricionista.ts`.
+- El **80 %** del riesgo de leads ya lo cubren health check, cron y prueba manual — no dupliques eso con E2E salvo que el usuario lo pida.
+
+## Prioridad si hay que testear
+
+1. `getFirstName`, `validateLeadPayload`, `validateNewPago`, `commissionForAmount`
+2. Integración API mockeada
+3. E2E navegador (último)
