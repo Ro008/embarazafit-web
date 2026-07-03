@@ -65,6 +65,17 @@ export async function fetchLeadsWithPagos(): Promise<
   }));
 }
 
+export async function fetchPagosForLead(leadId: string): Promise<Pago[]> {
+  const { data, error } = await getSupabase()
+    .from(PAGOS_TABLE)
+    .select('*')
+    .eq('lead_id', leadId)
+    .order('created_at', { ascending: true });
+
+  if (error) throw error;
+  return (data ?? []) as Pago[];
+}
+
 export async function insertPago(data: {
   lead_id: string;
   mes: string;

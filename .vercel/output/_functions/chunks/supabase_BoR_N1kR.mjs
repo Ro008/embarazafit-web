@@ -1,7 +1,9 @@
 import { createClient } from '@supabase/supabase-js';
-import { g as getRequiredEnv } from './env_jnO49ZIj.mjs';
+import { g as getRequiredEnv } from './env_CXdERRvH.mjs';
 
 let client = null;
+const LEADS_TABLE = "embarazafit_leads";
+const PAGOS_TABLE = "embarazafit_pagos";
 function getSupabase() {
   if (!client) {
     client = createClient(
@@ -13,14 +15,14 @@ function getSupabase() {
   return client;
 }
 async function insertLead(data) {
-  const { data: lead, error } = await getSupabase().from("leads").insert({ ...data, status: "nuevo" }).select().single();
+  const { data: lead, error } = await getSupabase().from(LEADS_TABLE).insert({ ...data, status: "nuevo" }).select().single();
   if (error) throw error;
   return lead;
 }
 async function fetchLeadsWithPagos() {
-  const { data: leads, error: leadsError } = await getSupabase().from("leads").select("*").order("created_at", { ascending: false });
+  const { data: leads, error: leadsError } = await getSupabase().from(LEADS_TABLE).select("*").order("created_at", { ascending: false });
   if (leadsError) throw leadsError;
-  const { data: pagos, error: pagosError } = await getSupabase().from("pagos").select("*").order("created_at", { ascending: false });
+  const { data: pagos, error: pagosError } = await getSupabase().from(PAGOS_TABLE).select("*").order("created_at", { ascending: false });
   if (pagosError) throw pagosError;
   const pagosByLead = /* @__PURE__ */ new Map();
   for (const pago of pagos ?? []) {
@@ -34,12 +36,12 @@ async function fetchLeadsWithPagos() {
   }));
 }
 async function insertPago(data) {
-  const { data: pago, error } = await getSupabase().from("pagos").insert(data).select().single();
+  const { data: pago, error } = await getSupabase().from(PAGOS_TABLE).insert(data).select().single();
   if (error) throw error;
   return pago;
 }
 async function updateLeadStatus(id, status) {
-  const { error } = await getSupabase().from("leads").update({ status }).eq("id", id);
+  const { error } = await getSupabase().from(LEADS_TABLE).update({ status }).eq("id", id);
   if (error) throw error;
 }
 

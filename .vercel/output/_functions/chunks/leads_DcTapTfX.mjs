@@ -5,6 +5,12 @@ const MOMENTO_LABELS = {
   posparto: "Estoy en pleno posparto",
   "busqueda-embarazo": "Estoy buscando el embarazo / Salud hormonal"
 };
+const STATUS_LABELS = {
+  nuevo: "Nueva",
+  enviado: "Pasada a María",
+  en_tratamiento: "Clienta (paga)",
+  cerrado: "No ha contratado"
+};
 function getMomentoLabel(value) {
   return MOMENTO_LABELS[value] ?? value;
 }
@@ -18,4 +24,4 @@ function commissionForAmount(amount) {
   return Math.round(amount * COMMISSION_RATE * 100) / 100;
 }
 
-export { COMMISSION_RATE as C, MOMENTO_LABELS as M, commissionForAmount as c, formatEuro as f, getMomentoLabel as g };
+export { COMMISSION_RATE as C, MOMENTO_LABELS as M, STATUS_LABELS as S, commissionForAmount as c, formatEuro as f, getMomentoLabel as g };

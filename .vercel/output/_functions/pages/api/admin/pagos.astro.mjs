@@ -1,5 +1,5 @@
-import { i as isAdminAuthed, u as unauthorizedResponse } from '../../../chunks/admin-auth_DH5dIX0_.mjs';
-import { u as updateLeadStatus, i as insertPago } from '../../../chunks/supabase_Cx9qJxwH.mjs';
+import { i as isAdminAuthed, u as unauthorizedResponse } from '../../../chunks/admin-auth_ommQd3NC.mjs';
+import { u as updateLeadStatus, i as insertPago } from '../../../chunks/supabase_BoR_N1kR.mjs';
 export { renderers } from '../../../renderers.mjs';
 
 const prerender = false;

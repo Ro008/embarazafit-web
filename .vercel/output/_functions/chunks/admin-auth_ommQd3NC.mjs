@@ -1,13 +1,20 @@
 import { createHash } from 'node:crypto';
-import { g as getRequiredEnv } from './env_jnO49ZIj.mjs';
+import { a as getEnv, g as getRequiredEnv } from './env_CXdERRvH.mjs';
 
 const ADMIN_COOKIE = "embarazafit_admin";
-function getAdminToken() {
-  const password = getRequiredEnv("ADMIN_PASSWORD");
+function hashAdminPassword(password) {
   return createHash("sha256").update(`embarazafit-admin:${password}`).digest("hex");
 }
+function getAdminToken() {
+  const password = getRequiredEnv("ADMIN_PASSWORD");
+  return hashAdminPassword(password);
+}
 function isAdminAuthed(cookies) {
-  return cookies.get(ADMIN_COOKIE)?.value === getAdminToken();
+  const session = cookies.get(ADMIN_COOKIE)?.value;
+  if (!session) return false;
+  const password = getEnv("ADMIN_PASSWORD");
+  if (!password) return false;
+  return session === hashAdminPassword(password);
 }
 function setAdminCookie(cookies) {
   cookies.set(ADMIN_COOKIE, getAdminToken(), {

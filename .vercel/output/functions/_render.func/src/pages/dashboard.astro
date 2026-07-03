@@ -6,10 +6,9 @@ import { getEnv } from '../lib/env';
 import { isMariaEmailLive } from '../lib/launch-status';
 import {
   COMMISSION_RATE,
-  canLeadAcceptMorePayments,
+  STATUS_LABELS,
   commissionForAmount,
   formatEuro,
-  formatShortDate,
   getMomentoLabel,
 } from '../lib/leads';
 import {
@@ -45,12 +44,6 @@ if (authed) {
 
 const leadsDelMes = leads.filter(
   (l) => leadCaptureMonth(l.created_at) === selectedMes,
-);
-
-const leadsPendientesCobro = leadsDelMes.filter(
-  (l) =>
-    canLeadAcceptMorePayments(l.pagos) &&
-    !l.pagos.some((p) => p.mes === selectedMes),
 );
 
 const cobrosDelMes = leads.flatMap((lead) =>
@@ -148,13 +141,12 @@ const clientasConPago = new Set(cobrosDelMes.map((p) => p.lead_id)).size;
                   A fin de mes, le pasas a María la lista de leads de ese mes.
                 </li>
                 <li>
-                  María te dice quién ha contratado su consulta (le han pagado a
-                  ella por Bizum) y cuánto ha cobrado de cada una.
+                  María te dice cuántas se han convertido en clientas y cuánto
+                  te han pagado (por Bizum).
                 </li>
                 <li>
-                  Registras aquí esos cobros → el dashboard calcula tu{' '}
-                  <strong>{Math.round(COMMISSION_RATE * 100)}%</strong> sobre lo
-                  que María ha cobrado.
+                  Registras aquí cada cobro → el dashboard calcula tu{' '}
+                  <strong>{Math.round(COMMISSION_RATE * 100)}%</strong>.
                 </li>
               </ol>
             </section>
@@ -196,10 +188,9 @@ const clientasConPago = new Set(cobrosDelMes.map((p) => p.lead_id)).size;
                   <strong>{formatEuro(totalCobrado)}</strong> cobrado por María
                 </li>
                 <li>
-                  <strong>{cobrosDelMes.length}</strong>{' '}
-                  {cobrosDelMes.length === 1
-                    ? 'pago registrado'
-                    : 'pagos registrados'}
+                  <strong>{cobrosDelMes.length}</strong> pago
+                  {cobrosDelMes.length === 1 ? '' : 's'} registrado
+                  {cobrosDelMes.length === 1 ? '' : 's'}
                 </li>
                 <li>
                   <strong>{clientasConPago}</strong> clienta
@@ -223,27 +214,18 @@ const clientasConPago = new Set(cobrosDelMes.map((p) => p.lead_id)).size;
 
               <h3>Registrar un cobro que María te ha confirmado</h3>
               <p class="help-text">
-                Solo leads de {mesLabel} sin cobro ya registrado este mes. Cada
-                clienta: un pago único o hasta 2 cuotas (una por mes).
+                Usa el mes seleccionado arriba ({mesLabel}) como mes del cobro.
               </p>
               <form id="cobro-global-form" class="cobro-form">
                 <input type="hidden" name="mes" value={selectedMes} />
                 <label>
-                  Lead de este mes
-                  <select
-                    name="lead_id"
-                    required
-                    disabled={leadsPendientesCobro.length === 0}
-                  >
-                    <option value="">
-                      {leadsDelMes.length === 0
-                        ? 'No hay leads este mes'
-                        : leadsPendientesCobro.length === 0
-                          ? 'Todas tienen cobro registrado'
-                          : 'Elige una lead…'}
-                    </option>
-                    {leadsPendientesCobro.map((l) => (
-                      <option value={l.id}>{l.nombre}</option>
+                  Clienta (lead)
+                  <select name="lead_id" required>
+                    <option value="">Elige una clienta…</option>
+                    {leads.map((l) => (
+                      <option value={l.id}>
+                        {l.nombre} ({leadCaptureMonth(l.created_at)})
+                      </option>
                     ))}
                   </select>
                 </label>
@@ -268,44 +250,98 @@ const clientasConPago = new Set(cobrosDelMes.map((p) => p.lead_id)).size;
               </form>
             </section>
 
-            <section class="card leads-export-card">
+            <section class="card">
               <h2>
                 Leads captados en {mesLabel} ({leadsDelMes.length})
               </h2>
               <p class="help-text">
-                Captura esta tabla para enviársela a María a fin de mes.
+                Estas son las solicitudes del formulario de este mes. Pásaselas
+                a María a fin de mes.
               </p>
               {
                 leadsDelMes.length === 0 ? (
                   <p class="empty">Ningún lead este mes.</p>
                 ) : (
-                  <div class="table-wrap">
-                    <table class="leads-table">
-                      <thead>
-                        <tr>
-                          <th>#</th>
-                          <th>Fecha</th>
-                          <th>Nombre</th>
-                          <th>Teléfono</th>
-                          <th>Email</th>
-                          <th>Momento</th>
-                          <th>Notas</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {leadsDelMes.map((lead, i) => (
-                          <tr>
-                            <td>{i + 1}</td>
-                            <td>{formatShortDate(lead.created_at)}</td>
-                            <td>{lead.nombre}</td>
-                            <td>{lead.telefono}</td>
-                            <td>{lead.email}</td>
-                            <td>{getMomentoLabel(lead.momento)}</td>
-                            <td>{lead.situacion || '—'}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                  <div class="leads-list">
+                    {leadsDelMes.map((lead) => {
+                      const pagosLead = lead.pagos.filter(
+                        (p) => p.mes === selectedMes,
+                      );
+                      return (
+                        <article class="lead-card">
+                          <div class="lead-top">
+                            <div>
+                              <h3>{lead.nombre}</h3>
+                              <p class="muted">
+                                {new Date(lead.created_at).toLocaleDateString(
+                                  'es-ES',
+                                )}
+                              </p>
+                            </div>
+                            <select
+                              class="status-select"
+                              data-lead-id={lead.id}
+                              aria-label="Estado"
+                            >
+                              {Object.entries(STATUS_LABELS).map(
+                                ([value, label]) => (
+                                  <option
+                                    value={value}
+                                    selected={lead.status === value}
+                                  >
+                                    {label}
+                                  </option>
+                                ),
+                              )}
+                            </select>
+                          </div>
+                          <p>
+                            <a href={`mailto:${lead.email}`}>{lead.email}</a>
+                            {' · '}
+                            <a
+                              href={`https://wa.me/${lead.telefono.replace(/\D/g, '')}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              {lead.telefono}
+                            </a>
+                          </p>
+                          <p class="muted">{getMomentoLabel(lead.momento)}</p>
+                          {lead.situacion && (
+                            <p class="situacion">{lead.situacion}</p>
+                          )}
+                          {pagosLead.length > 0 && (
+                            <p class="pago-ok">
+                              ✓ Cobro registrado:{' '}
+                              {pagosLead
+                                .map((p) => formatEuro(Number(p.importe)))
+                                .join(', ')}
+                            </p>
+                          )}
+                          <details class="quick-cobro">
+                            <summary>Registrar cobro de esta clienta</summary>
+                            <form
+                              class="cobro-form lead-cobro-form"
+                              data-lead-id={lead.id}
+                            >
+                              <input type="hidden" name="mes" value={selectedMes} />
+                              <label>
+                                Qué ha pagado
+                                <select name="preset" required>
+                                  <option value="">Elige…</option>
+                                  {PAYMENT_PRESETS.map((p) => (
+                                    <option value={p.id}>{p.label}</option>
+                                  ))}
+                                </select>
+                              </label>
+                              <button type="submit" class="btn-secondary btn-sm">
+                                Guardar
+                              </button>
+                            </form>
+                          </details>
+                        </article>
+                      );
+                    })}
                   </div>
                 )
               }
@@ -341,6 +377,20 @@ const clientasConPago = new Set(cobrosDelMes.map((p) => p.lead_id)).size;
       logoutBtn?.addEventListener('click', async () => {
         await fetch('/api/admin/logout', { method: 'POST' });
         window.location.reload();
+      });
+
+      document.querySelectorAll('.status-select').forEach((select) => {
+        select.addEventListener('change', async () => {
+          await fetch('/api/admin/pagos', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              action: 'update_status',
+              lead_id: (select as HTMLSelectElement).dataset.leadId,
+              status: (select as HTMLSelectElement).value,
+            }),
+          });
+        });
       });
 
       async function submitCobro(
@@ -381,6 +431,18 @@ const clientasConPago = new Set(cobrosDelMes.map((p) => p.lead_id)).size;
             fd.get('preset') as string,
           );
         });
+
+      document.querySelectorAll('.lead-cobro-form').forEach((form) => {
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const fd = new FormData(form as HTMLFormElement);
+          await submitCobro(
+            (form as HTMLFormElement).dataset.leadId!,
+            fd.get('mes') as string,
+            fd.get('preset') as string,
+          );
+        });
+      });
     </script>
   </body>
 </html>
@@ -402,7 +464,7 @@ const clientasConPago = new Set(cobrosDelMes.map((p) => p.lead_id)).size;
   }
 
   .admin-wrap {
-    max-width: 960px;
+    max-width: 720px;
     margin: 0 auto;
     padding: 20px 16px 48px;
   }
@@ -559,50 +621,61 @@ const clientasConPago = new Set(cobrosDelMes.map((p) => p.lead_id)).size;
     font-weight: normal;
   }
 
-  .leads-export-card {
-    padding: 16px;
+  .leads-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
   }
 
-  .table-wrap {
-    overflow-x: auto;
-    margin: 0 -4px;
+  .lead-card {
+    border: 1px solid #e8e8e8;
+    border-radius: 8px;
+    padding: 14px;
   }
 
-  .leads-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.78rem;
-    line-height: 1.35;
+  .lead-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 8px;
   }
 
-  .leads-table th,
-  .leads-table td {
-    padding: 6px 8px;
-    text-align: left;
-    border-bottom: 1px solid #e8e8e8;
-    vertical-align: top;
-  }
-
-  .leads-table th {
-    font-size: 0.72rem;
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
+  .lead-card h3 {
+    margin: 0;
+    font-size: 1rem;
     color: var(--deep-teal);
-    background: #f9f8f6;
-    white-space: nowrap;
   }
 
-  .leads-table tbody tr:nth-child(even) {
-    background: #fafafa;
+  .muted {
+    margin: 0;
+    font-size: 0.85rem;
+    opacity: 0.75;
   }
 
-  .leads-table td:nth-child(1),
-  .leads-table td:nth-child(2) {
-    white-space: nowrap;
+  .situacion {
+    font-size: 0.9rem;
+    font-style: italic;
+    margin: 8px 0 0;
   }
 
-  .leads-table td:nth-child(5) {
-    word-break: break-all;
+  .pago-ok {
+    margin: 8px 0 0;
+    font-size: 0.9rem;
+    color: var(--deep-teal);
+    font-weight: bold;
+  }
+
+  .quick-cobro summary {
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: var(--deep-teal);
+    margin-top: 10px;
+  }
+
+  .status-select {
+    font-size: 0.8rem;
+    padding: 4px 6px;
+    max-width: 140px;
   }
 
   .banner-warn {

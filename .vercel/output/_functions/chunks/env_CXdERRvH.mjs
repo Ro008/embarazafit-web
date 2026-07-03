@@ -6,8 +6,11 @@ function requireEnv(name) {
   }
   return value;
 }
+function getEnv(name) {
+  return Object.assign(__vite_import_meta_env__, {})[name] ?? process.env[name];
+}
 function getRequiredEnv(name) {
   return requireEnv(name);
 }
 
-export { getRequiredEnv as g };
+export { getEnv as a, getRequiredEnv as g };

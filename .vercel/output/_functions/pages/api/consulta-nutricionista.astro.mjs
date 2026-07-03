@@ -1,6 +1,6 @@
-import { g as getRequiredEnv } from '../../chunks/env_jnO49ZIj.mjs';
-import { g as getMomentoLabel, M as MOMENTO_LABELS } from '../../chunks/leads_YxVkUCuL.mjs';
-import { a as insertLead } from '../../chunks/supabase_Cx9qJxwH.mjs';
+import { g as getRequiredEnv, a as getEnv } from '../../chunks/env_CXdERRvH.mjs';
+import { g as getMomentoLabel, M as MOMENTO_LABELS } from '../../chunks/leads_DcTapTfX.mjs';
+import { a as insertLead } from '../../chunks/supabase_BoR_N1kR.mjs';
 export { renderers } from '../../renderers.mjs';
 
 function escapeHtml(text) {
@@ -18,12 +18,14 @@ function leadDetailsHtml(data) {
     </ul>
   `;
 }
-function notificationEmailHtml(data) {
+function notificationEmailHtml(data, isTestMode = false) {
+  const testNote = isTestMode ? `<p><em>(Modo prueba: en producción María recibiría un email aparte con estos datos para contactar a la clienta.)</em></p>` : "";
   return `
     <p>Hola,</p>
     <p>Has recibido una nueva solicitud de consulta con María desde Embarazafit.</p>
     ${leadDetailsHtml(data)}
-    <p>Puedes ver el registro en tu panel interno de leads.</p>
+    <p>Puedes ver el registro en tu dashboard: /dashboard</p>
+    ${testNote}
   `;
 }
 function mariaLeadEmailHtml(data) {
@@ -95,18 +97,35 @@ const POST = async ({ request }) => {
     }
     await insertLead(validated);
     const notificationEmail = getRequiredEnv("NOTIFICATION_EMAIL");
-    const mariaEmail = getRequiredEnv("MARIA_NUTRICIONISTA_EMAIL");
-    await sendMailrelayEmail({
-      to: notificationEmail,
-      subject: `[Embarazafit] Nueva solicitud de consulta — ${validated.nombre}`,
-      html: notificationEmailHtml(validated)
-    });
-    await sendMailrelayEmail({
-      to: mariaEmail,
-      toName: "María",
-      subject: `[Embarazafit] Nueva clienta interesada — ${validated.nombre}`,
-      html: mariaLeadEmailHtml(validated)
-    });
+    const mariaEmail = getEnv("MARIA_NUTRICIONISTA_EMAIL") || notificationEmail;
+    const isTestMode = mariaEmail === notificationEmail;
+    const emailErrors = [];
+    try {
+      await sendMailrelayEmail({
+        to: notificationEmail,
+        subject: `[Embarazafit] Nueva solicitud de consulta — ${validated.nombre}`,
+        html: notificationEmailHtml(validated, isTestMode)
+      });
+    } catch (err) {
+      console.error("Error email notificación:", err);
+      emailErrors.push("notificación");
+    }
+    if (!isTestMode) {
+      try {
+        await sendMailrelayEmail({
+          to: mariaEmail,
+          toName: "María",
+          subject: `[Embarazafit] Nueva clienta interesada — ${validated.nombre}`,
+          html: mariaLeadEmailHtml(validated)
+        });
+      } catch (err) {
+        console.error("Error email María:", err);
+        emailErrors.push("maría");
+      }
+    }
+    if (emailErrors.length > 0) {
+      console.warn("Lead guardado pero falló email:", emailErrors.join(", "));
+    }
     return new Response(JSON.stringify({ ok: true }), {
       status: 200,
       headers: { "Content-Type": "application/json" }

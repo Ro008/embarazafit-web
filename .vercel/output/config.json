@@ -20,10 +20,6 @@
 			"dest": "_render"
 		},
 		{
-			"src": "^/admin/leads/?$",
-			"dest": "_render"
-		},
-		{
 			"src": "^/api/admin/leads/?$",
 			"dest": "_render"
 		},
@@ -41,6 +37,10 @@
 		},
 		{
 			"src": "^/api/consulta-nutricionista/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/dashboard/?$",
 			"dest": "_render"
 		}
 	]

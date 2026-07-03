@@ -1,6 +1,11 @@
 import type { APIRoute } from 'astro';
 import { isAdminAuthed, unauthorizedResponse } from '../../../lib/admin-auth';
-import { insertPago, updateLeadStatus } from '../../../lib/supabase';
+import { validateNewPago } from '../../../lib/leads';
+import {
+  fetchPagosForLead,
+  insertPago,
+  updateLeadStatus,
+} from '../../../lib/supabase';
 
 export const prerender = false;
 
@@ -57,6 +62,15 @@ export const POST: APIRoute = async ({ request, cookies }) => {
 
     if (tipo !== 'fraccionado' && tipo !== 'completo') {
       return new Response(JSON.stringify({ error: 'Tipo de pago inválido' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    const existingPagos = await fetchPagosForLead(body.lead_id);
+    const validation = validateNewPago(existingPagos, { mes, tipo });
+    if (!validation.ok) {
+      return new Response(JSON.stringify({ error: validation.error }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' },
       });

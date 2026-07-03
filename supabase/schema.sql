@@ -26,6 +26,8 @@ create table if not exists embarazafit_pagos (
 create index if not exists idx_ef_leads_created_at on embarazafit_leads (created_at desc);
 create index if not exists idx_ef_pagos_lead_id on embarazafit_pagos (lead_id);
 create index if not exists idx_ef_pagos_mes on embarazafit_pagos (mes);
+-- Máximo un cobro por clienta y mes
+create unique index if not exists idx_ef_pagos_lead_mes on embarazafit_pagos (lead_id, mes);
 
 alter table embarazafit_leads enable row level security;
 alter table embarazafit_pagos enable row level security;
