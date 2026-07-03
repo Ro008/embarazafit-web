@@ -1,6 +1,7 @@
 import { g as getRequiredEnv, a as getEnv } from '../../chunks/env_CXdERRvH.mjs';
-import { g as getMomentoLabel, M as MOMENTO_LABELS } from '../../chunks/leads_DcTapTfX.mjs';
-import { a as insertLead } from '../../chunks/supabase_BoR_N1kR.mjs';
+import { g as getMomentoLabel, M as MOMENTO_LABELS } from '../../chunks/leads_BjpEd_Gs.mjs';
+import { s as sendMailrelayEmail } from '../../chunks/mailrelay_C_mkZ67k.mjs';
+import { b as insertLead } from '../../chunks/supabase_Dyg-IptV.mjs';
 export { renderers } from '../../renderers.mjs';
 
 function escapeHtml(text) {
@@ -37,32 +38,7 @@ function mariaLeadEmailHtml(data) {
   `;
 }
 
-async function sendMailrelayEmail(options) {
-  const apiUrl = getRequiredEnv("MAILRELAY_API_URL").replace(/\/$/, "");
-  const apiKey = getRequiredEnv("MAILRELAY_API_KEY");
-  const fromEmail = getRequiredEnv("MAILRELAY_FROM_EMAIL");
-  const fromName = getRequiredEnv("MAILRELAY_FROM_NAME");
-  const response = await fetch(`${apiUrl}/api/v1/send_emails`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-AUTH-TOKEN": apiKey
-    },
-    body: JSON.stringify({
-      from: { email: fromEmail, name: fromName },
-      to: [{ email: options.to, name: options.toName ?? options.to }],
-      subject: options.subject,
-      html_part: options.html
-    })
-  });
-  if (!response.ok) {
-    const text = await response.text();
-    throw new Error(`Mailrelay error (${response.status}): ${text}`);
-  }
-}
-
-const prerender = false;
-function validatePayload(body) {
+function validateLeadPayload(body) {
   const nombre = body.nombre?.trim();
   const email = body.email?.trim().toLowerCase();
   const telefono = body.telefono?.trim();
@@ -85,10 +61,12 @@ function validatePayload(body) {
   }
   return { nombre, email, telefono, momento, situacion };
 }
+
+const prerender = false;
 const POST = async ({ request }) => {
   try {
     const body = await request.json();
-    const validated = validatePayload(body);
+    const validated = validateLeadPayload(body);
     if ("error" in validated) {
       return new Response(JSON.stringify({ error: validated.error }), {
         status: 400,

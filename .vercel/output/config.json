@@ -40,6 +40,14 @@
 			"dest": "_render"
 		},
 		{
+			"src": "^/api/cron/check-lead-form/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/api/health/leads/?$",
+			"dest": "_render"
+		},
+		{
 			"src": "^/dashboard/?$",
 			"dest": "_render"
 		}

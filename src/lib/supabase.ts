@@ -76,6 +76,15 @@ export async function fetchPagosForLead(leadId: string): Promise<Pago[]> {
   return (data ?? []) as Pago[];
 }
 
+export async function deleteLead(id: string): Promise<void> {
+  const { error } = await getSupabase()
+    .from(LEADS_TABLE)
+    .delete()
+    .eq('id', id);
+
+  if (error) throw error;
+}
+
 export async function insertPago(data: {
   lead_id: string;
   mes: string;

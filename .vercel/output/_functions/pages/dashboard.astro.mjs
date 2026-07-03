@@ -2,8 +2,8 @@ import { e as createAstro, f as createComponent, n as renderHead, l as renderScr
 import 'kleur/colors';
 import { i as isAdminAuthed } from '../chunks/admin-auth_ommQd3NC.mjs';
 import { a as getEnv } from '../chunks/env_CXdERRvH.mjs';
-import { f as formatEuro, C as COMMISSION_RATE, c as commissionForAmount, g as getMomentoLabel, S as STATUS_LABELS } from '../chunks/leads_DcTapTfX.mjs';
-import { f as fetchLeadsWithPagos } from '../chunks/supabase_BoR_N1kR.mjs';
+import { a as canLeadAcceptMorePayments, f as formatEuro, C as COMMISSION_RATE, c as commissionForAmount, b as formatShortDate, g as getMomentoLabel } from '../chunks/leads_BjpEd_Gs.mjs';
+import { f as fetchLeadsWithPagos } from '../chunks/supabase_Dyg-IptV.mjs';
 /* empty css                                     */
 export { renderers } from '../renderers.mjs';
 
@@ -85,6 +85,9 @@ const $$Dashboard = createComponent(async ($$result, $$props, $$slots) => {
   const leadsDelMes = leads.filter(
     (l) => leadCaptureMonth(l.created_at) === selectedMes
   );
+  const leadsPendientesCobro = leadsDelMes.filter(
+    (l) => canLeadAcceptMorePayments(l.pagos) && !l.pagos.some((p) => p.mes === selectedMes)
+  );
   const cobrosDelMes = leads.flatMap(
     (lead) => lead.pagos.filter((p) => p.mes === selectedMes).map((p) => ({
       ...p,
@@ -109,48 +112,32 @@ Las chicas rellenan el formulario → aparecen abajo como${" "} <strong>leads ca
 </li> <li>
 A fin de mes, le pasas a María la lista de leads de ese mes.
 </li> <li>
-María te dice cuántas se han convertido en clientas y cuánto
-                  te han pagado (por Bizum).
+María te dice quién ha contratado su consulta (le han pagado a
+                  ella por Bizum) y cuánto ha cobrado de cada una.
 </li> <li>
-Registras aquí cada cobro → el dashboard calcula tu${" "} <strong>${Math.round(COMMISSION_RATE * 100)}%</strong>.
+Registras aquí esos cobros → el dashboard calcula tu${" "} <strong>${Math.round(COMMISSION_RATE * 100)}%</strong> sobre lo
+                  que María ha cobrado.
 </li> </ol> </section> <details class="card pricing-card"> <summary>Precios del programa (referencia)</summary> <div class="pricing-grid"> <div> <h3>Pago único (Bizum)</h3> <p> <strong>Lanzamiento</strong> (1.er mes):${" "} ${formatEuro(PROGRAM_PRICING.completo.lanzamiento)} </p> <p> <strong>Oficial:</strong>${" "} ${formatEuro(PROGRAM_PRICING.completo.oficial)} </p> </div> <div> <h3>Pago en 2 cuotas (+${PROGRAM_PRICING.extraAplazado})</h3> <p>
 Lanzamiento: ${formatEuro(PROGRAM_PRICING.aplazado.lanzamiento.total)}${" "}
 → 2 × ${formatEuro(PROGRAM_PRICING.aplazado.lanzamiento.cuota)} </p> <p>
 Oficial: ${formatEuro(PROGRAM_PRICING.aplazado.oficial.total)} →
                     2 × ${formatEuro(PROGRAM_PRICING.aplazado.oficial.cuota)} </p> </div> </div> </details> <section class="card commission-card"> <h2>Cobros de María en ${mesLabel}</h2> <p class="big-number">${formatEuro(comisionMes)}</p> <p class="sub-note">Tu comisión (${Math.round(COMMISSION_RATE * 100)}%)</p> <ul class="stats-row"> <li> <strong>${formatEuro(totalCobrado)}</strong> cobrado por María
-</li> <li> <strong>${cobrosDelMes.length}</strong> pago
-${cobrosDelMes.length === 1 ? "" : "s"} registrado
-${cobrosDelMes.length === 1 ? "" : "s"} </li> <li> <strong>${clientasConPago}</strong> clienta
+</li> <li> <strong>${cobrosDelMes.length}</strong>${" "} ${cobrosDelMes.length === 1 ? "pago registrado" : "pagos registrados"} </li> <li> <strong>${clientasConPago}</strong> clienta
 ${clientasConPago === 1 ? "" : "s"} </li> </ul> ${cobrosDelMes.length > 0 && renderTemplate`<ul class="cobros-list"> ${cobrosDelMes.map((p) => renderTemplate`<li> ${p.lead_nombre} — ${formatEuro(Number(p.importe))} ${p.tipo === "fraccionado" ? " (cuota)" : " (completo)"}
 → tu parte:${" "} ${formatEuro(commissionForAmount(Number(p.importe)))} </li>`)} </ul>`} <h3>Registrar un cobro que María te ha confirmado</h3> <p class="help-text">
-Usa el mes seleccionado arriba (${mesLabel}) como mes del cobro.
+Solo leads de ${mesLabel} sin cobro ya registrado este mes. Cada
+                clienta: un pago único o hasta 2 cuotas (una por mes).
 </p> <form id="cobro-global-form" class="cobro-form"> <input type="hidden" name="mes"${addAttribute(selectedMes, "value")}> <label>
-Clienta (lead)
-<select name="lead_id" required> <option value="">Elige una clienta…</option> ${leads.map((l) => renderTemplate`<option${addAttribute(l.id, "value")}> ${l.nombre} (${leadCaptureMonth(l.created_at)})
-</option>`)} </select> </label> <label>
+Lead de este mes
+<select name="lead_id" required${addAttribute(leadsPendientesCobro.length === 0, "disabled")}> <option value=""> ${leadsDelMes.length === 0 ? "No hay leads este mes" : leadsPendientesCobro.length === 0 ? "Todas tienen cobro registrado" : "Elige una lead\u2026"} </option> ${leadsPendientesCobro.map((l) => renderTemplate`<option${addAttribute(l.id, "value")}>${l.nombre}</option>`)} </select> </label> <label>
 Qué ha pagado
 <select name="preset" required> <option value="">Elige el importe…</option> ${PAYMENT_PRESETS.map((p) => renderTemplate`<option${addAttribute(p.id, "value")}${addAttribute(p.importe, "data-importe")}${addAttribute(p.tipo, "data-tipo")}> ${p.label} </option>`)} </select> </label> <button type="submit" class="btn-secondary">
 Guardar cobro
-</button> </form> </section> <section class="card"> <h2>
+</button> </form> </section> <section class="card leads-export-card"> <h2>
 Leads captados en ${mesLabel} (${leadsDelMes.length})
 </h2> <p class="help-text">
-Estas son las solicitudes del formulario de este mes. Pásaselas
-                a María a fin de mes.
-</p> ${leadsDelMes.length === 0 ? renderTemplate`<p class="empty">Ningún lead este mes.</p>` : renderTemplate`<div class="leads-list"> ${leadsDelMes.map((lead) => {
-    const pagosLead = lead.pagos.filter(
-      (p) => p.mes === selectedMes
-    );
-    return renderTemplate`<article class="lead-card"> <div class="lead-top"> <div> <h3>${lead.nombre}</h3> <p class="muted"> ${new Date(lead.created_at).toLocaleDateString(
-      "es-ES"
-    )} </p> </div> <select class="status-select"${addAttribute(lead.id, "data-lead-id")} aria-label="Estado"> ${Object.entries(STATUS_LABELS).map(
-      ([value, label]) => renderTemplate`<option${addAttribute(value, "value")}${addAttribute(lead.status === value, "selected")}> ${label} </option>`
-    )} </select> </div> <p> <a${addAttribute(`mailto:${lead.email}`, "href")}>${lead.email}</a> ${" \xB7 "} <a${addAttribute(`https://wa.me/${lead.telefono.replace(/\D/g, "")}`, "href")} target="_blank" rel="noopener noreferrer"> ${lead.telefono} </a> </p> <p class="muted">${getMomentoLabel(lead.momento)}</p> ${lead.situacion && renderTemplate`<p class="situacion">${lead.situacion}</p>`} ${pagosLead.length > 0 && renderTemplate`<p class="pago-ok">
-✓ Cobro registrado:${" "} ${pagosLead.map((p) => formatEuro(Number(p.importe))).join(", ")} </p>`} <details class="quick-cobro"> <summary>Registrar cobro de esta clienta</summary> <form class="cobro-form lead-cobro-form"${addAttribute(lead.id, "data-lead-id")}> <input type="hidden" name="mes"${addAttribute(selectedMes, "value")}> <label>
-Qué ha pagado
-<select name="preset" required> <option value="">Elige…</option> ${PAYMENT_PRESETS.map((p) => renderTemplate`<option${addAttribute(p.id, "value")}>${p.label}</option>`)} </select> </label> <button type="submit" class="btn-secondary btn-sm">
-Guardar
-</button> </form> </details> </article>`;
-  })} </div>`} </section> ` })}`} </div> ${renderScript($$result, "C:/Users/User/Dropbox/side projects/embarazafit-web/src/pages/dashboard.astro?astro&type=script&index=0&lang.ts")} </body> </html> `;
+Captura esta tabla para enviársela a María a fin de mes.
+</p> ${leadsDelMes.length === 0 ? renderTemplate`<p class="empty">Ningún lead este mes.</p>` : renderTemplate`<div class="table-wrap"> <table class="leads-table"> <thead> <tr> <th>#</th> <th>Fecha</th> <th>Nombre</th> <th>Teléfono</th> <th>Email</th> <th>Momento</th> <th>Notas</th> </tr> </thead> <tbody> ${leadsDelMes.map((lead, i) => renderTemplate`<tr> <td>${i + 1}</td> <td>${formatShortDate(lead.created_at)}</td> <td>${lead.nombre}</td> <td>${lead.telefono}</td> <td>${lead.email}</td> <td>${getMomentoLabel(lead.momento)}</td> <td>${lead.situacion || "\u2014"}</td> </tr>`)} </tbody> </table> </div>`} </section> ` })}`} </div> ${renderScript($$result, "C:/Users/User/Dropbox/side projects/embarazafit-web/src/pages/dashboard.astro?astro&type=script&index=0&lang.ts")} </body> </html> `;
 }, "C:/Users/User/Dropbox/side projects/embarazafit-web/src/pages/dashboard.astro", void 0);
 
 const $$file = "C:/Users/User/Dropbox/side projects/embarazafit-web/src/pages/dashboard.astro";

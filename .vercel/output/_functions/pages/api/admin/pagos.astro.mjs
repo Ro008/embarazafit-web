@@ -1,5 +1,6 @@
 import { i as isAdminAuthed, u as unauthorizedResponse } from '../../../chunks/admin-auth_ommQd3NC.mjs';
-import { u as updateLeadStatus, i as insertPago } from '../../../chunks/supabase_BoR_N1kR.mjs';
+import { v as validateNewPago } from '../../../chunks/leads_BjpEd_Gs.mjs';
+import { u as updateLeadStatus, a as fetchPagosForLead, i as insertPago } from '../../../chunks/supabase_Dyg-IptV.mjs';
 export { renderers } from '../../../renderers.mjs';
 
 const prerender = false;
@@ -41,6 +42,14 @@ const POST = async ({ request, cookies }) => {
     }
     if (tipo !== "fraccionado" && tipo !== "completo") {
       return new Response(JSON.stringify({ error: "Tipo de pago inválido" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" }
+      });
+    }
+    const existingPagos = await fetchPagosForLead(body.lead_id);
+    const validation = validateNewPago(existingPagos, { mes, tipo });
+    if (!validation.ok) {
+      return new Response(JSON.stringify({ error: validation.error }), {
         status: 400,
         headers: { "Content-Type": "application/json" }
       });

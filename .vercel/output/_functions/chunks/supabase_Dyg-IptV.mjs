@@ -35,6 +35,15 @@ async function fetchLeadsWithPagos() {
     pagos: pagosByLead.get(lead.id) ?? []
   }));
 }
+async function fetchPagosForLead(leadId) {
+  const { data, error } = await getSupabase().from(PAGOS_TABLE).select("*").eq("lead_id", leadId).order("created_at", { ascending: true });
+  if (error) throw error;
+  return data ?? [];
+}
+async function deleteLead(id) {
+  const { error } = await getSupabase().from(LEADS_TABLE).delete().eq("id", id);
+  if (error) throw error;
+}
 async function insertPago(data) {
   const { data: pago, error } = await getSupabase().from(PAGOS_TABLE).insert(data).select().single();
   if (error) throw error;
@@ -45,4 +54,4 @@ async function updateLeadStatus(id, status) {
   if (error) throw error;
 }
 
-export { insertLead as a, fetchLeadsWithPagos as f, insertPago as i, updateLeadStatus as u };
+export { fetchPagosForLead as a, insertLead as b, deleteLead as d, fetchLeadsWithPagos as f, getSupabase as g, insertPago as i, updateLeadStatus as u };

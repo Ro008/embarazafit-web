@@ -4,57 +4,16 @@ import {
   mariaLeadEmailHtml,
   notificationEmailHtml,
 } from '../../lib/email-templates';
-import { MOMENTO_LABELS } from '../../lib/leads';
+import { validateLeadPayload } from '../../lib/lead-form';
 import { sendMailrelayEmail } from '../../lib/mailrelay';
 import { insertLead } from '../../lib/supabase';
 
 export const prerender = false;
 
-interface LeadPayload {
-  nombre?: string;
-  email?: string;
-  telefono?: string;
-  momento?: string;
-  situacion?: string;
-  consentimiento?: string;
-}
-
-function validatePayload(body: LeadPayload): {
-  nombre: string;
-  email: string;
-  telefono: string;
-  momento: string;
-  situacion: string | null;
-} | { error: string } {
-  const nombre = body.nombre?.trim();
-  const email = body.email?.trim().toLowerCase();
-  const telefono = body.telefono?.trim();
-  const momento = body.momento?.trim();
-  const situacion = body.situacion?.trim() || null;
-
-  if (!nombre || nombre.length < 2) {
-    return { error: 'Indica tu nombre completo.' };
-  }
-  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return { error: 'Indica un email válido.' };
-  }
-  if (!telefono || telefono.length < 9) {
-    return { error: 'Indica un teléfono válido con WhatsApp.' };
-  }
-  if (!momento || !MOMENTO_LABELS[momento]) {
-    return { error: 'Selecciona en qué momento te encuentras.' };
-  }
-  if (!body.consentimiento) {
-    return { error: 'Debes aceptar compartir tus datos con María.' };
-  }
-
-  return { nombre, email, telefono, momento, situacion };
-}
-
 export const POST: APIRoute = async ({ request }) => {
   try {
-    const body = (await request.json()) as LeadPayload;
-    const validated = validatePayload(body);
+    const body = (await request.json()) as import('../../lib/lead-form').LeadPayload;
+    const validated = validateLeadPayload(body);
 
     if ('error' in validated) {
       return new Response(JSON.stringify({ error: validated.error }), {

@@ -137,6 +137,45 @@ Tras el deploy:
 
 ---
 
+## Monitorización del formulario (tranquilidad con poco esfuerzo)
+
+Para no enterarte tarde de que el formulario ha dejado de guardar leads:
+
+### 1. Ya está en el código (tras deploy)
+
+| Qué | URL | Cuándo |
+|---|---|---|
+| **Ping ligero** | `https://www.embarazafit.com/api/health/leads` | Lo vigila un servicio externo (tú configuras) |
+| **Prueba de escritura** | `/api/cron/check-lead-form` | Vercel, **8:00 y 20:00** UTC (9:00 y 21:00 hora España en invierno) |
+
+Si la prueba de escritura falla, recibes un email en `NOTIFICATION_EMAIL` con asunto `[ALERTA Embarazafit]…`.
+
+La prueba inserta un lead ficticio y lo borra al instante. No llega a María ni ensucia el dashboard.
+
+### 2. Variable en Vercel (obligatoria para el cron)
+
+Añade `CRON_SECRET` — una contraseña larga aleatoria (p. ej. generada con un gestor de contraseñas). Vercel la usa para llamar al cron de forma segura.
+
+La misma variable en `.env` local si quieres probar el endpoint a mano:
+
+```bash
+curl -H "Authorization: Bearer TU_CRON_SECRET" http://localhost:4321/api/cron/check-lead-form
+```
+
+### 3. UptimeRobot (gratis, 5 minutos — 2 minutos de configuración)
+
+1. Cuenta en [uptimerobot.com](https://uptimerobot.com)
+2. **Add monitor** → tipo **HTTP(s)**
+3. URL: `https://www.embarazafit.com/api/health/leads`
+4. Intervalo: 5 minutos
+5. Alerta: tu email
+
+Opcional: segundo monitor a la página pública `https://www.embarazafit.com/consulta-nutricionista`.
+
+Con esto cubres el 80 % del riesgo: caída de web, Supabase roto o variables mal configuradas, y fallos al guardar leads.
+
+---
+
 ## Checklist de prueba
 
 - [ ] Supabase: tablas creadas (`schema.sql` ejecutado)
@@ -146,6 +185,7 @@ Tras el deploy:
 - [ ] Recibir 2 emails en contacto@embarazafit.com
 - [ ] Variables en Vercel + redeploy
 - [ ] Probar formulario en producción
+- [ ] **Monitorización:** `CRON_SECRET` en Vercel + monitor UptimeRobot en `/api/health/leads`
 - [ ] **LANZAMIENTO:** `MARIA_NUTRICIONISTA_EMAIL=hola@mariagonzalvez.com` en .env + Vercel (aviso amarillo del dashboard debe desaparecer)
 
 ---
