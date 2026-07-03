@@ -28,46 +28,26 @@ La misma contraseña debe estar en Vercel para que funcione en producción.
 
 ---
 
-## Modo pruebas vs producción (email de María)
+## Email de María
 
-Hay **tres modos** según qué pongas en `MARIA_NUTRICIONISTA_EMAIL`:
+El email de María **no se guarda en el repo** (GitHub es público). Configúralo solo en:
 
-### Opción A — Pruebas completas (recomendado ahora)
+- **Local:** `.env` → `MARIA_NUTRICIONISTA_EMAIL=…`
+- **Producción:** Vercel → Environment Variables (mismo nombre)
 
-Simulas ser María con tu email personal:
+Por cada formulario se envían **3 emails**:
 
-```text
-MARIA_NUTRICIONISTA_EMAIL=rociosirvent@gmail.com
-```
-
-Por cada formulario se envían **3 emails distintos**:
-
-| Quién | Email |
+| Quién | Destino |
 |---|---|
-| La clienta | Confirmación «¡Todo listo…!» |
-| Embarazafit | `[Embarazafit] Nuevo lead — …` → `NOTIFICATION_EMAIL` |
-| «María» (tú en pruebas) | `[Embarazafit] Nueva clienta interesada — …` → rociosirvent@gmail.com |
+| La clienta | El email que ponga en el formulario |
+| Embarazafit | `NOTIFICATION_EMAIL` |
+| María | `MARIA_NUTRICIONISTA_EMAIL` |
 
-El aviso amarillo del dashboard **desaparece** (el sistema cree que María ya está configurada). Al lanzar de verdad, cambias al email real de María.
+### Pruebas sin molestar a María
 
-### Opción B — Pruebas mínimas (campo vacío)
+Deja el campo **vacío** (solo 2 emails: clienta + Embarazafit) o pon temporalmente tu email personal.
 
-```text
-MARIA_NUTRICIONISTA_EMAIL=
-```
-
-- Solo 2 envíos: confirmación a la clienta + aviso a `NOTIFICATION_EMAIL`
-- El email de María **no se envía** (antes se duplicaba en contacto y fallaba Mailrelay)
-
-### Opción C — Producción
-
-```text
-MARIA_NUTRICIONISTA_EMAIL=mariagonzalvezbellon@gmail.com
-```
-
-María recibe su email con los datos de cada clienta.
-
-Tras cambiar `.env`, **reinicia** `npm run dev`. En Vercel, añade la misma variable y redeploy.
+Tras cambiar `.env`, **reinicia** `npm run dev`. En Vercel, la misma variable y redeploy.
 
 ### Si Mailrelay falla en el 2.º o 3.º email
 
@@ -195,14 +175,14 @@ Con esto cubres el 80 % del riesgo: caída de web, Supabase roto o variables mal
 ## Checklist de prueba
 
 - [ ] Supabase: tablas creadas (`schema.sql` ejecutado)
-- [ ] `.env` local completo (excepto `MARIA_NUTRICIONISTA_EMAIL` vacío)
+- [ ] `.env` local y Vercel con `MARIA_NUTRICIONISTA_EMAIL` (email de María, solo en entorno — no en GitHub)
 - [ ] Dashboard local: `/dashboard` + contraseña
 - [ ] Enviar formulario de prueba → lead en dashboard
 - [ ] Recibir 2 emails en contacto@embarazafit.com
 - [ ] Variables en Vercel + redeploy
 - [ ] Probar formulario en producción
 - [ ] **Monitorización:** `CRON_SECRET` en Vercel + monitor UptimeRobot en `/api/health/leads`
-- [ ] **LANZAMIENTO:** `MARIA_NUTRICIONISTA_EMAIL=mariagonzalvezbellon@gmail.com` en .env + Vercel (aviso amarillo del dashboard debe desaparecer)
+- [ ] **Testing (Pareto):** ver `docs/TESTING.md` si cambias lógica de leads, pagos o emails
 
 ---
 

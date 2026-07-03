@@ -9,7 +9,7 @@ Antes de dar por cerrado el formulario de María, comprobar:
 
 ## Email de María (IMPORTANTE)
 
-- [ ] `MARIA_NUTRICIONISTA_EMAIL` — vacío, `rociosirvent@gmail.com` (pruebas) o `mariagonzalvezbellon@gmail.com` (producción)
+- [ ] `MARIA_NUTRICIONISTA_EMAIL` en `.env` y Vercel (email de María; no commitear — repo público)
 - [ ] Verificar en dashboard que desaparece el aviso amarillo de "modo prueba"
 
 Código: `src/lib/launch-status.ts`, `src/pages/api/consulta-nutricionista.ts`
