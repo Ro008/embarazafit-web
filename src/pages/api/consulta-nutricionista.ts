@@ -34,7 +34,7 @@ export const POST: APIRoute = async ({ request }) => {
     try {
       await sendMailrelayEmail({
         to: notificationEmail,
-        subject: `[Embarazafit] Nueva solicitud de consulta — ${validated.nombre}`,
+        subject: `[Embarazafit] Nuevo lead — ${validated.nombre}`,
         html: notificationEmailHtml(validated, isTestMode),
       });
     } catch (err) {

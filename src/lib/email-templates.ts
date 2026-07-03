@@ -41,7 +41,7 @@ export function notificationEmailHtml(
     : '';
 
   return `
-    <p>Hola,</p>
+    <p>Hola Ro,</p>
     <p>Has recibido una nueva solicitud de consulta con María desde Embarazafit.</p>
     ${leadDetailsHtml(data)}
     <p>Puedes ver el registro en tu dashboard: /dashboard</p>
@@ -53,7 +53,7 @@ export function mariaLeadEmailHtml(data: LeadEmailData): string {
   return `
     <p>Hola María,</p>
     <p>Una lectora de Embarazafit quiere consultar contigo el programa CÍCLICAS.</p>
-    <p>Por favor, contáctala en los próximos días por WhatsApp para coordinar.</p>
+    <p>Por favor, contáctala en los próximos días por WhatsApp para coordinarte con ella.</p>
     ${leadDetailsHtml(data)}
   `;
 }
