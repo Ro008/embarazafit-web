@@ -30,32 +30,48 @@ La misma contraseña debe estar en Vercel para que funcione en producción.
 
 ## Modo pruebas vs producción (email de María)
 
-### Mientras pruebas
+Hay **tres modos** según qué pongas en `MARIA_NUTRICIONISTA_EMAIL`:
 
-En `.env` y Vercel, deja **vacío**:
+### Opción A — Pruebas completas (recomendado ahora)
+
+Simulas ser María con tu email personal:
+
+```text
+MARIA_NUTRICIONISTA_EMAIL=rociosirvent@gmail.com
+```
+
+Por cada formulario se envían **3 emails distintos**:
+
+| Quién | Email |
+|---|---|
+| La clienta | Confirmación «¡Todo listo…!» |
+| Embarazafit | `[Embarazafit] Nuevo lead — …` → `NOTIFICATION_EMAIL` |
+| «María» (tú en pruebas) | `[Embarazafit] Nueva clienta interesada — …` → rociosirvent@gmail.com |
+
+El aviso amarillo del dashboard **desaparece** (el sistema cree que María ya está configurada). Al lanzar de verdad, cambias al email real de María.
+
+### Opción B — Pruebas mínimas (campo vacío)
 
 ```text
 MARIA_NUTRICIONISTA_EMAIL=
 ```
 
-Comportamiento:
-- Recibes **2 emails** en `NOTIFICATION_EMAIL` (contacto@embarazafit.com)
-- El que iría a María lleva el asunto: **`[Prueba — iría a María]`**
-- María **no recibe nada**
+- Solo 2 envíos: confirmación a la clienta + aviso a `NOTIFICATION_EMAIL`
+- El email de María **no se envía** (antes se duplicaba en contacto y fallaba Mailrelay)
 
-### Cuando todo funcione — activar email real de María
-
-1. Abre `.env` (local) y Vercel (producción)
-2. Añade:
+### Opción C — Producción
 
 ```text
 MARIA_NUTRICIONISTA_EMAIL=mariagonzalvezbellon@gmail.com
 ```
 
-3. Guarda y redeploy en Vercel (o reinicia `npm run dev` en local)
-4. **No hace falta cambiar código**
+María recibe su email con los datos de cada clienta.
 
-A partir de ahí María recibe su email con los datos de cada clienta.
+Tras cambiar `.env`, **reinicia** `npm run dev`. En Vercel, añade la misma variable y redeploy.
+
+### Si Mailrelay falla en el 2.º o 3.º email
+
+A veces la API responde `Your account is currently under review` aunque el panel no muestre nada. Suele ser **límite de envíos seguidos**. El código ya espera 5 s entre emails y reintenta. Si persiste, escribe a soporte de Mailrelay con ese mensaje exacto.
 
 ---
 

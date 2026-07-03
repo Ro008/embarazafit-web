@@ -1,11 +1,14 @@
 import type { APIRoute } from 'astro';
 import { getEnv, getRequiredEnv } from '../../lib/env';
 import {
+  getFirstName,
+  leadConfirmationEmailHtml,
+  leadConfirmationSubject,
   mariaLeadEmailHtml,
   notificationEmailHtml,
 } from '../../lib/email-templates';
 import { validateLeadPayload } from '../../lib/lead-form';
-import { sendMailrelayEmail } from '../../lib/mailrelay';
+import { mailrelayGap, sendMailrelayEmail } from '../../lib/mailrelay';
 import { insertLead } from '../../lib/supabase';
 
 export const prerender = false;
@@ -31,6 +34,21 @@ export const POST: APIRoute = async ({ request }) => {
 
     const emailErrors: string[] = [];
 
+    // Confirmación a la clienta primero (prioridad si Mailrelay limita envíos seguidos)
+    try {
+      await sendMailrelayEmail({
+        to: validated.email,
+        toName: getFirstName(validated.nombre),
+        subject: leadConfirmationSubject(validated.nombre),
+        html: leadConfirmationEmailHtml(validated.nombre),
+      });
+    } catch (err) {
+      console.error('Error email confirmación lead:', err);
+      emailErrors.push('confirmación');
+    }
+
+    await mailrelayGap();
+
     try {
       await sendMailrelayEmail({
         to: notificationEmail,
@@ -42,7 +60,8 @@ export const POST: APIRoute = async ({ request }) => {
       emailErrors.push('notificación');
     }
 
-    // En modo prueba ambos iban al mismo correo → Mailrelay falla en el 2.º envío
+    await mailrelayGap();
+
     if (!isTestMode) {
       try {
         await sendMailrelayEmail({

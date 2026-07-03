@@ -9,8 +9,7 @@ Antes de dar por cerrado el formulario de María, comprobar:
 
 ## Email de María (IMPORTANTE)
 
-- [ ] `MARIA_NUTRICIONISTA_EMAIL` está **vacío** → modo prueba (emails de María van a `NOTIFICATION_EMAIL` con asunto `[Prueba — iría a María]`)
-- [ ] **Al lanzar:** poner `MARIA_NUTRICIONISTA_EMAIL=mariagonzalvezbellon@gmail.com` en `.env` **y** en Vercel Environment Variables, luego redeploy
+- [ ] `MARIA_NUTRICIONISTA_EMAIL` — vacío, `rociosirvent@gmail.com` (pruebas) o `mariagonzalvezbellon@gmail.com` (producción)
 - [ ] Verificar en dashboard que desaparece el aviso amarillo de "modo prueba"
 
 Código: `src/lib/launch-status.ts`, `src/pages/api/consulta-nutricionista.ts`
