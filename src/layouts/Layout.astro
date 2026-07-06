@@ -6,6 +6,7 @@ interface Props {
 }
 
 const { title = 'Embarazafit' } = Astro.props;
+const year = new Date().getFullYear();
 ---
 
 <!DOCTYPE html>
@@ -59,7 +60,7 @@ const { title = 'Embarazafit' } = Astro.props;
     </main>
     <footer>
       <div class="footer-content">
-        <p>&copy; 2025 Embarazafit. Todos los derechos reservados.</p>
+        <p>&copy; {year} Embarazafit. Todos los derechos reservados.</p>
         <a
           href="https://www.instagram.com/embarazafit/"
           target="_blank"
