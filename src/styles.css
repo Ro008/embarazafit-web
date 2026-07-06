@@ -30,6 +30,8 @@ body {
   padding: 0;
   background-color: var(--beige);
   color: var(--gunmetal);
+  overflow-x: clip;
+  max-width: 100%;
 }
 
 main {
@@ -72,6 +74,8 @@ button.btn-descarga {
 /* Estilos para el modelo de caja */
 html {
   box-sizing: border-box;
+  overflow-x: clip;
+  max-width: 100%;
 }
 
 *,
@@ -266,6 +270,27 @@ footer {
 
 .footer-content p {
   margin: 0;
+}
+
+.footer-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.footer-link {
+  color: var(--pale-sand);
+  font-size: 0.85em;
+  opacity: 0.85;
+  text-decoration: none;
+  border-bottom: none;
+  transition: color 0.3s ease, opacity 0.3s ease;
+}
+
+.footer-link:hover {
+  color: var(--vibrant-coral);
+  opacity: 1;
+  border-bottom: none;
 }
 
 .social-link {

@@ -1,251 +1,671 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import InstagramEmbed from "../components/InstagramEmbed.astro";
+
+const instagramReels = [
+  "https://www.instagram.com/embarazafit/reel/DRxLewNjFos/",
+  "https://www.instagram.com/embarazafit/reel/DMiLD1EN_Ss/",
+  "https://www.instagram.com/embarazafit/reel/DMDfuzFNP-i/",
+];
+
+const MAILRELAY_HOST = "embarazafit.ipzmarketing.com";
+const NEWSLETTER_TOKEN = "0-9bk82OxLw";
 ---
 
-<Layout title="Embarazafit - Proteína y mancuernas">
-  <div class="banner-movil" id="banner-movil">
-    <p>
-      ¿Diabetes gestacional? 👉
-      <button
-        type="button"
-        class="btn-descarga-banner ipz-button"
-        data-host="embarazafit.ipzmarketing.com"
-        data-protocol="https"
-        data-token="0-9bk82OxLw"
-        id="btn-descarga-banner-link"
-      >
-        Descarga mi menú gratis
-      </button>
-    </p>
-    <button class="cerrar-banner" id="cerrar-banner">×</button>
-  </div>
+<Layout title="Embarazafit | Proteína y mancuernas">
+  <div class="hp">
+    <!-- 1. Hero emocional (P.A.S.) -->
+    <section class="hp-hero" aria-labelledby="hero-title">
+      <div class="hp-hero-inner">
+        <h1 id="hero-title">
+          Porque estar embarazada es maravilloso... pero a veces es un poquito
+          una 💩.
+        </h1>
 
-  <main>
-    <section class="columns-container">
-      <div class="column">
-        <h2>
-          ¿Te han diagnosticado diabetes gestacional? Mi menú semanal es para
-          ti.
-        </h2>
-        <div class="acordeon-content">
-          <p>
-            Recibir el diagnóstico de diabetes gestacional puede ser abrumador.
-            Yo pasé por ahí y sé lo que se siente. Por eso, he creado una guía
-            gratuita con el menú semanal que a mí me ayudó a controlar mis
-            niveles de glucosa de forma deliciosa y sin sentirme limitada.
-          </p>
-          <button
-            type="button"
-            class="btn-descarga ipz-button"
-            data-host="embarazafit.ipzmarketing.com"
-            data-protocol="https"
-            data-token="0-9bk82OxLw"
-            id="btn-descarga-menu"
-            data-location="main_content"
-          >
-            Descargar mi guía gratuita
-          </button>
-        </div>
+        <p class="hp-hero-problem">
+          Náuseas, el estrés de la curva del azúcar, opiniones de todo el mundo
+          y un cansancio que no se va ni durmiendo tres días seguidos. La
+          maternidad real no es el postureo de Instagram.
+        </p>
+
+        <p class="hp-hero-agitation">
+          Te bombardean con lo que "deberías" comer, cómo "deberías" entrenar y
+          qué decisiones "deberías" tomar en el parto. Es abrumador, estresante
+          y, la verdad, no tienes tiempo de sacarte tres carreras universitarias
+          para validar qué es seguro para tu bebé y qué no.
+        </p>
+
+        <p class="hp-hero-solution">
+          Por eso creé EmbarazaFit. Herramientas directas, sin rodeos y
+          avaladas por expertos para que recuperes el control y la paz mental.
+        </p>
+
+        <a href="#recursos" class="btn-hero">Ver Recursos Gratuitos y Premium</a>
       </div>
     </section>
-  </main>
+
+    <div class="hp-body">
+      <!-- 2. La Verdad por Delante -->
+      <section class="hp-about" aria-labelledby="about-title">
+        <div class="hp-about-photo">
+          <div class="hp-about-photo-fallback" id="rocio-photo-fallback">
+            <span>🤍</span>
+          </div>
+          <img
+            src="/rocio.jpg"
+            alt="Rocío, creadora de EmbarazaFit"
+            width="480"
+            height="560"
+            loading="lazy"
+            id="rocio-photo"
+          />
+        </div>
+
+        <div class="hp-about-text">
+          <h2 id="about-title">Hola, soy Rocío 💚</h2>
+
+          <p>
+            No soy médico, ni nutricionista, ni entrenadora personal. Soy
+            programadora web, creadora de EmbarazaFit y madre. Cuando me tocó
+            vivirlo a mí (y enfrentarme a la diabetes gestacional), me di cuenta
+            de lo sola y perdida que te puedes sentir en este proceso.
+          </p>
+
+          <p>
+            Como mi superpoder es el código y no la medicina, tomé una decisión:
+            yo pongo la tecnología y me rodeo de los mejores profesionales del
+            sector para ayudarte a ti.
+          </p>
+
+          <p>
+            🍏 <strong>Para tu alimentación:</strong> Me he aliado con María,
+            nutricionista especializada en salud femenina. Educa sin agobios,
+            traza contigo un plan realista y te acompaña de cerca para que los
+            cambios se queden.
+            <a href="/consulta-nutricionista">Ver programa de nutrición</a>
+          </p>
+
+          <p>
+            💪 <strong>Para mis entrenamientos de fuerza:</strong> Mi brújula y
+            referente absoluto es Marcos Vázquez (Fitness Revolucionario). He
+            hecho varios de sus programas y aplico sus principios de base
+            científica para mantenerme fuerte, ágil y con energía en el día a día.
+          </p>
+        </div>
+      </section>
+
+      <!-- 3. Newsletter -->
+      <section class="hp-newsletter" aria-labelledby="newsletter-title">
+        <h2 id="newsletter-title">💌 Reflexiones sin filtro (directas a tu email)</h2>
+
+        <p>
+          La maternidad es una etapa maravillosa... pero suele venir acompañada de
+          noches en vela y de la culpa por querer recuperar tu vida.
+        </p>
+
+        <p>
+          Escribo una newsletter privada donde comparto mis reflexiones incómodas,
+          a veces útiles, pero siempre honestas sobre la maternidad. Es gratis y
+          te puedes dar de baja cuando quieras.
+        </p>
+
+        <form
+          class="hp-newsletter-form ipz-form"
+          data-host={MAILRELAY_HOST}
+          data-protocol="https"
+          data-token={NEWSLETTER_TOKEN}
+          method="post"
+        >
+          <div class="hp-newsletter-row">
+            <input
+              type="email"
+              name="email"
+              placeholder="Tu email aquí..."
+              required
+              autocomplete="email"
+              aria-label="Tu email"
+            />
+            <button type="submit">Unirme 💚</button>
+          </div>
+          <p class="hp-newsletter-footnote">
+            De regalo te llevas un menú para la diabetes gestacional.
+          </p>
+        </form>
+      </section>
+
+      <!-- 4. Recursos -->
+      <section class="hp-recursos" id="recursos" aria-labelledby="recursos-title">
+        <h2 id="recursos-title">Tus herramientas de control y paz mental</h2>
+
+        <div class="hp-recursos-grid">
+          <article class="hp-card hp-card-free">
+            <p class="hp-card-label">🆓 Recursos Gratuitos</p>
+
+            <div class="hp-card-free-item">
+              <h3>Plan de Parto Interactivo</h3>
+              <p>
+                Diseña, personaliza y descarga de forma visual tus deseos para el
+                gran día. Sin agobios, paso a paso y listo para entregar a tu equipo
+                médico.
+              </p>
+              <a href="/plan-de-parto" class="btn-card">Empezar mi Plan Gratis</a>
+            </div>
+
+            <div class="hp-card-free-item">
+              <h3>Menú para diabetes gestacional</h3>
+              <p>
+                El menú semanal que a mí me ayudó a controlar la glucosa sin
+                sentirme limitada. Gratis al suscribirte a la newsletter.
+              </p>
+              <a href="/regalo" class="btn-card">Ver mi menú gratuito</a>
+            </div>
+          </article>
+
+          <article class="hp-card hp-card-premium">
+            <p class="hp-card-label">⭐ Recursos Premium</p>
+            <h3>Acompañamiento nutricional con María</h3>
+            <p>
+              Cada comida, la misma duda: ¿lo estoy haciendo bien? Ya sea por la
+              glucosa, el cansancio o los cambios hormonales de esta etapa. María
+              traduce la ciencia a tu vida real, con un plan hecho para ti. Solo
+              abre unas pocas plazas al mes.
+            </p>
+            <a href="/consulta-nutricionista" class="btn-card btn-card-premium">
+              Reservar mi Asesoría con María
+            </a>
+          </article>
+        </div>
+      </section>
+
+      <!-- 5. Instagram -->
+      <section class="hp-social" aria-labelledby="social-title">
+        <h2 id="social-title">Lo que se comenta en la comunidad</h2>
+
+        <div class="hp-reels-grid">
+          {
+            instagramReels.map((permalink) => (
+              <div class="hp-reel">
+                <InstagramEmbed permalink={permalink} />
+              </div>
+            ))
+          }
+        </div>
+
+        <p class="hp-social-cta">
+          Si quieres dosis de realidad diaria sobre maternidad, te espero al otro
+          lado en
+          <a
+            href="https://www.instagram.com/embarazafit/"
+            target="_blank"
+            rel="noopener noreferrer"
+            >@embarazafit</a
+          >.
+        </p>
+      </section>
+    </div>
+  </div>
 </Layout>
 
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const photo = document.getElementById("rocio-photo");
+    const fallback = document.getElementById("rocio-photo-fallback");
+
+    if (photo && fallback) {
+      const showFallback = () => {
+        photo.style.display = "none";
+        fallback.style.display = "flex";
+      };
+
+      photo.addEventListener("load", () => {
+        fallback.style.display = "none";
+      });
+
+      if (photo.complete && photo.naturalHeight === 0) {
+        showFallback();
+      } else if (photo.complete && photo.naturalHeight > 0) {
+        fallback.style.display = "none";
+      } else {
+        photo.addEventListener("error", showFallback);
+      }
+    }
+  });
+</script>
+
 <style>
-  /*
-   * ESTILOS RESPONSIVOS PARA LAS COLUMNAS Y EL ACORDEÓN
-   */
-  .columns-container {
+  :global(main:has(.hp)) {
+    margin-top: 0;
+    max-width: 100%;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    overflow-x: clip;
+  }
+
+  .hp {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: clip;
+  }
+
+  /* Hero */
+  .hp-hero {
+    background: #fff;
+    padding: clamp(48px, 8vw, 96px) 20px;
+    margin-bottom: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .hp-hero-inner {
+    max-width: 760px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .hp-hero h1 {
+    font-size: clamp(1.75rem, 5vw, 2.75rem);
+    line-height: 1.2;
+    color: var(--gunmetal);
+    margin: 0 0 28px;
+    font-weight: 700;
+  }
+
+  .hp-hero-problem,
+  .hp-hero-agitation,
+  .hp-hero-solution {
+    font-size: clamp(1rem, 2.2vw, 1.125rem);
+    line-height: 1.75;
+    color: var(--dark-charcoal);
+    margin: 0 0 20px;
+    text-align: left;
+  }
+
+  .hp-hero-solution {
+    font-weight: 600;
+    margin-bottom: 32px;
+  }
+
+  .btn-hero {
+    display: inline-block;
+    padding: 14px 32px;
+    background-color: var(--rusty-red);
+    color: var(--pale-sand);
+    text-decoration: none;
+    border: none;
+    border-radius: 50px;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+  }
+
+  .btn-hero:hover {
+    background-color: var(--deep-teal);
+    color: var(--pale-sand);
+    border-bottom: none;
+  }
+
+  /* Body sections */
+  .hp-body {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 0 20px 48px;
+    overflow-x: clip;
+  }
+
+  .hp-body section {
+    margin-bottom: 32px;
+  }
+
+  /* About */
+  .hp-about {
+    display: grid;
+    grid-template-columns: minmax(240px, 360px) 1fr;
+    gap: 40px;
+    align-items: center;
+    background: transparent;
+    padding: 48px 0;
+    box-shadow: none;
+  }
+
+  .hp-about-photo {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+    background: linear-gradient(
+      160deg,
+      var(--dusty-rose) 0%,
+      var(--pale-sand) 100%
+    );
+  }
+
+  .hp-about-photo-fallback {
+    display: flex;
+    position: absolute;
+    inset: 0;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+  }
+
+  .hp-about-photo img {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 20%;
+    display: block;
+  }
+
+  .hp-about-text {
+    background: transparent;
+    padding: 0;
+    box-shadow: none;
+  }
+
+  .hp-about h2 {
+    font-size: clamp(1.5rem, 3.5vw, 2rem);
+    color: var(--gunmetal);
+    margin: 0 0 20px;
+  }
+
+  .hp-about p {
+    line-height: 1.75;
+    margin: 0 0 16px;
+    color: var(--dark-charcoal);
+  }
+
+  /* Newsletter */
+  .hp-newsletter {
+    background: linear-gradient(
+      160deg,
+      #f3efe8 0%,
+      rgba(210, 183, 189, 0.25) 100%
+    );
+    padding: clamp(32px, 5vw, 48px);
+    border-radius: 12px;
+    text-align: center;
+  }
+
+  .hp-newsletter h2 {
+    font-size: clamp(1.35rem, 3vw, 1.75rem);
+    margin: 0 0 16px;
+    color: var(--gunmetal);
+  }
+
+  .hp-newsletter p {
+    max-width: 640px;
+    margin: 0 auto 16px;
+    line-height: 1.7;
+    color: var(--dark-charcoal);
+  }
+
+  .hp-newsletter-footnote {
+    font-size: 0.78rem;
+    color: var(--dark-charcoal);
+    opacity: 0.65;
+    margin: 32px 0 0;
+    padding: 0 0 0 18px;
+    width: 100%;
+    text-align: left;
+    line-height: 1.4;
+    white-space: nowrap;
+  }
+
+  .hp-newsletter-form {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    max-width: 560px;
+    margin: 28px auto 0;
+    width: 100%;
+  }
+
+  .hp-newsletter-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
-    margin-bottom: 40px;
-  }
-
-  /* Estilos de las columnas en escritorio (ancho > 767px) */
-  @media (min-width: 768px) {
-    .column {
-      flex: 1;
-      background-color: var(--baby-powder);
-      padding: 30px;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
-
-    .column h2 {
-      border-bottom: 2px solid var(--rusty-red);
-      padding-bottom: 10px;
-      margin-bottom: 15px;
-      cursor: default;
-    }
-
-    .acordeon-content {
-      max-height: none !important;
-      overflow: visible;
-    }
-  }
-
-  /* Estilos para móviles (ancho < 768px) */
-  @media (max-width: 767px) {
-    main {
-      padding: 0 10px;
-    }
-
-    .columns-container {
-      padding: 0;
-    }
-
-    .column {
-      width: 100%;
-      background-color: var(--baby-powder);
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-      padding: 0;
-      margin-bottom: 20px;
-    }
-
-    .column h2 {
-      padding: 20px;
-      text-align: center;
-      background-color: var(--baby-powder);
-      color: var(--gunmetal);
-      cursor: pointer;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-      border: none;
-      margin: 0;
-    }
-
-    .acordeon-content {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.2s ease-out;
-      padding: 0 20px;
-      background-color: var(--baby-powder);
-    }
-
-    .acordeon-content.active {
-      max-height: 1000px;
-      padding: 20px;
-      animation: fadeIn 0.5s ease-in-out;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(-10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-  }
-
-  /*
-   * Estilos del banner flotante para móviles
-   * --- Actualizado con el nuevo color ---
-   */
-  .banner-movil {
-    position: fixed;
-    top: 0;
-    left: 0;
+    gap: 10px;
     width: 100%;
-    background-color: var(
-      --vibrant-coral
-    ); /* Color de acento para que destaque */
+  }
+
+  .hp-newsletter-form input[type="email"] {
+    flex: 1 1 220px;
+    min-width: 0;
+    width: auto;
+    padding: 14px 18px;
+    border: 2px solid rgba(50, 163, 152, 0.3);
+    border-radius: 50px;
+    font-family: "Poppins", sans-serif;
+    font-size: 1rem;
+    line-height: 1.4;
+    background: #fff;
+    color: var(--dark-charcoal);
+    outline: none;
+    transition: border-color 0.2s ease;
+    box-sizing: border-box;
+  }
+
+  .hp-newsletter-form input[type="email"]:focus {
+    border-color: var(--deep-teal);
+  }
+
+  .hp-newsletter-form button {
+    padding: 14px 24px;
+    flex-shrink: 0;
+    background-color: var(--deep-teal);
     color: var(--pale-sand);
-    padding: 10px 40px 10px 15px;
-    text-align: center;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-    transform: translateY(-100%);
-    transition: transform 0.5s ease-in-out;
-  }
-
-  .banner-movil.visible {
-    transform: translateY(0);
-  }
-
-  .banner-movil p {
-    margin: 0;
-    font-size: 1em;
-    display: inline-block;
-  }
-
-  .banner-movil .btn-descarga-banner,
-  .banner-movil button.btn-descarga-banner {
-    color: var(
-      --dark-charcoal
-    ); /* Texto oscuro para contrastar con el fondo coral */
+    border: none;
+    border-radius: 50px;
+    font-family: "Poppins", sans-serif;
     font-weight: bold;
-    text-decoration: underline;
-    margin-left: 5px;
-    background: none;
-    border: none;
-    padding: 0;
+    font-size: 1rem;
     cursor: pointer;
-    font-family: "Poppins";
+    transition: background-color 0.3s ease;
+    white-space: nowrap;
   }
 
-  .banner-movil .cerrar-banner {
-    background: none;
-    border: none;
+  .hp-newsletter-form button:hover {
+    background-color: var(--rusty-red);
+  }
+
+  /* Recursos */
+  .hp-recursos {
+    background: transparent;
+    padding: 48px 0 24px;
+    box-shadow: none;
+    scroll-margin-top: 80px;
+  }
+
+  .hp-recursos h2 {
+    text-align: center;
+    font-size: clamp(1.4rem, 3.5vw, 1.9rem);
+    margin: 0 0 32px;
+    color: var(--gunmetal);
+  }
+
+  .hp-recursos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    gap: 24px;
+    align-items: start;
+  }
+
+  .hp-card {
+    background: #fff;
+    padding: 32px 28px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    display: flex;
+    flex-direction: column;
+    border: 2px solid transparent;
+  }
+
+  .hp-card-free {
+    border-color: rgba(50, 163, 152, 0.2);
+  }
+
+  .hp-card-premium {
+    border-color: rgba(247, 111, 94, 0.25);
+    background: linear-gradient(
+      180deg,
+      #fff 0%,
+      rgba(247, 244, 239, 0.6) 100%
+    );
+  }
+
+  .hp-card-label {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: var(--deep-teal);
+    margin: 0 0 12px;
+  }
+
+  .hp-card-premium .hp-card-label {
+    color: var(--rusty-red);
+  }
+
+  .hp-card-free .hp-card-label {
+    margin-bottom: 20px;
+  }
+
+  .hp-card-free-item + .hp-card-free-item {
+    margin-top: 28px;
+    padding-top: 28px;
+    border-top: 1px solid rgba(50, 163, 152, 0.2);
+  }
+
+  .hp-card-free-item h3 {
+    font-size: 1.25rem;
+    color: var(--gunmetal);
+    margin: 0 0 12px;
+  }
+
+  .hp-card-free-item p {
+    line-height: 1.65;
+    color: var(--dark-charcoal);
+    margin: 0 0 20px;
+  }
+
+  .hp-card h3 {
+    font-size: 1.25rem;
+    color: var(--gunmetal);
+    margin: 0 0 12px;
+  }
+
+  .hp-card > p:not(.hp-card-note) {
+    line-height: 1.65;
+    color: var(--dark-charcoal);
+    margin: 0 0 20px;
+  }
+
+  .hp-card-note {
+    font-size: 0.9rem;
+    background: #fff8e6;
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-bottom: 20px !important;
+  }
+
+  .btn-card {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: var(--deep-teal);
     color: var(--pale-sand);
-    font-size: 2em;
-    cursor: pointer;
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: bold;
+    text-align: center;
+    transition: background-color 0.3s ease;
+    align-self: flex-start;
+    border-bottom: none;
   }
 
-  /* Ocultar el banner en pantallas más grandes */
-  @media (min-width: 426px) {
-    .banner-movil {
-      display: none;
+  .btn-card:hover {
+    background-color: var(--rusty-red);
+    color: var(--pale-sand);
+    border-bottom: none;
+  }
+
+  .btn-card-premium {
+    background-color: var(--rusty-red);
+  }
+
+  .btn-card-premium:hover {
+    background-color: var(--deep-teal);
+  }
+
+  /* Social / Instagram */
+  .hp-social {
+    background: transparent;
+    padding: 24px 0 0;
+    box-shadow: none;
+    text-align: center;
+  }
+
+  .hp-social h2 {
+    font-size: clamp(1.35rem, 3vw, 1.75rem);
+    margin: 0 0 28px;
+    color: var(--gunmetal);
+  }
+
+  .hp-reels-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    gap: 20px;
+    margin-bottom: 24px;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .hp-reel {
+    display: flex;
+    justify-content: center;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .hp-social-cta {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: var(--dark-charcoal);
+    margin: 0;
+  }
+
+  @media (max-width: 768px) {
+    .hp-about {
+      grid-template-columns: 1fr;
+      gap: 28px;
+      padding: 32px 0;
+    }
+
+    .hp-about-photo {
+      max-width: 320px;
+      margin: 0 auto;
+    }
+
+    .hp-newsletter-row {
+      flex-direction: column;
+    }
+
+    .hp-newsletter-form input[type="email"] {
+      flex: none;
+      width: 100%;
+    }
+
+    .hp-newsletter-form button {
+      width: 100%;
+    }
+
+    .hp-newsletter-footnote {
+      white-space: normal;
+    }
+
+    .btn-card {
+      align-self: stretch;
     }
   }
 </style>
-
-<script>
-  // Lógica para mostrar y ocultar el banner
-  document.addEventListener("DOMContentLoaded", function () {
-    const banner = document.getElementById("banner-movil");
-    const botonCerrar = document.getElementById("cerrar-banner");
-
-    if (banner && botonCerrar) {
-      // Muestra el banner al cargar la página
-      banner.classList.add("visible");
-      // Escucha el clic para cerrarlo
-      botonCerrar.addEventListener("click", function () {
-        banner.classList.remove("visible");
-      });
-    }
-  });
-
-  // Lógica para los acordeones
-  var botonesAcordeon = document.querySelectorAll(".column h2");
-  botonesAcordeon.forEach(function (boton) {
-    boton.addEventListener("click", function () {
-      var contenido = this.nextElementSibling;
-      contenido.classList.toggle("active");
-    });
-  });
-
-  // Lógica de seguimiento de clics
-  document.addEventListener("DOMContentLoaded", function () {
-    var buttonsToTrack = document.querySelectorAll("[data-location]");
-    buttonsToTrack.forEach(function (button) {
-      button.addEventListener("click", function () {
-        var location = this.getAttribute("data-location");
-        if (typeof gtag !== "undefined") {
-          gtag("event", "download_click", {
-            event_category: "Descargas",
-            event_label: location,
-          });
-        }
-      });
-    });
-  });
-</script>
