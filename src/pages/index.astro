@@ -140,13 +140,25 @@ const NEWSLETTER_TOKEN = "0-9bk82OxLw";
         <div class="hp-recursos-grid">
           <article class="hp-card hp-card-free">
             <p class="hp-card-label">🆓 Recursos Gratuitos</p>
-            <h3>Plan de Parto Interactivo</h3>
-            <p>
-              Diseña, personaliza y descarga de forma visual tus deseos para el
-              gran día. Sin agobios, paso a paso y listo para entregar a tu equipo
-              médico.
-            </p>
-            <a href="/plan-de-parto" class="btn-card">Empezar mi Plan Gratis</a>
+
+            <div class="hp-card-free-item">
+              <h3>Plan de Parto Interactivo</h3>
+              <p>
+                Diseña, personaliza y descarga de forma visual tus deseos para el
+                gran día. Sin agobios, paso a paso y listo para entregar a tu equipo
+                médico.
+              </p>
+              <a href="/plan-de-parto" class="btn-card">Empezar mi Plan Gratis</a>
+            </div>
+
+            <div class="hp-card-free-item">
+              <h3>Menú para diabetes gestacional</h3>
+              <p>
+                El menú semanal que a mí me ayudó a controlar la glucosa sin
+                sentirme limitada. Gratis al suscribirte a la newsletter.
+              </p>
+              <a href="/regalo" class="btn-card">Ver mi menú gratuito</a>
+            </div>
           </article>
 
           <article class="hp-card hp-card-premium">
@@ -515,6 +527,28 @@ const NEWSLETTER_TOKEN = "0-9bk82OxLw";
 
   .hp-card-premium .hp-card-label {
     color: var(--rusty-red);
+  }
+
+  .hp-card-free .hp-card-label {
+    margin-bottom: 20px;
+  }
+
+  .hp-card-free-item + .hp-card-free-item {
+    margin-top: 28px;
+    padding-top: 28px;
+    border-top: 1px solid rgba(50, 163, 152, 0.2);
+  }
+
+  .hp-card-free-item h3 {
+    font-size: 1.25rem;
+    color: var(--gunmetal);
+    margin: 0 0 12px;
+  }
+
+  .hp-card-free-item p {
+    line-height: 1.65;
+    color: var(--dark-charcoal);
+    margin: 0 0 20px;
   }
 
   .hp-card h3 {
