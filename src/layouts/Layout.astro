@@ -6,6 +6,7 @@ interface Props {
 }
 
 const { title = 'Embarazafit' } = Astro.props;
+const year = new Date().getFullYear();
 ---
 
 <!DOCTYPE html>
@@ -59,7 +60,7 @@ const { title = 'Embarazafit' } = Astro.props;
     </main>
     <footer>
       <div class="footer-content">
-        <p>&copy; 2025 Embarazafit. Todos los derechos reservados.</p>
+        <p>&copy; {year} Embarazafit. Todos los derechos reservados.</p>
         <a
           href="https://www.instagram.com/embarazafit/"
           target="_blank"
@@ -70,12 +71,6 @@ const { title = 'Embarazafit' } = Astro.props;
           <i class="fab fa-instagram"></i>
         </a>
       </div>
-      <p class="afiliado-disclaimer">
-        Embarazafit participa en el Programa de Afiliados de Amazon EU, un
-        programa de publicidad para afiliados diseñado para ofrecer a los sitios
-        web un modo de obtener comisiones por publicidad, publicitando e
-        incluyendo enlaces a Amazon.es.
-      </p>
     </footer>
 
     <script async src="//www.instagram.com/embed.js"></script>
