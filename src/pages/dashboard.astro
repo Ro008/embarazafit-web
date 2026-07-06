@@ -43,9 +43,12 @@ if (authed) {
   }
 }
 
-const leadsDelMes = leads.filter(
-  (l) => leadCaptureMonth(l.created_at) === selectedMes,
-);
+const leadsDelMes = leads
+  .filter((l) => leadCaptureMonth(l.created_at) === selectedMes)
+  .sort(
+    (a, b) =>
+      new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+  );
 
 const leadsPendientesCobro = leadsDelMes.filter(
   (l) =>
@@ -280,21 +283,33 @@ const clientasConPago = new Set(cobrosDelMes.map((p) => p.lead_id)).size;
                   <p class="empty">Ningún lead este mes.</p>
                 ) : (
                   <div class="table-wrap">
-                    <table class="leads-table">
+                    <table class="leads-table" id="leads-table">
                       <thead>
                         <tr>
-                          <th>#</th>
-                          <th>Fecha</th>
-                          <th>Nombre</th>
-                          <th>Teléfono</th>
-                          <th>Email</th>
-                          <th>Momento</th>
-                          <th>Notas</th>
+                          <th scope="col">#</th>
+                          <th
+                            class="sortable sort-asc"
+                            data-sort="fecha"
+                            scope="col"
+                            aria-sort="ascending"
+                          >
+                            Fecha
+                          </th>
+                          <th class="sortable" data-sort="nombre" scope="col">
+                            Nombre
+                          </th>
+                          <th scope="col">Teléfono</th>
+                          <th scope="col">Email</th>
+                          <th scope="col">Momento</th>
+                          <th scope="col">Notas</th>
                         </tr>
                       </thead>
                       <tbody>
                         {leadsDelMes.map((lead, i) => (
-                          <tr>
+                          <tr
+                            data-fecha={lead.created_at}
+                            data-nombre={lead.nombre}
+                          >
                             <td>{i + 1}</td>
                             <td>{formatShortDate(lead.created_at)}</td>
                             <td>{lead.nombre}</td>
@@ -381,6 +396,84 @@ const clientasConPago = new Set(cobrosDelMes.map((p) => p.lead_id)).size;
             fd.get('preset') as string,
           );
         });
+
+      const leadsTable = document.getElementById('leads-table');
+      if (leadsTable) {
+        const tbody = leadsTable.querySelector('tbody');
+        const headers = leadsTable.querySelectorAll<HTMLTableCellElement>(
+          'th[data-sort]',
+        );
+        let activeKey = 'fecha';
+        let activeDir: 'asc' | 'desc' = 'asc';
+
+        function compareRows(
+          a: HTMLTableRowElement,
+          b: HTMLTableRowElement,
+          key: string,
+          dir: 'asc' | 'desc',
+        ) {
+          let cmp = 0;
+          if (key === 'fecha') {
+            cmp = (a.dataset.fecha ?? '').localeCompare(b.dataset.fecha ?? '');
+          } else {
+            const av = (a.dataset.nombre ?? '').toLocaleLowerCase('es');
+            const bv = (b.dataset.nombre ?? '').toLocaleLowerCase('es');
+            cmp = av.localeCompare(bv, 'es', { sensitivity: 'base' });
+          }
+          return dir === 'asc' ? cmp : -cmp;
+        }
+
+        function renumberRows() {
+          tbody
+            ?.querySelectorAll<HTMLTableRowElement>('tr')
+            .forEach((row, i) => {
+              const numCell = row.querySelector('td');
+              if (numCell) numCell.textContent = String(i + 1);
+            });
+        }
+
+        function updateHeaderState(activeHeader: HTMLTableCellElement) {
+          headers.forEach((h) => {
+            const isActive = h === activeHeader;
+            h.classList.toggle('sort-asc', isActive && activeDir === 'asc');
+            h.classList.toggle('sort-desc', isActive && activeDir === 'desc');
+            h.setAttribute(
+              'aria-sort',
+              isActive
+                ? activeDir === 'asc'
+                  ? 'ascending'
+                  : 'descending'
+                : 'none',
+            );
+          });
+        }
+
+        function sortTable(key: string, header: HTMLTableCellElement) {
+          if (!tbody) return;
+
+          if (activeKey === key) {
+            activeDir = activeDir === 'asc' ? 'desc' : 'asc';
+          } else {
+            activeKey = key;
+            activeDir = 'asc';
+          }
+
+          const rows = Array.from(
+            tbody.querySelectorAll<HTMLTableRowElement>('tr'),
+          );
+          rows.sort((a, b) => compareRows(a, b, key, activeDir));
+          rows.forEach((row) => tbody.appendChild(row));
+          renumberRows();
+          updateHeaderState(header);
+        }
+
+        headers.forEach((header) => {
+          header.addEventListener('click', () => {
+            const key = header.dataset.sort;
+            if (key) sortTable(key, header);
+          });
+        });
+      }
     </script>
   </body>
 </html>
@@ -590,6 +683,35 @@ const clientasConPago = new Set(cobrosDelMes.map((p) => p.lead_id)).size;
     color: var(--deep-teal);
     background: #f9f8f6;
     white-space: nowrap;
+  }
+
+  .leads-table th.sortable {
+    cursor: pointer;
+    user-select: none;
+    padding-right: 1.4em;
+    position: relative;
+  }
+
+  .leads-table th.sortable:hover {
+    background: #f0eeea;
+  }
+
+  .leads-table th.sortable::after {
+    content: '↕';
+    position: absolute;
+    right: 6px;
+    opacity: 0.35;
+    font-size: 0.65rem;
+  }
+
+  .leads-table th.sort-asc::after {
+    content: '↑';
+    opacity: 1;
+  }
+
+  .leads-table th.sort-desc::after {
+    content: '↓';
+    opacity: 1;
   }
 
   .leads-table tbody tr:nth-child(even) {
