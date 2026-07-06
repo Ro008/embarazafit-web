@@ -279,13 +279,6 @@ footer {
   color: var(--vibrant-coral);
 }
 
-.afiliado-disclaimer {
-  max-width: 800px;
-  margin: 0 auto;
-  text-align: center;
-  opacity: 0.5;
-}
-
 @media (min-width: 768px) {
   footer {
     align-items: center;
@@ -297,9 +290,5 @@ footer {
     justify-content: space-between;
     width: 100%;
     max-width: 800px;
-  }
-
-  .afiliado-disclaimer {
-    margin-top: 10px;
   }
 }
