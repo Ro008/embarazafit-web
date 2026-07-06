@@ -440,10 +440,12 @@ const NEWSLETTER_TOKEN = "0-9bk82OxLw";
     border-radius: 50px;
     font-family: "Poppins", sans-serif;
     font-size: 1rem;
+    line-height: 1.4;
     background: #fff;
     color: var(--dark-charcoal);
     outline: none;
     transition: border-color 0.2s ease;
+    box-sizing: border-box;
   }
 
   .hp-newsletter-form input[type="email"]:focus {
@@ -647,6 +649,11 @@ const NEWSLETTER_TOKEN = "0-9bk82OxLw";
 
     .hp-newsletter-row {
       flex-direction: column;
+    }
+
+    .hp-newsletter-form input[type="email"] {
+      flex: none;
+      width: 100%;
     }
 
     .hp-newsletter-form button {
