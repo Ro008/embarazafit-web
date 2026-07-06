@@ -272,6 +272,27 @@ footer {
   margin: 0;
 }
 
+.footer-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.footer-link {
+  color: var(--pale-sand);
+  font-size: 0.85em;
+  opacity: 0.85;
+  text-decoration: none;
+  border-bottom: none;
+  transition: color 0.3s ease, opacity 0.3s ease;
+}
+
+.footer-link:hover {
+  color: var(--vibrant-coral);
+  opacity: 1;
+  border-bottom: none;
+}
+
 .social-link {
   color: var(--pale-sand);
   font-size: 1.5em;
