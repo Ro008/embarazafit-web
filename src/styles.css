@@ -30,6 +30,8 @@ body {
   padding: 0;
   background-color: var(--beige);
   color: var(--gunmetal);
+  overflow-x: clip;
+  max-width: 100%;
 }
 
 main {
@@ -72,6 +74,8 @@ button.btn-descarga {
 /* Estilos para el modelo de caja */
 html {
   box-sizing: border-box;
+  overflow-x: clip;
+  max-width: 100%;
 }
 
 *,
