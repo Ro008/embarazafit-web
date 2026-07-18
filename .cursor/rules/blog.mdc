@@ -20,11 +20,14 @@ Cuando Ro pase un **borrador** (texto libre, Notion, WhatsApp, etc.), convertirl
 ---
 title: "Título del post"
 description: "1–2 frases para SEO / listado / Open Graph. No se muestra como lead en el artículo."
-pubDate: YYYY-MM-DD
+pubDate: 2026-07-18T10:00:00
 ---
 ```
 
-- `pubDate`: solo para JSON-LD `datePublished` (SEO). **Nunca** pintarlo en la UI.
+- `pubDate`: orden interno de la serie + JSON-LD `datePublished`. **Nunca** pintarlo en la UI.
+- Usar fecha **y hora** (`YYYY-MM-DDTHH:mm:ss`) para el orden. El post más antiguo = #1 de la serie.
+  - Post actual #1: `adios-picos-ayunas-diabetes-gestacional` → `2026-07-18T09:00:00`
+  - Cada post nuevo debe llevar un `pubDate` **posterior** al anterior.
 - `dateModified`: automático (`fs` mtime del `.md` en build). No añadir campo `updatedDate` a mano.
 - `draft: true` (opcional): oculta el post en producción; en local sí se ve.
 
@@ -44,6 +47,7 @@ pubDate: YYYY-MM-DD
 | Foto + “Ro de EmbarazaFit” + “Lectura de X min” | Cabecera (`BlogArticleMeta`) |
 | CTA → `/regalo` (menú DG + newsletter) | Tras el contenido, antes de la firma |
 | “Ni antojos ni cuentos” | Solo en la **firma al final** del post |
+| Anterior / Siguiente | Tras la firma (`BlogAdjacentNav`), orden por `pubDate` ascendente |
 | Fechas | **Ninguna** en pantalla; sí en JSON-LD oculto |
 
 No duplicar el CTA ni la firma en el Markdown del post.
@@ -63,3 +67,5 @@ No duplicar el CTA ni la firma en el Markdown del post.
 - Listado: `src/pages/blog/index.astro`
 - Post: `src/pages/blog/[slug].astro`
 - Meta UI: `src/components/BlogArticleMeta.astro`
+- Nav serie: `src/components/BlogAdjacentNav.astro`
+- Helpers: `src/lib/blog.ts`

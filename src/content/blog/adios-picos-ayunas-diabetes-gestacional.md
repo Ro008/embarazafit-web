@@ -1,7 +1,7 @@
 ---
 title: 'Adiós a los picos en ayunas: cómo "hackear" tus cenas y desayunos con diabetes gestacional'
 description: Soluciones prácticas y basadas en evidencia para bajar la glucosa en ayunas con diabetes gestacional, empezando por la cena y el desayuno.
-pubDate: 2026-07-18
+pubDate: 2026-07-18T09:00:00
 ---
 
 Si acabas de recibir el diagnóstico de diabetes gestacional, es normal que te sientas abrumada. Pero respira: no estás enferma, tu cuerpo simplemente está pasando por una **resistencia hormonal temporal**. El reto más común suele ser la glucosa en ayunas, esa cifra que ves al despertar y que parece no bajar hagas lo que hagas.

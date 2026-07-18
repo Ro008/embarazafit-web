@@ -18,7 +18,7 @@ La plantilla del post ya incluye: autor, tiempo de lectura, CTA a `/regalo` (men
 ---
 title: "Título del post"
 description: "Resumen corto para SEO y el listado."
-pubDate: 2026-07-18
+pubDate: 2026-07-20T10:00:00
 ---
 
 Primer párrafo…
@@ -28,6 +28,8 @@ Primer párrafo…
 Más contenido.
 ```
 
-- `pubDate` solo va a SEO (JSON-LD). No se muestra en pantalla.
+- `pubDate` (fecha + hora) ordena la serie y el SEO. No se muestra en pantalla.
+- Post #1 actual: `adios-picos-ayunas-diabetes-gestacional` (`2026-07-18T09:00:00`). Los nuevos van con `pubDate` posterior.
 - Al guardar el archivo, `dateModified` se actualiza solo (mtime).
 - Opcional: `draft: true` para no publicar aún en producción.
+- Al final de cada post, la plantilla muestra **Anterior / Siguiente** según ese orden.
