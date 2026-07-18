@@ -1,0 +1,81 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import BlogArticleMeta from '../../components/BlogArticleMeta.astro';
+import {
+  formatReadingLabel,
+  getDateModified,
+  getReadingMinutes,
+} from '../../lib/blog';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => {
+    return import.meta.env.PROD ? data.draft !== true : true;
+  });
+
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const readingMinutes = getReadingMinutes(post.body);
+const readingLabel = formatReadingLabel(readingMinutes);
+const dateModified = getDateModified(post);
+const canonicalUrl = new URL(`/blog/${post.id}`, Astro.site);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: post.data.pubDate.toISOString(),
+  dateModified: dateModified.toISOString(),
+  author: {
+    '@type': 'Person',
+    name: 'Ro de EmbarazaFit',
+    url: 'https://www.embarazafit.com',
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'EmbarazaFit',
+    url: 'https://www.embarazafit.com',
+  },
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': canonicalUrl.href,
+  },
+  timeRequired: `PT${readingMinutes}M`,
+  inLanguage: 'es',
+};
+---
+
+<Layout title={`${post.data.title} | EmbarazaFit`} description={post.data.description}>
+  <article class="blog-post">
+    <p class="blog-post__back">
+      <a href="/blog">← Volver al blog</a>
+    </p>
+
+    <header class="blog-post__header">
+      <h1>{post.data.title}</h1>
+      <BlogArticleMeta readingLabel={readingLabel} />
+    </header>
+
+    <div class="blog-post__content">
+      <Content />
+    </div>
+
+    <footer class="blog-post__firma">
+      <img src="/rocio.jpg" alt="" width="48" height="48" class="blog-post__firma-photo" />
+      <div>
+        <p class="blog-post__firma-name">Ro de EmbarazaFit</p>
+        <p class="blog-post__firma-tag">Ni antojos ni cuentos</p>
+      </div>
+    </footer>
+  </article>
+
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+</Layout>

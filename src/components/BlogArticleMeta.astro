@@ -1,0 +1,24 @@
+---
+interface Props {
+  readingLabel: string;
+}
+
+const { readingLabel } = Astro.props;
+---
+
+<div class="blog-article-meta">
+  <div class="blog-article-meta__author">
+    <img
+      src="/rocio.jpg"
+      alt="Ro de EmbarazaFit"
+      class="blog-article-meta__photo"
+      width="56"
+      height="56"
+    />
+    <div class="blog-article-meta__text">
+      <p class="blog-article-meta__name">Ro de EmbarazaFit</p>
+      <p class="blog-article-meta__firma">Ni antojos ni cuentos</p>
+    </div>
+  </div>
+  <p class="blog-article-meta__reading">{readingLabel}</p>
+</div>
