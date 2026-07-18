@@ -25,3 +25,7 @@ pnpm-debug.log*
 .idea/
 .vercel
 .env*
+
+# exports locales de migración (contienen datos personales)
+supabase/export-*.json
+supabase/migrate-data.sql

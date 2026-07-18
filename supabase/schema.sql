@@ -1,6 +1,5 @@
--- Ejecutar en Supabase → SQL Editor
--- Puedes usar UNO de tus proyectos Supabase existentes (no hace falta crear uno nuevo).
--- Las tablas llevan prefijo embarazafit_ para no chocar con otras apps del mismo proyecto.
+-- Ejecutar en Supabase → SQL Editor (proyecto Embarazafit).
+-- Las tablas llevan prefijo embarazafit_.
 
 create table if not exists embarazafit_leads (
   id uuid primary key default gen_random_uuid(),
