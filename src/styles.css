@@ -442,7 +442,6 @@ footer {
   color: var(--dark-charcoal);
 }
 
-.blog-article-meta__firma,
 .blog-post__firma-tag {
   margin: 0.15rem 0 0;
   font-size: 0.9rem;
@@ -498,11 +497,21 @@ footer {
   word-break: break-word;
 }
 
+.blog-post__newsletter {
+  margin: 1.75rem 0 0;
+  padding: 1rem 1.15rem;
+  line-height: 1.6;
+  font-size: 0.98rem;
+  background-color: rgba(50, 163, 152, 0.1);
+  border-left: 3px solid var(--deep-teal);
+  border-radius: 0 6px 6px 0;
+}
+
 .blog-post__firma {
   display: flex;
   align-items: center;
   gap: 0.85rem;
-  margin-top: 2rem;
+  margin-top: 1.5rem;
   padding-top: 1.25rem;
   border-top: 1px solid var(--dusty-rose);
 }
