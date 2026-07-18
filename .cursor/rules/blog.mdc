@@ -34,7 +34,7 @@ pubDate: YYYY-MM-DD
 - No repetir el título en el body: la página ya renderiza `title` como `<h1>`.
 - No poner autor, fechas ni “lectura de X min” en el Markdown: lo pone el layout (`BlogArticleMeta` + firma al final).
 - Tono: español, claro, evidencia sin dramas; voz de Ro / EmbarazaFit.
-- Imágenes: poner en `public/` (p. ej. `public/blog/...`) y referenciar `/blog/...`.
+- Imágenes/diagramas: preferir SVG **inline** en el Markdown (`<figure class="blog-diagram">…</figure>`). Si usas archivos, van en `public/images/blog/` con ruta `/images/blog/...` (nunca `/blog/...`: choca con la ruta del post).
 
 ## UX del artículo (ya implementada — no duplicar)
 
