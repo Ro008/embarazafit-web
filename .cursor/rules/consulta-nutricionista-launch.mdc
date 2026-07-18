@@ -22,6 +22,6 @@ Mínimo: `ADMIN_PASSWORD`, `NOTIFICATION_EMAIL`, `MAILRELAY_*`, `SUPABASE_*`, `M
 
 ## Supabase
 
-Plan free = máx. 2 proyectos. **Reutilizar un proyecto existente** y ejecutar `supabase/schema.sql` (tablas `embarazafit_leads`, `embarazafit_pagos`).
+Proyecto propio Embarazafit: `https://vysngzqpcwnharrifmdp.supabase.co`. Ejecutar `supabase/schema.sql` si hace falta recrear tablas.
 
 Guía completa: `docs/CONSULTA-NUTRICIONISTA.md`

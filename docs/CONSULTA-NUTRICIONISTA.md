@@ -55,22 +55,20 @@ A veces la API responde `Your account is currently under review` aunque el panel
 
 ---
 
-## Paso a paso: Supabase (sin crear proyecto nuevo)
+## Paso a paso: Supabase (proyecto Embarazafit)
 
-El plan free permite **máximo 2 proyectos**. Si ya los tienes ocupados, **reutiliza uno** (DocCy u otro personal).
+Embarazafit usa su **proyecto propio**: `https://vysngzqpcwnharrifmdp.supabase.co`
 
-1. Entra en [supabase.com](https://supabase.com) → abre **uno de tus proyectos existentes**
+1. Entra en [supabase.com](https://supabase.com) → abre el **proyecto Embarazafit**
 2. **SQL Editor** → **New query**
 3. Copia y ejecuta `supabase/schema.sql` del repo
-   - Crea tablas `embarazafit_leads` y `embarazafit_pagos` (prefijo para no chocar con otras apps)
+   - Crea tablas `embarazafit_leads` y `embarazafit_pagos`
 4. **Settings → API** → copia al `.env`:
    - **Project URL** → `SUPABASE_URL`
    - **service_role** (Reveal → copiar) → `SUPABASE_SERVICE_ROLE_KEY`
    - ⚠️ Usa `service_role`, **no** la clave `anon`
 
-No hace falta un tercer proyecto Supabase solo para Embarazafit.
-
-**Proyecto usado:** DocCy - Testing → ver `docs/SUPABASE-COMPARTIDO.md`
+Más detalle: `docs/SUPABASE-COMPARTIDO.md`
 
 ---
 

@@ -10,5 +10,5 @@ export const LAUNCH_CHECKLIST = {
     'Configurar MARIA_NUTRICIONISTA_EMAIL en .env y Vercel (email de María — no va en el repo)',
   vercelEnv: 'Copiar todas las variables de .env a Vercel → Environment Variables',
   supabaseSchema:
-    'Ejecutar supabase/schema.sql en un proyecto Supabase existente (tablas embarazafit_*)',
+    'Ejecutar supabase/schema.sql en el proyecto Supabase de Embarazafit (tablas embarazafit_*)',
 } as const;
