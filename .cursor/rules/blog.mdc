@@ -1,0 +1,71 @@
+---
+description: Publicar o maquetar posts del blog EmbarazaFit desde un borrador (Markdown, frontmatter, UX del artículo)
+globs: src/content/blog/**
+alwaysApply: false
+---
+
+# Blog EmbarazaFit — cómo maquetar un post
+
+Cuando Ro pase un **borrador** (texto libre, Notion, WhatsApp, etc.), convertirlo en un Markdown en `src/content/blog/` siguiendo este contrato. No hace falta tocar páginas ni componentes: la lista (`/blog`) y el detalle (`/blog/[slug]`) ya existen.
+
+## Crear el archivo
+
+1. Nombre del archivo = slug de la URL: `src/content/blog/mi-slug.md` → `/blog/mi-slug`
+2. Solo `.md` (no MDX). Colección definida en `src/content.config.ts`.
+3. Helpers: `src/lib/blog.ts` (lectura estimada + `dateModified` desde mtime del archivo).
+
+## Frontmatter obligatorio
+
+```yaml
+---
+title: "Título del post"
+description: "1–2 frases para SEO / listado / Open Graph. No se muestra como lead en el artículo."
+pubDate: 2026-07-18T10:00:00
+---
+```
+
+- `pubDate`: orden interno de la serie + JSON-LD `datePublished`. **Nunca** pintarlo en la UI.
+- Usar fecha **y hora** (`YYYY-MM-DDTHH:mm:ss`) para el orden. El post más antiguo = #1 de la serie.
+  - Post actual #1: `adios-picos-ayunas-diabetes-gestacional` → `2026-07-18T09:00:00`
+  - Cada post nuevo debe llevar un `pubDate` **posterior** al anterior.
+- `dateModified`: automático (`fs` mtime del `.md` en build). No añadir campo `updatedDate` a mano.
+- `draft: true` (opcional): oculta el post en producción; en local sí se ve.
+
+## Cuerpo Markdown
+
+- Empezar directo con el contenido (párrafos, `##` / `###`, listas, enlaces).
+- No repetir el título en el body: la página ya renderiza `title` como `<h1>`.
+- No poner autor, fechas ni “lectura de X min” en el Markdown: lo pone el layout (`BlogArticleMeta` + firma al final).
+- Tono: español, claro, evidencia sin dramas; voz de Ro / EmbarazaFit.
+- Imágenes/diagramas: preferir SVG **inline** en el Markdown (`<figure class="blog-diagram">…</figure>`). Si usas archivos, van en `public/images/blog/` con ruta `/images/blog/...` (nunca `/blog/...`: choca con la ruta del post).
+
+## UX del artículo (ya implementada — no duplicar)
+
+| Visible | Dónde |
+|---------|--------|
+| Título | `<h1>` desde frontmatter |
+| Foto + “Ro de EmbarazaFit” + “Lectura de X min” | Cabecera (`BlogArticleMeta`) |
+| CTA → `/regalo` (menú DG + newsletter) | Tras el contenido, antes de la firma |
+| “Ni antojos ni cuentos” | Solo en la **firma al final** del post |
+| Anterior / Siguiente | Tras la firma (`BlogAdjacentNav`), orden por `pubDate` ascendente |
+| Fechas | **Ninguna** en pantalla; sí en JSON-LD oculto |
+
+No duplicar el CTA ni la firma en el Markdown del post.
+
+## Checklist al recibir un borrador
+
+- [ ] Elegir slug corto en kebab-case (español, sin acentos en el filename)
+- [ ] Redactar `title` y `description` SEO si el borrador no los trae
+- [ ] Pasar el texto a Markdown limpio (títulos, listas, enlaces a `/fuentes` si aplica)
+- [ ] Crear solo el `.md` en `src/content/blog/`
+- [ ] Verificar en `npm run dev` → `/blog` y `/blog/[slug]`
+
+## Archivos clave
+
+- Contenido: `src/content/blog/*.md`
+- Schema: `src/content.config.ts`
+- Listado: `src/pages/blog/index.astro`
+- Post: `src/pages/blog/[slug].astro`
+- Meta UI: `src/components/BlogArticleMeta.astro`
+- Nav serie: `src/components/BlogAdjacentNav.astro`
+- Helpers: `src/lib/blog.ts`

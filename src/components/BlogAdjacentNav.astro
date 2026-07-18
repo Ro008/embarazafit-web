@@ -1,0 +1,33 @@
+---
+import type { BlogPost } from '../lib/blog';
+
+interface Props {
+  prev?: BlogPost;
+  next?: BlogPost;
+}
+
+const { prev, next } = Astro.props;
+---
+
+{
+  (prev || next) && (
+    <nav class="blog-adjacent" aria-label="Más artículos">
+      {prev ? (
+        <a href={`/blog/${prev.id}`} class="blog-adjacent__link blog-adjacent__link--prev">
+          <span class="blog-adjacent__label">← Anterior</span>
+          <span class="blog-adjacent__title">{prev.data.title}</span>
+        </a>
+      ) : (
+        <span class="blog-adjacent__link blog-adjacent__link--empty" />
+      )}
+      {next ? (
+        <a href={`/blog/${next.id}`} class="blog-adjacent__link blog-adjacent__link--next">
+          <span class="blog-adjacent__label">Siguiente →</span>
+          <span class="blog-adjacent__title">{next.data.title}</span>
+        </a>
+      ) : (
+        <span class="blog-adjacent__link blog-adjacent__link--empty" />
+      )}
+    </nav>
+  )
+}

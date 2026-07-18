@@ -1,0 +1,49 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import { formatReadingLabel, getReadingMinutes } from '../../lib/blog';
+
+const posts = (
+  await getCollection('blog', ({ data }) => {
+    return import.meta.env.PROD ? data.draft !== true : true;
+  })
+).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<Layout
+  title="Blog | EmbarazaFit"
+  description="Artículos sobre embarazo, fuerza, nutrición y parto con evidencia y sin cuentos. Por Ro de EmbarazaFit."
+>
+  <section class="blog-index">
+    <h2>Blog</h2>
+    <p class="blog-index__intro">
+      Embarazo, complicaciones, variantes y deporte de fuerza: lo que necesitas
+      saber, con evidencia científica y sin mitos ni dramas. Si quieres
+      profundizar en los estudios y referencias que uso, visita mis
+      <a href="/fuentes">fuentes</a>.
+    </p>
+
+    {
+      posts.length === 0 ? (
+        <p>Pronto habrá artículos nuevos. Vuelve en unos días.</p>
+      ) : (
+        <ul class="blog-index__list">
+          {posts.map((post) => {
+            const readingLabel = formatReadingLabel(getReadingMinutes(post.body));
+            return (
+              <li>
+                <a href={`/blog/${post.id}`} class="blog-index__card">
+                  <h3>{post.data.title}</h3>
+                  <p>{post.data.description}</p>
+                  <span class="blog-index__meta">
+                    Ro de EmbarazaFit · {readingLabel}
+                  </span>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      )
+    }
+  </section>
+</Layout>

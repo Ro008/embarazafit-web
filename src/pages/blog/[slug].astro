@@ -1,0 +1,91 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import BlogArticleMeta from '../../components/BlogArticleMeta.astro';
+import BlogAdjacentNav from '../../components/BlogAdjacentNav.astro';
+import {
+  formatReadingLabel,
+  getAdjacentPosts,
+  getDateModified,
+  getReadingMinutes,
+} from '../../lib/blog';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => {
+    return import.meta.env.PROD ? data.draft !== true : true;
+  });
+
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post, posts },
+  }));
+}
+
+const { post, posts } = Astro.props;
+const { Content } = await render(post);
+const { prev, next } = getAdjacentPosts(posts, post.id);
+
+const readingMinutes = getReadingMinutes(post.body);
+const readingLabel = formatReadingLabel(readingMinutes);
+const dateModified = getDateModified(post);
+const canonicalUrl = new URL(`/blog/${post.id}`, Astro.site);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: post.data.pubDate.toISOString(),
+  dateModified: dateModified.toISOString(),
+  author: {
+    '@type': 'Person',
+    name: 'Ro de EmbarazaFit',
+    url: 'https://www.embarazafit.com',
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'EmbarazaFit',
+    url: 'https://www.embarazafit.com',
+  },
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': canonicalUrl.href,
+  },
+  timeRequired: `PT${readingMinutes}M`,
+  inLanguage: 'es',
+};
+---
+
+<Layout title={`${post.data.title} | EmbarazaFit`} description={post.data.description}>
+  <article class="blog-post">
+    <p class="blog-post__back">
+      <a href="/blog">← Volver al blog</a>
+    </p>
+
+    <header class="blog-post__header">
+      <h1>{post.data.title}</h1>
+      <BlogArticleMeta readingLabel={readingLabel} />
+    </header>
+
+    <div class="blog-post__content">
+      <Content />
+    </div>
+
+    <p class="blog-post__newsletter">
+      Si la diabetes gestacional te toca de cerca,
+      <a href="/regalo">tengo un regalo para ti</a>.
+    </p>
+
+    <footer class="blog-post__firma">
+      <img src="/rocio.jpg" alt="" width="48" height="48" class="blog-post__firma-photo" />
+      <div>
+        <p class="blog-post__firma-name">Ro de EmbarazaFit</p>
+        <p class="blog-post__firma-tag">Ni antojos ni cuentos</p>
+      </div>
+    </footer>
+
+    <BlogAdjacentNav prev={prev} next={next} />
+  </article>
+
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+</Layout>
