@@ -63,8 +63,7 @@ Embarazafit usa su **proyecto propio**: `https://vysngzqpcwnharrifmdp.supabase.c
 2. **SQL Editor** → **New query**
 3. Copia y ejecuta `supabase/schema.sql` del repo
    - Crea tablas `embarazafit_leads` y `embarazafit_pagos`
-4. Si migras desde DocCy: ejecuta también `supabase/migrate-data.sql`
-5. **Settings → API** → copia al `.env`:
+4. **Settings → API** → copia al `.env`:
    - **Project URL** → `SUPABASE_URL`
    - **service_role** (Reveal → copiar) → `SUPABASE_SERVICE_ROLE_KEY`
    - ⚠️ Usa `service_role`, **no** la clave `anon`

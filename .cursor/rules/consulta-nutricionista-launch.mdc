@@ -22,6 +22,6 @@ Mínimo: `ADMIN_PASSWORD`, `NOTIFICATION_EMAIL`, `MAILRELAY_*`, `SUPABASE_*`, `M
 
 ## Supabase
 
-Proyecto propio Embarazafit: `https://vysngzqpcwnharrifmdp.supabase.co`. Ejecutar `supabase/schema.sql` (y `migrate-data.sql` si hay datos antiguos).
+Proyecto propio Embarazafit: `https://vysngzqpcwnharrifmdp.supabase.co`. Ejecutar `supabase/schema.sql` si hace falta recrear tablas.
 
 Guía completa: `docs/CONSULTA-NUTRICIONISTA.md`

@@ -23,8 +23,6 @@ Embarazafit tiene su **propio proyecto Supabase**, separado de DocCy.
 
 Script de creación: `supabase/schema.sql` (ejecutar una vez en SQL Editor).
 
-Migración desde DocCy (datos históricos): `supabase/migrate-data.sql` (después del schema).
-
 ---
 
 ## Claves API — cuál usar
@@ -54,17 +52,6 @@ Misma URL y misma service_role en local (`.env`) y en Vercel.
 
 - No poner la publishable key en `SUPABASE_SERVICE_ROLE_KEY`
 - No subir la service_role a GitHub (solo `.env` local y Vercel)
-- No dejar producción apuntando al proyecto DocCy tras la migración
-
----
-
-## Checklist migración
-
-- [ ] Ejecutar `supabase/schema.sql` en el proyecto nuevo
-- [ ] Ejecutar `supabase/migrate-data.sql` (copia leads + pagos)
-- [ ] Actualizar `SUPABASE_URL` y `SUPABASE_SERVICE_ROLE_KEY` en `.env`
-- [ ] Actualizar las mismas variables en Vercel
-- [ ] Probar formulario + dashboard
-- [ ] (Opcional) Borrar tablas `embarazafit_*` del proyecto DocCy cuando confirmes que todo va bien
+- No dejar producción apuntando al proyecto DocCy
 
 Ver también: `docs/CONSULTA-NUTRICIONISTA.md`
