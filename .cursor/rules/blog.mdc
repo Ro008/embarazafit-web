@@ -42,7 +42,7 @@ pubDate: YYYY-MM-DD
 |---------|--------|
 | Título | `<h1>` desde frontmatter |
 | Foto + “Ro de EmbarazaFit” + “Lectura de X min” | Cabecera (`BlogArticleMeta`) |
-| CTA newsletter → `/#newsletter` | Tras el contenido, antes de la firma |
+| CTA → `/regalo` (menú DG + newsletter) | Tras el contenido, antes de la firma |
 | “Ni antojos ni cuentos” | Solo en la **firma al final** del post |
 | Fechas | **Ninguna** en pantalla; sí en JSON-LD oculto |
 

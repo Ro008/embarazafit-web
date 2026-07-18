@@ -10,7 +10,7 @@ Para que el agente maquete un borrador automáticamente, ver la regla `.cursor/r
 2. Él crea `src/content/blog/mi-slug.md` con el frontmatter de abajo.
 3. Revisa en `/blog` y `/blog/mi-slug`.
 
-La plantilla del post ya incluye: autor, tiempo de lectura, CTA a la newsletter (`/#newsletter`) y firma. No los escribas en el Markdown.
+La plantilla del post ya incluye: autor, tiempo de lectura, CTA a `/regalo` (menú de diabetes gestacional + newsletter) y firma. No los escribas en el Markdown.
 
 ## Plantilla mínima
 
