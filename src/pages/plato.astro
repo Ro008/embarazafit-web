@@ -1,0 +1,183 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PlatoPremiumGate from '../components/PlatoPremiumGate.astro';
+import PlatoInteractivo from '../components/PlatoInteractivo.astro';
+import {
+  PLATO_PREMIUM_COOKIE,
+  PLATO_PREMIUM_PARAM,
+} from '../lib/plato-config';
+
+/**
+ * Comprobación SSR del parámetro en la URL.
+ * Si viene ?premium=true se activa el contenido.
+ * La cookie se gestiona en el cliente (ver <script> abajo).
+ */
+const url = new URL(Astro.request.url);
+const hasParam = url.searchParams.get(PLATO_PREMIUM_PARAM) === 'true';
+
+/**
+ * La comprobación de cookie es client-side. El servidor renderiza
+ * el simulador si el parámetro está presente; de lo contrario, el
+ * <script> lo decide según la cookie antes de que el usuario vea nada.
+ */
+const renderSimulator = hasParam;
+---
+
+<Layout
+  title="Simulador del Plato | Embarazafit"
+  description="Construye tu plato 50-25-25 con evidencia científica para controlar la diabetes gestacional. Herramienta premium interactiva."
+>
+  <style>
+    :global(main) {
+      max-width: 1000px;
+      padding: 0 16px;
+    }
+
+    .plato-page {
+      padding: 32px 0 56px;
+    }
+
+    .plato-header {
+      margin-bottom: 32px;
+      text-align: center;
+    }
+
+    .plato-header__label {
+      display: inline-block;
+      margin-bottom: 10px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #32a398;
+      background: #32a39815;
+      border-radius: 20px;
+      padding: 3px 14px;
+    }
+
+    .plato-header h1 {
+      margin: 0 0 10px;
+      font-size: clamp(1.5rem, 5vw, 2rem);
+      color: #2e3033;
+      line-height: 1.2;
+    }
+
+    .plato-header p {
+      max-width: 540px;
+      margin: 0 auto;
+      font-size: 1rem;
+      line-height: 1.65;
+      color: #2e303399;
+    }
+
+    /* Región que contiene gate o simulador */
+    #plato-content {
+      /* sin display:none; el JS lo controla */
+    }
+
+    /* Loader invisible mientras JS decide */
+    #plato-loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 220px;
+      color: #2e303360;
+      font-size: 0.9rem;
+    }
+  </style>
+
+  <div class="plato-page">
+    <header class="plato-header">
+      <span class="plato-header__label">⭐ Herramienta Premium</span>
+      <h1>Simulador del Plato<br />para Diabetes Gestacional</h1>
+      <p>
+        Arma tu plato con la estructura 50-25-25 basada en evidencia para
+        controlar los picos de glucosa en ayunas y tras las comidas.
+      </p>
+    </header>
+
+    <!-- Fallback de carga (visible solo el instante antes de que JS corra) -->
+    <div id="plato-loading" aria-hidden="true">
+      <span>Cargando…</span>
+    </div>
+
+    <!-- Contenido real; JS lo muestra con la variante correcta -->
+    <div id="plato-content" hidden>
+      {
+        renderSimulator ? (
+          <div id="plato-simulator">
+            <PlatoInteractivo />
+          </div>
+        ) : (
+          <>
+            {/* Si el servidor no tiene el param, renderizamos ambas variantes
+                y JS decide cuál mostrar según la cookie */}
+            <div id="plato-simulator" hidden>
+              <PlatoInteractivo />
+            </div>
+            <div id="plato-gate">
+              <PlatoPremiumGate />
+            </div>
+          </>
+        )
+      }
+    </div>
+  </div>
+</Layout>
+
+<script define:vars={{ PLATO_PREMIUM_COOKIE, PLATO_PREMIUM_PARAM, renderSimulator }}>
+  /**
+   * Lógica de acceso premium:
+   * 1. Si el servidor ya detectó el parámetro, solo guardamos la cookie.
+   * 2. Si no, comprobamos la cookie para decidir qué mostrar.
+   */
+
+  const COOKIE_NAME = PLATO_PREMIUM_COOKIE;
+  const COOKIE_DAYS = 3650; // 10 años ≈ acceso permanente
+
+  function getCookie(name) {
+    return document.cookie.split('; ').reduce((acc, pair) => {
+      const [k, v] = pair.split('=');
+      return k === name ? decodeURIComponent(v) : acc;
+    }, '');
+  }
+
+  function setCookie(name, value, days) {
+    const expires = new Date(Date.now() + days * 864e5).toUTCString();
+    document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/; SameSite=Lax`;
+  }
+
+  // ── Comprobar si tiene acceso ───────────────────────────
+  const urlParam = new URLSearchParams(location.search).get(PLATO_PREMIUM_PARAM);
+  const hasCookie = getCookie(COOKIE_NAME) === 'true';
+  const hasAccess = urlParam === 'true' || hasCookie || renderSimulator;
+
+  if (hasAccess) {
+    // Persistir la cookie si vino por URL
+    if (urlParam === 'true' && !hasCookie) {
+      setCookie(COOKIE_NAME, 'true', COOKIE_DAYS);
+    }
+    // Limpiar el param de la URL sin recargar (URL canónica limpia)
+    if (urlParam === 'true') {
+      const clean = location.pathname;
+      history.replaceState(null, '', clean);
+    }
+  }
+
+  // ── Mostrar la variante correcta ───────────────────────
+  const loading = document.getElementById('plato-loading');
+  const content = document.getElementById('plato-content');
+  const simulator = document.getElementById('plato-simulator');
+  const gate = document.getElementById('plato-gate');
+
+  if (loading) loading.hidden = true;
+  if (content) content.hidden = false;
+
+  if (hasAccess) {
+    if (simulator) simulator.hidden = false;
+    if (gate) gate.hidden = true;
+  } else {
+    if (simulator) simulator.hidden = true;
+    if (gate) gate.hidden = false;
+  }
+</script>

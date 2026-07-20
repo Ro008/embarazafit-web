@@ -1,0 +1,128 @@
+---
+import {
+  PLATO_CHECKOUT_URL,
+  PLATO_PREMIUM_AMOUNT,
+  PLATO_PREMIUM_CURRENCY,
+} from '../lib/plato-config';
+---
+
+<section
+  class="mx-auto max-w-lg rounded-2xl border border-dusty-rose/60 bg-white p-8 text-center shadow-lg"
+  aria-labelledby="plato-gate-title"
+>
+  <div
+    class="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-deep-teal/10 text-3xl"
+    aria-hidden="true"
+  >
+    🍽️
+  </div>
+
+  <p class="mb-2 text-sm font-bold uppercase tracking-wide text-deep-teal">
+    Herramienta premium
+  </p>
+
+  <h1
+    id="plato-gate-title"
+    class="mb-3 text-2xl font-bold leading-tight text-gunmetal"
+  >
+    Ups, esta herramienta es exclusiva
+  </h1>
+
+  <p class="mb-6 text-base leading-relaxed text-gunmetal/80">
+    El Simulador del Plato Interactivo te ayuda a armar comidas con la
+    proporción 50-25-25 basada en evidencia, para controlar los picos de
+    glucosa en ayunas y tras las comidas.
+  </p>
+
+  <ul class="mb-8 space-y-3 text-left text-sm text-gunmetal/85">
+    <li class="flex gap-3">
+      <span class="mt-0.5 text-deep-teal" aria-hidden="true">✓</span>
+      <span>Lista oficial de alimentos con índice glucémico</span>
+    </li>
+    <li class="flex gap-3">
+      <span class="mt-0.5 text-deep-teal" aria-hidden="true">✓</span>
+      <span>Plato visual interactivo 50 % verduras · 25 % proteína · 25 % carbohidratos</span>
+    </li>
+    <li class="flex gap-3">
+      <span class="mt-0.5 text-deep-teal" aria-hidden="true">✓</span>
+      <span>Sin registro: acceso inmediato tras la compra</span>
+    </li>
+  </ul>
+
+  <a
+    href={PLATO_CHECKOUT_URL}
+    class="plato-gate-cta"
+  >
+    <span class="plato-gate-cta-text">Desbloquear por</span>
+    <span class="plato-gate-cta-price" aria-label={`${PLATO_PREMIUM_AMOUNT} euros`}>
+      <span class="plato-gate-cta-amount">{PLATO_PREMIUM_AMOUNT}</span>
+      <span class="plato-gate-cta-currency">{PLATO_PREMIUM_CURRENCY}</span>
+    </span>
+  </a>
+
+  <p class="mt-4 text-xs text-gunmetal/60">
+  Pago único · Acceso permanente en este dispositivo
+  </p>
+</section>
+
+<style>
+  .plato-gate-cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.35rem 0.5rem;
+    width: 100%;
+    padding: 14px 24px;
+    border-radius: 9999px;
+    background-color: #e85a4a;
+    color: #ffffff !important;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.2;
+    text-decoration: none;
+    border-bottom: none;
+    box-shadow: 0 2px 8px rgba(232, 90, 74, 0.35);
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .plato-gate-cta-text {
+    color: #ffffff;
+    letter-spacing: 0.01em;
+  }
+
+  .plato-gate-cta-price {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.2rem;
+    padding: 0.1rem 0.55rem;
+    border-radius: 0.5rem;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    font-variant-numeric: tabular-nums;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+  }
+
+  .plato-gate-cta-amount {
+    font-size: 1.35rem;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: 0.02em;
+  }
+
+  .plato-gate-cta-currency {
+    font-size: 1.1rem;
+    font-weight: 800;
+    line-height: 1;
+    font-family: system-ui, 'Segoe UI', sans-serif;
+  }
+
+  .plato-gate-cta:hover {
+    background-color: #32a398;
+    color: #ffffff !important;
+    border-bottom: none;
+    box-shadow: 0 2px 8px rgba(50, 163, 152, 0.35);
+  }
+</style>
