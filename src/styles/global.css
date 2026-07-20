@@ -1,0 +1,11 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-pale-sand: #f7f4ef;
+  --color-deep-teal: #32a398;
+  --color-vibrant-coral: #f76f5e;
+  --color-dusty-rose: #d2b7bd;
+  --color-gunmetal: #2e3033;
+  --color-dark-charcoal: #2e3033;
+  --font-sans: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+}
