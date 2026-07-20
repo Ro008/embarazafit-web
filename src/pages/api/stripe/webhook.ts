@@ -6,6 +6,21 @@ import { insertPlatoCompra } from '../../../lib/supabase';
 
 export const prerender = false;
 
+/** Solo para comprobar en el navegador que la ruta existe. Stripe usa POST. */
+export const GET: APIRoute = async () => {
+  return new Response(
+    JSON.stringify({
+      ok: true,
+      message:
+        'Webhook de Stripe activo. Este endpoint solo acepta POST desde Stripe.',
+    }),
+    {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    },
+  );
+};
+
 /**
  * Webhook de Stripe: guarda compras del Plato Interactivo.
  * Evento: checkout.session.completed (Payment Links).
