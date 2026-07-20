@@ -1,11 +1,13 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import { getRequiredEnv } from './env';
 import type { Lead, Pago } from './leads';
+import type { PlatoCompra } from './plato-compras';
 
 let client: SupabaseClient | null = null;
 
 const LEADS_TABLE = 'embarazafit_leads';
 const PAGOS_TABLE = 'embarazafit_pagos';
+const PLATO_COMPRAS_TABLE = 'embarazafit_plato_compras';
 
 export function getSupabase(): SupabaseClient {
   if (!client) {
@@ -111,4 +113,39 @@ export async function updateLeadStatus(
     .eq('id', id);
 
   if (error) throw error;
+}
+
+export async function insertPlatoCompra(data: {
+  stripe_session_id: string;
+  email: string | null;
+  customer_name: string | null;
+  importe: number;
+  currency: string;
+  created_at?: string;
+}): Promise<{ inserted: boolean; compra?: PlatoCompra }> {
+  const { data: compra, error } = await getSupabase()
+    .from(PLATO_COMPRAS_TABLE)
+    .insert(data)
+    .select()
+    .single();
+
+  if (error) {
+    // Idempotencia: Stripe puede reenviar el mismo evento
+    if (error.code === '23505') {
+      return { inserted: false };
+    }
+    throw error;
+  }
+
+  return { inserted: true, compra: compra as PlatoCompra };
+}
+
+export async function fetchPlatoCompras(): Promise<PlatoCompra[]> {
+  const { data, error } = await getSupabase()
+    .from(PLATO_COMPRAS_TABLE)
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (error) throw error;
+  return (data ?? []) as PlatoCompra[];
 }
