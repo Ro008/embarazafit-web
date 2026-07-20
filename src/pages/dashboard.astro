@@ -18,13 +18,17 @@ import {
   formatMonthLabel,
   leadCaptureMonth,
 } from '../lib/pricing';
-import { fetchLeadsWithPagos } from '../lib/supabase';
+import { platoCompraMonth } from '../lib/plato-compras';
+import { fetchLeadsWithPagos, fetchPlatoCompras } from '../lib/supabase';
 
 const mesActual = new Date().toISOString().slice(0, 7);
 
 const authed = isAdminAuthed(Astro.cookies);
 const adminConfigured = Boolean(getEnv('ADMIN_PASSWORD'));
 const mariaEmailLive = isMariaEmailLive();
+const stripeWebhookConfigured = Boolean(
+  getEnv('STRIPE_SECRET_KEY') && getEnv('STRIPE_WEBHOOK_SECRET'),
+);
 
 const mesQuery = Astro.url.searchParams.get('mes');
 const selectedMes =
@@ -32,14 +36,20 @@ const selectedMes =
 const mesLabel = formatMonthLabel(selectedMes);
 
 let leads: Awaited<ReturnType<typeof fetchLeadsWithPagos>> = [];
+let platoCompras: Awaited<ReturnType<typeof fetchPlatoCompras>> = [];
 let loadError: string | null = null;
 
 if (authed) {
   try {
-    leads = await fetchLeadsWithPagos();
+    const [leadsResult, platoResult] = await Promise.all([
+      fetchLeadsWithPagos(),
+      fetchPlatoCompras(),
+    ]);
+    leads = leadsResult;
+    platoCompras = platoResult;
   } catch {
     loadError =
-      'No se pudieron cargar los leads. Revisa Supabase y las variables de entorno.';
+      'No se pudieron cargar los datos. Revisa Supabase y las variables de entorno.';
   }
 }
 
@@ -72,6 +82,18 @@ const totalCobrado = cobrosDelMes.reduce(
 );
 const comisionMes = commissionForAmount(totalCobrado);
 const clientasConPago = new Set(cobrosDelMes.map((p) => p.lead_id)).size;
+
+const platoDelMes = platoCompras.filter(
+  (c) => platoCompraMonth(c.created_at) === selectedMes,
+);
+const totalPlatoMes = platoDelMes.reduce(
+  (sum, c) => sum + Number(c.importe),
+  0,
+);
+const totalPlatoHistorico = platoCompras.reduce(
+  (sum, c) => sum + Number(c.importe),
+  0,
+);
 ---
 
 <!DOCTYPE html>
@@ -140,6 +162,97 @@ const clientasConPago = new Set(cobrosDelMes.map((p) => p.lead_id)).size;
               <span class="month-hint">{mesLabel}</span>
             </form>
 
+            <section class="income-overview" aria-label="Resumen de ingresos">
+              <article class="card income-tile income-tile--maria">
+                <p class="income-tile-label">Colaboración con María</p>
+                <p class="income-tile-value">{formatEuro(comisionMes)}</p>
+                <p class="income-tile-note">
+                  Tu comisión del {Math.round(COMMISSION_RATE * 100)}% en{' '}
+                  {mesLabel}
+                </p>
+              </article>
+              <article class="card income-tile income-tile--plato">
+                <p class="income-tile-label">Simulador del Plato</p>
+                <p class="income-tile-value">{formatEuro(totalPlatoMes)}</p>
+                <p class="income-tile-note">
+                  {platoDelMes.length}{' '}
+                  {platoDelMes.length === 1 ? 'venta' : 'ventas'} en {mesLabel}
+                </p>
+              </article>
+            </section>
+
+            <h2 class="section-divider" id="seccion-plato">
+              Ingresos · Simulador del Plato
+            </h2>
+
+            {
+              !stripeWebhookConfigured && (
+                <section class="banner-warn" role="status">
+                  <strong>Stripe pendiente:</strong> añade{' '}
+                  <code>STRIPE_SECRET_KEY</code> y{' '}
+                  <code>STRIPE_WEBHOOK_SECRET</code> en Vercel. Guía en{' '}
+                  <code>docs/PLATO-INTERACTIVO.md</code>.
+                </section>
+              )
+            }
+
+            <section class="card plato-card">
+              <h2>Ventas del Plato en {mesLabel}</h2>
+              <p class="big-number big-number--coral">
+                {formatEuro(totalPlatoMes)}
+              </p>
+              <p class="sub-note">Ingresos brutos (antes de comisión Stripe)</p>
+              <ul class="stats-row">
+                <li>
+                  <strong>{platoDelMes.length}</strong>{' '}
+                  {platoDelMes.length === 1 ? 'compra' : 'compras'} este mes
+                </li>
+                <li>
+                  <strong>{formatEuro(totalPlatoHistorico)}</strong> acumulado
+                  histórico
+                </li>
+                <li>
+                  <strong>{platoCompras.length}</strong> ventas totales
+                </li>
+              </ul>
+
+              {
+                platoDelMes.length === 0 ? (
+                  <p class="empty">
+                    Ninguna compra del Plato este mes. Cuando alguien pague por
+                    Stripe, aparecerá aquí automáticamente.
+                  </p>
+                ) : (
+                  <div class="table-wrap">
+                    <table class="leads-table">
+                      <thead>
+                        <tr>
+                          <th scope="col">Fecha</th>
+                          <th scope="col">Email</th>
+                          <th scope="col">Nombre</th>
+                          <th scope="col">Importe</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {platoDelMes.map((c) => (
+                          <tr>
+                            <td>{formatShortDate(c.created_at)}</td>
+                            <td>{c.email || '—'}</td>
+                            <td>{c.customer_name || '—'}</td>
+                            <td>{formatEuro(Number(c.importe))}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )
+              }
+            </section>
+
+            <h2 class="section-divider" id="seccion-maria">
+              Ingresos · Colaboración con María
+            </h2>
+
             <section class="card workflow-card">
               <h2>Cómo trabajar con María</h2>
               <ol>
@@ -191,9 +304,12 @@ const clientasConPago = new Set(cobrosDelMes.map((p) => p.lead_id)).size;
             </details>
 
             <section class="card commission-card">
-              <h2>Cobros de María en {mesLabel}</h2>
+              <h2>Tu comisión por María en {mesLabel}</h2>
               <p class="big-number">{formatEuro(comisionMes)}</p>
-              <p class="sub-note">Tu comisión ({Math.round(COMMISSION_RATE * 100)}%)</p>
+              <p class="sub-note">
+                Tu {Math.round(COMMISSION_RATE * 100)}% sobre lo cobrado por María
+                (no es ingreso del Plato)
+              </p>
               <ul class="stats-row">
                 <li>
                   <strong>{formatEuro(totalCobrado)}</strong> cobrado por María
@@ -594,6 +710,72 @@ const clientasConPago = new Set(cobrosDelMes.map((p) => p.lead_id)).size;
 
   .commission-card {
     border-left: 4px solid var(--deep-teal);
+  }
+
+  .section-divider {
+    margin: 28px 0 12px;
+    font-size: 1.05rem;
+    color: var(--dark-charcoal);
+    border-bottom: 2px solid rgba(50, 163, 152, 0.25);
+    padding-bottom: 8px;
+  }
+
+  .income-overview {
+    display: grid;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+
+  @media (min-width: 560px) {
+    .income-overview {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .income-tile {
+    margin-bottom: 0;
+  }
+
+  .income-tile--maria {
+    border-left: 4px solid var(--deep-teal);
+  }
+
+  .income-tile--plato {
+    border-left: 4px solid var(--vibrant-coral);
+  }
+
+  .income-tile-label {
+    margin: 0 0 6px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    opacity: 0.75;
+  }
+
+  .income-tile-value {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--deep-teal);
+  }
+
+  .income-tile--plato .income-tile-value {
+    color: var(--vibrant-coral);
+  }
+
+  .income-tile-note {
+    margin: 6px 0 0;
+    font-size: 0.85rem;
+    opacity: 0.8;
+  }
+
+  .plato-card {
+    border-left: 4px solid var(--vibrant-coral);
+  }
+
+  .big-number--coral {
+    color: var(--vibrant-coral);
   }
 
   .big-number {
