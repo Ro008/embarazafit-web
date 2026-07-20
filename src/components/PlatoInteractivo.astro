@@ -11,8 +11,17 @@ const categorias = PLATO_CATEGORIAS;
        GRÁFICO DEL PLATO (arriba en mobile, lateral en desktop)
   ──────────────────────────────────────────── -->
   <div class="plato-visual-wrap">
-    <!-- SVG plato -->
-    <div class="plato-svg-container">
+    <div
+      id="plato-safe-badge"
+      class="plato-safe-badge"
+      hidden
+      role="status"
+      aria-live="polite"
+    >
+      ✓ Plato Seguro y Equilibrado
+    </div>
+
+    <div id="plato-svg-wrap" class="plato-svg-container">
       <svg
         id="plato-svg"
         viewBox="0 0 260 260"
@@ -20,38 +29,42 @@ const categorias = PLATO_CATEGORIAS;
         aria-label="Representación visual de tu plato"
         role="img"
       >
-        <!-- Sombra del plato -->
         <ellipse cx="130" cy="248" rx="100" ry="10" fill="#00000012"/>
-        <!-- Plato base -->
-        <circle cx="130" cy="128" r="118" fill="#fff" stroke="#d2b7bd" stroke-width="3"/>
-        <!-- Segmento Verduras 50% (semicírculo izquierdo) -->
+        <circle
+          id="plato-ring"
+          cx="130"
+          cy="128"
+          r="118"
+          fill="#fff"
+          stroke="#d2b7bd"
+          stroke-width="3"
+        />
         <path
           id="seg-verduras"
+          class="plato-seg"
           d="M130 10 A118 118 0 0 0 130 246 L130 128 Z"
           fill="#32a398"
-          opacity="0.85"
+          opacity="0.55"
         />
-        <!-- Segmento Proteínas 25% (cuarto superior derecho) -->
         <path
           id="seg-proteinas"
+          class="plato-seg"
           d="M130 10 A118 118 0 0 1 248 128 L130 128 Z"
           fill="#f76f5e"
-          opacity="0.88"
+          opacity="0.55"
         />
-        <!-- Segmento Carbohidratos 25% (cuarto inferior derecho) -->
         <path
           id="seg-carbohidratos"
+          class="plato-seg"
           d="M248 128 A118 118 0 0 1 130 246 L130 128 Z"
           fill="#d2b7bd"
+          opacity="0.55"
         />
-        <!-- Borde del plato encima de los segmentos -->
         <circle cx="130" cy="128" r="118" fill="none" stroke="#2e303315" stroke-width="2"/>
 
-        <!-- Líneas divisorias -->
         <line x1="130" y1="10" x2="130" y2="246" stroke="#fff" stroke-width="2" opacity="0.6"/>
         <line x1="130" y1="128" x2="248" y2="128" stroke="#fff" stroke-width="2" opacity="0.6"/>
 
-        <!-- Etiquetas de categoría (siempre visibles) -->
         <text x="80" y="130" text-anchor="middle" fill="#fff" font-family="Poppins,sans-serif" font-size="10" font-weight="700">50%</text>
         <text x="80" y="142" text-anchor="middle" fill="#fff" font-family="Poppins,sans-serif" font-size="8">Verduras</text>
         <text x="195" y="80" text-anchor="middle" fill="#fff" font-family="Poppins,sans-serif" font-size="10" font-weight="700">25%</text>
@@ -62,14 +75,17 @@ const categorias = PLATO_CATEGORIAS;
           <tspan x="195" dy="7">hidratos</tspan>
         </text>
 
-        <!-- Alimento seleccionado — texto dinámico; se actualiza vía JS -->
-        <text id="plato-label-verduras" x="75" y="115" text-anchor="middle" fill="#fff" font-family="Poppins,sans-serif" font-size="7.5" font-weight="700" opacity="0">–</text>
-        <text id="plato-label-proteinas" x="195" y="65" text-anchor="middle" fill="#fff" font-family="Poppins,sans-serif" font-size="7.5" font-weight="700" opacity="0">–</text>
-        <text id="plato-label-carbohidratos" x="195" y="165" text-anchor="middle" fill="#fff" font-family="Poppins,sans-serif" font-size="7.5" font-weight="700" opacity="0">–</text>
+        <text id="plato-label-verduras" class="plato-food-label" x="75" y="115" text-anchor="middle" fill="#fff" font-family="Poppins,sans-serif" font-size="7.5" font-weight="700" opacity="0">–</text>
+        <text id="plato-label-proteinas" class="plato-food-label" x="195" y="65" text-anchor="middle" fill="#fff" font-family="Poppins,sans-serif" font-size="7.5" font-weight="700" opacity="0">–</text>
+        <text id="plato-label-carbohidratos" class="plato-food-label" x="195" y="165" text-anchor="middle" fill="#fff" font-family="Poppins,sans-serif" font-size="7.5" font-weight="700" opacity="0">–</text>
       </svg>
     </div>
 
-    <!-- Resumen del plato seleccionado -->
+    <button type="button" id="plato-surprise" class="plato-surprise">
+      <span aria-hidden="true">🎲</span>
+      ¿Cena rápida? Sorpréndeme
+    </button>
+
     <div id="plato-resumen" class="plato-resumen" aria-live="polite">
       <p class="plato-resumen-hint">
         Elige un ingrediente de cada categoría para armar tu plato.
@@ -153,10 +169,6 @@ const categorias = PLATO_CATEGORIAS;
     <!-- Notas al pie -->
     <div class="plato-notas">
       <p>
-        <strong>Combinación:</strong>
-        {PLATO_NOTAS.combinacion}
-      </p>
-      <p>
         <strong>Aderezos:</strong>
         {PLATO_NOTAS.aderezos}
       </p>
@@ -190,16 +202,25 @@ const categorias = PLATO_CATEGORIAS;
 </div>
 
 <script>
-  import {
-    fillIdeaPlaceholders,
-    resolvePlatoIdeas,
-  } from '../data/plato-alimentos';
+  import { PLATO_CATEGORIAS } from '../data/plato-alimentos';
+  import { findRecetasForSelection } from '../data/plato-recetas';
 
-  // ── ESTADO ─────────────────────────────────────────────
   const selected: Record<string, { id: string; name: string } | null> = {
     verduras: null,
     proteinas: null,
     carbohidratos: null,
+  };
+
+  const labelMap: Record<string, string> = {
+    verduras: 'plato-label-verduras',
+    proteinas: 'plato-label-proteinas',
+    carbohidratos: 'plato-label-carbohidratos',
+  };
+
+  const segMap: Record<string, string> = {
+    verduras: 'seg-verduras',
+    proteinas: 'seg-proteinas',
+    carbohidratos: 'seg-carbohidratos',
   };
 
   // ── TABS ───────────────────────────────────────────────
@@ -220,71 +241,136 @@ const categorias = PLATO_CATEGORIAS;
       if (panel) panel.hidden = false;
     });
 
-    // Activar primer tab visualmente al arrancar
     if (tab.getAttribute('aria-selected') === 'true') {
       tab.classList.add('is-active');
     }
   });
 
-  // ── ALIMENTOS ──────────────────────────────────────────
-  const alimentoBtns =
-    document.querySelectorAll<HTMLButtonElement>('.plato-alimento-btn');
+  function clearCategoryButtons(cat: string) {
+    document
+      .querySelectorAll<HTMLButtonElement>(
+        `.plato-alimento-btn[data-cat="${cat}"]`,
+      )
+      .forEach((b) => {
+        b.setAttribute('aria-pressed', 'false');
+        b.classList.remove('is-selected');
+      });
+  }
 
-  alimentoBtns.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const cat = btn.dataset.cat as string;
-      const id = btn.dataset.id as string;
-      const name = btn.dataset.name as string;
+  function markButtonSelected(cat: string, id: string) {
+    clearCategoryButtons(cat);
+    const btn = document.querySelector<HTMLButtonElement>(
+      `.plato-alimento-btn[data-cat="${cat}"][data-id="${id}"]`,
+    );
+    if (!btn) return;
+    btn.setAttribute('aria-pressed', 'true');
+    btn.classList.add('is-selected');
+  }
 
-      // Deseleccionar otros en la misma categoría
-      document
-        .querySelectorAll<HTMLButtonElement>(`.plato-alimento-btn[data-cat="${cat}"]`)
-        .forEach((b) => {
-          b.setAttribute('aria-pressed', 'false');
-          b.classList.remove('is-selected');
-        });
+  /** Selección programática (clic o sorpresa). */
+  function setSeleccion(
+    cat: string,
+    id: string,
+    name: string,
+    opts: { animate?: boolean; toggleOff?: boolean } = {},
+  ) {
+    const { animate = true, toggleOff = false } = opts;
 
-      // Toggle: si ya estaba seleccionado, deseleccionar
-      if (selected[cat]?.id === id) {
-        selected[cat] = null;
-        btn.setAttribute('aria-pressed', 'false');
-        btn.classList.remove('is-selected');
-      } else {
-        selected[cat] = { id, name };
-        btn.setAttribute('aria-pressed', 'true');
-        btn.classList.add('is-selected');
-      }
+    if (toggleOff && selected[cat]?.id === id) {
+      selected[cat] = null;
+      clearCategoryButtons(cat);
+      actualizarPlato({ animateLabels: false });
+      return;
+    }
 
-      actualizarPlato();
+    selected[cat] = { id, name };
+    markButtonSelected(cat, id);
+    actualizarPlato({ animateLabels: animate, animateCat: cat });
+  }
+
+  document
+    .querySelectorAll<HTMLButtonElement>('.plato-alimento-btn')
+    .forEach((btn) => {
+      btn.addEventListener('click', () => {
+        setSeleccion(
+          btn.dataset.cat as string,
+          btn.dataset.id as string,
+          btn.dataset.name as string,
+          { toggleOff: true },
+        );
+      });
     });
-  });
 
-  // ── ACTUALIZAR PLATO SVG Y RESUMEN ──────────────────────
-  function actualizarPlato() {
-    const labelMap: Record<string, string> = {
-      verduras: 'plato-label-verduras',
-      proteinas: 'plato-label-proteinas',
-      carbohidratos: 'plato-label-carbohidratos',
-    };
+  function popLabel(el: SVGTextElement) {
+    el.classList.remove('is-pop');
+    void el.getBoundingClientRect();
+    el.classList.add('is-pop');
+    window.setTimeout(() => el.classList.remove('is-pop'), 400);
+  }
+
+  function actualizarPlato(opts: {
+    animateLabels?: boolean;
+    animateCat?: string;
+  } = {}) {
+    const { animateLabels = true, animateCat } = opts;
 
     for (const cat of Object.keys(selected)) {
-      const el = document.getElementById(labelMap[cat]) as SVGTextElement | null;
+      const el = document.getElementById(
+        labelMap[cat],
+      ) as SVGTextElement | null;
+      const seg = document.getElementById(segMap[cat]);
       if (!el) continue;
 
       if (selected[cat]) {
-        // Truncar nombre largo para el SVG
         const nombre = selected[cat]!.name;
         const truncado =
           nombre.length > 18 ? nombre.slice(0, 16) + '…' : nombre;
+        const changed = el.textContent !== truncado;
         el.textContent = truncado;
         el.setAttribute('opacity', '1');
+        seg?.classList.add('is-filled');
+        if (
+          animateLabels &&
+          changed &&
+          (!animateCat || animateCat === cat)
+        ) {
+          popLabel(el);
+        }
       } else {
+        el.textContent = '–';
         el.setAttribute('opacity', '0');
+        el.classList.remove('is-pop');
+        seg?.classList.remove('is-filled');
       }
     }
 
+    actualizarSafeState();
     actualizarResumen();
     actualizarIdeas();
+  }
+
+  function actualizarSafeState() {
+    const complete = Boolean(
+      selected.verduras && selected.proteinas && selected.carbohidratos,
+    );
+    const wrap = document.getElementById('plato-svg-wrap');
+    const badge = document.getElementById('plato-safe-badge');
+    const ring = document.getElementById('plato-ring');
+
+    wrap?.classList.toggle('is-complete', complete);
+    if (badge) {
+      const wasHidden = badge.hidden;
+      badge.hidden = !complete;
+      if (complete && wasHidden) {
+        badge.classList.remove('is-pop');
+        void badge.offsetWidth;
+        badge.classList.add('is-pop');
+      }
+    }
+    if (ring) {
+      ring.setAttribute('stroke', complete ? '#32a398' : '#d2b7bd');
+      ring.setAttribute('stroke-width', complete ? '5' : '3');
+    }
   }
 
   function actualizarResumen() {
@@ -310,15 +396,12 @@ const categorias = PLATO_CATEGORIAS;
     for (const item of items) {
       const alimento = selected[item.cat];
       if (alimento) {
-        html += `<li><span class="plato-resumen-pct plato-resumen-pct--${item.cat}">${item.pct} ${item.label}</span> <span class="plato-resumen-name">${alimento.name}</span></li>`;
+        html += `<li><span class="plato-resumen-pct plato-resumen-pct--${item.cat}">${item.pct} ${item.label}</span> <span class="plato-resumen-name">${escapeHtml(alimento.name)}</span></li>`;
       }
     }
     html += '</ul>';
 
-    if (total === 3) {
-      html +=
-        '<p class="plato-resumen-completo">✅ Plato completo y equilibrado para gestionar tu glucosa.</p>';
-    } else {
+    if (total < 3) {
       const faltan = 3 - total;
       html += `<p class="plato-resumen-hint">Aún ${faltan === 1 ? 'falta' : 'faltan'} ${faltan} ${faltan === 1 ? 'categoría' : 'categorías'}.</p>`;
     }
@@ -352,17 +435,30 @@ const categorias = PLATO_CATEGORIAS;
       return;
     }
 
-    const ideas = resolvePlatoIdeas(proteina.id, carbo.id);
-    list.innerHTML = ideas
-      .map((idea) => {
-        const tip = fillIdeaPlaceholders(idea.tip, {
-          verdura: verdura.name,
-          carbohidrato: carbo.name,
-          proteina: proteina.name,
-        });
+    const { recetas, source } = findRecetasForSelection({
+      verdura: verdura.id,
+      proteina: proteina.id,
+      carbohidrato: carbo.id,
+    });
+
+    if (source !== 'match' || recetas.length === 0) {
+      section.hidden = true;
+      section.classList.remove('is-highlight');
+      list.innerHTML = '';
+      bar.hidden = true;
+      return;
+    }
+
+    const titleEl = document.getElementById('plato-ideas-title');
+    if (titleEl) {
+      titleEl.textContent = 'Ideas rápidas para cocinar este plato';
+    }
+
+    list.innerHTML = recetas
+      .map((receta) => {
         return `<li class="plato-idea">
-          <p class="plato-idea-title">${escapeHtml(idea.title)}</p>
-          <p class="plato-idea-tip">${escapeHtml(tip)}</p>
+          <p class="plato-idea-title">${escapeHtml(receta.title)}</p>
+          <p class="plato-idea-tip">${escapeHtml(receta.tip)}</p>
         </li>`;
       })
       .join('');
@@ -378,15 +474,39 @@ const categorias = PLATO_CATEGORIAS;
     section.hidden = false;
     section.scrollIntoView({ behavior: 'smooth', block: 'center' });
     section.classList.remove('is-highlight');
-    // Reinicia animación
     void section.offsetWidth;
     section.classList.add('is-highlight');
     if (bar) bar.hidden = true;
   }
 
+  function sorprender() {
+    for (const cat of PLATO_CATEGORIAS) {
+      const pool = cat.alimentos;
+      const pick = pool[Math.floor(Math.random() * pool.length)];
+      if (!pick) continue;
+      selected[cat.id] = { id: pick.id, name: pick.name };
+      markButtonSelected(cat.id, pick.id);
+    }
+    actualizarPlato({ animateLabels: false });
+    for (const cat of Object.keys(selected)) {
+      const el = document.getElementById(
+        labelMap[cat],
+      ) as SVGTextElement | null;
+      if (el && selected[cat]) popLabel(el);
+    }
+    // Solo lleva a ideas si hay receta exacta para esa combinación
+    window.setTimeout(() => {
+      const bar = document.getElementById('plato-ideas-bar');
+      if (bar && !bar.hidden) irAIdeas();
+    }, 320);
+  }
+
   document
     .getElementById('plato-ideas-cta')
     ?.addEventListener('click', irAIdeas);
+  document
+    .getElementById('plato-surprise')
+    ?.addEventListener('click', sorprender);
 </script>
 
 <style>
@@ -572,13 +692,122 @@ const categorias = PLATO_CATEGORIAS;
     max-width: 280px;
     width: 100%;
     margin: 0 auto;
+    padding: 10px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    transition:
+      border-color 0.35s ease,
+      box-shadow 0.35s ease,
+      background-color 0.35s ease;
     filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.1));
+  }
+
+  .plato-svg-container.is-complete {
+    border-color: #32a398;
+    background: rgba(50, 163, 152, 0.08);
+    box-shadow: 0 0 0 4px rgba(50, 163, 152, 0.18);
+    filter: drop-shadow(0 6px 20px rgba(50, 163, 152, 0.28));
   }
 
   .plato-svg-container svg {
     width: 100%;
     height: auto;
     display: block;
+  }
+
+  .plato-seg {
+    transition: opacity 0.3s ease;
+  }
+
+  .plato-seg.is-filled {
+    opacity: 0.92 !important;
+  }
+
+  :global(.plato-food-label) {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  :global(.plato-food-label.is-pop) {
+    animation: plato-label-pop 0.38s cubic-bezier(0.34, 1.45, 0.64, 1);
+  }
+
+  @keyframes plato-label-pop {
+    0% {
+      opacity: 0;
+      transform: scale(0.72);
+    }
+    70% {
+      opacity: 1;
+      transform: scale(1.08);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .plato-safe-badge {
+    align-self: center;
+    margin: 0 auto;
+    padding: 8px 14px;
+    border-radius: 9999px;
+    background: #32a398;
+    color: #fff;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    box-shadow: 0 4px 14px rgba(50, 163, 152, 0.35);
+  }
+
+  .plato-safe-badge.is-pop {
+    animation: plato-badge-pop 0.45s cubic-bezier(0.34, 1.4, 0.64, 1);
+  }
+
+  @keyframes plato-badge-pop {
+    0% {
+      opacity: 0;
+      transform: translateY(8px) scale(0.9);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  .plato-surprise {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+    padding: 12px 16px;
+    border: 2px dashed rgba(50, 163, 152, 0.45);
+    border-radius: 9999px;
+    background: #fff;
+    color: #2e3033;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition:
+      background 0.2s ease,
+      border-color 0.2s ease,
+      transform 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .plato-surprise:hover,
+  .plato-surprise:focus-visible {
+    background: #eef7f5;
+    border-color: #32a398;
+    outline: none;
+  }
+
+  .plato-surprise:active {
+    transform: scale(0.97);
   }
 
   /* ── Resumen debajo del plato ─────────────────────────── */
@@ -744,6 +973,7 @@ const categorias = PLATO_CATEGORIAS;
     gap: 5px;
     /* Scroll cómodo en móvil si la lista es larga */
     max-height: 42dvh;
+    overflow-x: hidden;
     overflow-y: auto;
     overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
@@ -765,6 +995,8 @@ const categorias = PLATO_CATEGORIAS;
 
   .plato-alimento-btn {
     width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -776,7 +1008,10 @@ const categorias = PLATO_CATEGORIAS;
     cursor: pointer;
     font-family: 'Poppins', sans-serif;
     text-align: left;
-    transition: background 0.15s, border-color 0.15s;
+    transition:
+      background 0.15s,
+      border-color 0.15s,
+      box-shadow 0.15s;
     -webkit-tap-highlight-color: transparent;
   }
 
@@ -790,22 +1025,46 @@ const categorias = PLATO_CATEGORIAS;
   .plato-alimento-btn.is-selected {
     background: #eef7f5;
     border-color: #32a398;
+    /* Sin scale ni ring externo: evitaban scroll horizontal */
+    box-shadow: inset 0 0 0 1px rgba(50, 163, 152, 0.25);
+  }
+
+  .plato-alimento-btn.is-selected .plato-alimento-name::before {
+    content: '✓ ';
+    color: #32a398;
+    font-weight: 700;
   }
 
   .plato-panel[data-cat='proteinas'] .plato-alimento-btn.is-selected {
     border-color: #f76f5e;
     background: #fff5f4;
+    box-shadow: inset 0 0 0 1px rgba(247, 111, 94, 0.2);
+  }
+
+  .plato-panel[data-cat='proteinas']
+    .plato-alimento-btn.is-selected
+    .plato-alimento-name::before {
+    color: #f76f5e;
   }
 
   .plato-panel[data-cat='carbohidratos'] .plato-alimento-btn.is-selected {
     border-color: #c4a0a9;
     background: #fdf8f9;
+    box-shadow: inset 0 0 0 1px rgba(196, 160, 169, 0.25);
+  }
+
+  .plato-panel[data-cat='carbohidratos']
+    .plato-alimento-btn.is-selected
+    .plato-alimento-name::before {
+    color: #c4a0a9;
   }
 
   .plato-alimento-name {
     font-size: 0.85rem;
     color: #2e3033;
     line-height: 1.35;
+    min-width: 0;
+    overflow-wrap: anywhere;
   }
 
   .plato-alimento-gi {
