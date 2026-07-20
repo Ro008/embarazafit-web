@@ -75,6 +75,19 @@ const categorias = PLATO_CATEGORIAS;
         Elige un ingrediente de cada categoría para armar tu plato.
       </p>
     </div>
+
+    <section
+      id="plato-ideas"
+      class="plato-ideas"
+      hidden
+      aria-live="polite"
+      aria-labelledby="plato-ideas-title"
+    >
+      <h2 id="plato-ideas-title" class="plato-ideas-title">
+        Ideas rápidas para cocinar este plato
+      </h2>
+      <ul id="plato-ideas-list" class="plato-ideas-list"></ul>
+    </section>
   </div>
 
   <!-- ────────────────────────────────────────────
@@ -155,6 +168,13 @@ const categorias = PLATO_CATEGORIAS;
     <PlatoBeneficiosPremium />
   </div>
 
+  <!-- CTA fijo: la usuaria suele estar abajo eligiendo alimentos al completar el plato -->
+  <div id="plato-ideas-bar" class="plato-ideas-bar" hidden>
+    <button type="button" id="plato-ideas-cta" class="plato-ideas-cta">
+      ¡Plato completo! Ver ideas de cocina
+    </button>
+  </div>
+
   <footer class="plato-feedback">
     <p class="plato-feedback-title">
       💬 ¿Quieres sugerir una mejora o algo no funciona como debería?
@@ -170,6 +190,11 @@ const categorias = PLATO_CATEGORIAS;
 </div>
 
 <script>
+  import {
+    fillIdeaPlaceholders,
+    resolvePlatoIdeas,
+  } from '../data/plato-alimentos';
+
   // ── ESTADO ─────────────────────────────────────────────
   const selected: Record<string, { id: string; name: string } | null> = {
     verduras: null,
@@ -259,6 +284,7 @@ const categorias = PLATO_CATEGORIAS;
     }
 
     actualizarResumen();
+    actualizarIdeas();
   }
 
   function actualizarResumen() {
@@ -299,6 +325,68 @@ const categorias = PLATO_CATEGORIAS;
 
     resumen.innerHTML = html;
   }
+
+  function escapeHtml(text: string) {
+    return text
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;');
+  }
+
+  function actualizarIdeas() {
+    const section = document.getElementById('plato-ideas');
+    const list = document.getElementById('plato-ideas-list');
+    const bar = document.getElementById('plato-ideas-bar');
+    if (!section || !list || !bar) return;
+
+    const verdura = selected.verduras;
+    const proteina = selected.proteinas;
+    const carbo = selected.carbohidratos;
+
+    if (!verdura || !proteina || !carbo) {
+      section.hidden = true;
+      section.classList.remove('is-highlight');
+      list.innerHTML = '';
+      bar.hidden = true;
+      return;
+    }
+
+    const ideas = resolvePlatoIdeas(proteina.id, carbo.id);
+    list.innerHTML = ideas
+      .map((idea) => {
+        const tip = fillIdeaPlaceholders(idea.tip, {
+          verdura: verdura.name,
+          carbohidrato: carbo.name,
+          proteina: proteina.name,
+        });
+        return `<li class="plato-idea">
+          <p class="plato-idea-title">${escapeHtml(idea.title)}</p>
+          <p class="plato-idea-tip">${escapeHtml(tip)}</p>
+        </li>`;
+      })
+      .join('');
+    section.hidden = false;
+    bar.hidden = false;
+  }
+
+  function irAIdeas() {
+    const section = document.getElementById('plato-ideas');
+    const bar = document.getElementById('plato-ideas-bar');
+    if (!section) return;
+
+    section.hidden = false;
+    section.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    section.classList.remove('is-highlight');
+    // Reinicia animación
+    void section.offsetWidth;
+    section.classList.add('is-highlight');
+    if (bar) bar.hidden = true;
+  }
+
+  document
+    .getElementById('plato-ideas-cta')
+    ?.addEventListener('click', irAIdeas);
 </script>
 
 <style>
@@ -341,6 +429,114 @@ const categorias = PLATO_CATEGORIAS;
 
   .plato-beneficios {
     grid-area: beneficios;
+  }
+
+  .plato-ideas {
+    background: #fff;
+    border: 1px solid rgba(50, 163, 152, 0.28);
+    border-left: 4px solid #32a398;
+    border-radius: 12px;
+    padding: 16px 18px;
+    scroll-margin-top: 88px;
+  }
+
+  .plato-ideas.is-highlight {
+    animation: plato-ideas-pulse 1.2s ease;
+  }
+
+  @keyframes plato-ideas-pulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(50, 163, 152, 0.45);
+    }
+    40% {
+      box-shadow: 0 0 0 6px rgba(50, 163, 152, 0.2);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(50, 163, 152, 0);
+    }
+  }
+
+  .plato-ideas-title {
+    margin: 0 0 12px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #2e3033;
+    line-height: 1.35;
+  }
+
+  .plato-ideas-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  :global(.plato-idea) {
+    padding: 12px 14px;
+    background: #f7f4ef;
+    border-radius: 10px;
+  }
+
+  :global(.plato-idea-title) {
+    margin: 0 0 6px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #32a398;
+    line-height: 1.35;
+  }
+
+  :global(.plato-idea-tip) {
+    margin: 0;
+    font-size: 0.88rem;
+    line-height: 1.55;
+    color: #2e3033cc;
+  }
+
+  .plato-ideas-bar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 40;
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+    background: linear-gradient(
+      to top,
+      rgba(247, 244, 239, 0.98) 60%,
+      rgba(247, 244, 239, 0)
+    );
+    pointer-events: none;
+  }
+
+  .plato-ideas-cta {
+    pointer-events: auto;
+    display: block;
+    width: 100%;
+    max-width: 420px;
+    margin: 0 auto;
+    padding: 14px 18px;
+    border: none;
+    border-radius: 9999px;
+    background: #32a398;
+    color: #fff;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(50, 163, 152, 0.35);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .plato-ideas-cta:hover,
+  .plato-ideas-cta:focus-visible {
+    background: #2a8a81;
+    outline: none;
+  }
+
+  /* Espacio para que el CTA fijo no tape el feedback */
+  .plato-root:has(#plato-ideas-bar:not([hidden])) {
+    padding-bottom: 72px;
   }
 
   .plato-feedback {
