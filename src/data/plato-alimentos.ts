@@ -18,8 +18,6 @@ export interface PlatoCategoria {
 }
 
 export const PLATO_NOTAS = {
-  combinacion:
-    'Los carbohidratos siempre deben ir acompañados de una proteína o grasa saludable (como aguacate o aceite de oliva) para evitar picos de glucosa.',
   preparacion:
     'Prioriza métodos de cocción al vapor, plancha u horno.',
   aderezos:
