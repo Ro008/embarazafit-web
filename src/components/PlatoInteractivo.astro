@@ -202,14 +202,34 @@ const categorias = PLATO_CATEGORIAS;
 </div>
 
 <script>
-  import { PLATO_CATEGORIAS } from '../data/plato-alimentos';
-  import { findRecetasForSelection } from '../data/plato-recetas';
+  import { PLATO_CATEGORIAS, getAlimentoById } from '../data/plato-alimentos';
+  import {
+    PLATO_COMBINACIONES,
+    findRecetasForSelection,
+    type PlatoCombinacion,
+  } from '../data/plato-recetas';
 
   const selected: Record<string, { id: string; name: string } | null> = {
     verduras: null,
     proteinas: null,
     carbohidratos: null,
   };
+
+  /** Cola barajada de combinaciones con receta; al vaciarse, «Sorpréndeme» pasa a aleatorio total */
+  let surpriseRecipeQueue: PlatoCombinacion[] = [];
+  let surpriseRecipesExhausted = false;
+
+  function shuffleInPlace<T>(arr: T[]): T[] {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  function refillSurpriseRecipeQueue() {
+    surpriseRecipeQueue = shuffleInPlace([...PLATO_COMBINACIONES]);
+  }
 
   const labelMap: Record<string, string> = {
     verduras: 'plato-label-verduras',
@@ -479,7 +499,25 @@ const categorias = PLATO_CATEGORIAS;
     if (bar) bar.hidden = true;
   }
 
-  function sorprender() {
+  function aplicarCombinacion(combo: {
+    verdura: string;
+    proteina: string;
+    carbohidrato: string;
+  }) {
+    const picks = [
+      { cat: 'verduras' as const, id: combo.verdura },
+      { cat: 'proteinas' as const, id: combo.proteina },
+      { cat: 'carbohidratos' as const, id: combo.carbohidrato },
+    ];
+    for (const { cat, id } of picks) {
+      const alimento = getAlimentoById(cat, id);
+      if (!alimento) continue;
+      selected[cat] = { id: alimento.id, name: alimento.name };
+      markButtonSelected(cat, alimento.id);
+    }
+  }
+
+  function sorprenderAleatorioTotal() {
     for (const cat of PLATO_CATEGORIAS) {
       const pool = cat.alimentos;
       const pick = pool[Math.floor(Math.random() * pool.length)];
@@ -487,6 +525,27 @@ const categorias = PLATO_CATEGORIAS;
       selected[cat.id] = { id: pick.id, name: pick.name };
       markButtonSelected(cat.id, pick.id);
     }
+  }
+
+  function sorprender() {
+    if (!surpriseRecipesExhausted) {
+      if (surpriseRecipeQueue.length === 0) {
+        refillSurpriseRecipeQueue();
+      }
+      const combo = surpriseRecipeQueue.pop();
+      if (combo) {
+        aplicarCombinacion(combo);
+        if (surpriseRecipeQueue.length === 0) {
+          surpriseRecipesExhausted = true;
+        }
+      } else {
+        surpriseRecipesExhausted = true;
+        sorprenderAleatorioTotal();
+      }
+    } else {
+      sorprenderAleatorioTotal();
+    }
+
     actualizarPlato({ animateLabels: false });
     for (const cat of Object.keys(selected)) {
       const el = document.getElementById(
@@ -494,7 +553,6 @@ const categorias = PLATO_CATEGORIAS;
       ) as SVGTextElement | null;
       if (el && selected[cat]) popLabel(el);
     }
-    // Solo lleva a ideas si hay receta exacta para esa combinación
     window.setTimeout(() => {
       const bar = document.getElementById('plato-ideas-bar');
       if (bar && !bar.hidden) irAIdeas();
