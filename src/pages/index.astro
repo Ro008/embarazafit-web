@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import InstagramEmbed from "../components/InstagramEmbed.astro";
+import { PLATO_PREMIUM_AMOUNT, PLATO_PREMIUM_CURRENCY } from "../lib/plato-config";
 
 const instagramReels = [
   "https://www.instagram.com/embarazafit/reel/DRxLewNjFos/",
@@ -146,7 +147,7 @@ const NEWSLETTER_TOKEN = "0-9bk82OxLw";
             <p class="hp-card-label">🆓 Recursos Gratuitos</p>
 
             <div class="hp-card-free-item">
-              <h3>Plan de Parto Interactivo</h3>
+              <h3>Plan de parto interactivo</h3>
               <p>
                 Diseña, personaliza y descarga de forma visual tus deseos para el
                 gran día. Sin agobios, paso a paso y listo para entregar a tu equipo
@@ -167,16 +168,38 @@ const NEWSLETTER_TOKEN = "0-9bk82OxLw";
 
           <article class="hp-card hp-card-premium">
             <p class="hp-card-label">⭐ Recursos Premium</p>
-            <h3>Acompañamiento nutricional con María</h3>
-            <p>
-              Cada comida, la misma duda: ¿lo estoy haciendo bien? Ya sea por la
-              glucosa, el cansancio o los cambios hormonales de esta etapa. María
-              traduce la ciencia a tu vida real, con un plan hecho para ti. Solo
-              abre unas pocas plazas al mes.
-            </p>
-            <a href="/consulta-nutricionista" class="btn-card btn-card-premium">
-              Reservar mi Asesoría con María
-            </a>
+
+            <div class="hp-card-premium-item">
+              <h3>Acompañamiento nutricional con María</h3>
+              <p>
+                Cada comida, la misma duda: ¿lo estoy haciendo bien? Ya sea por la
+                glucosa, el cansancio o los cambios hormonales de esta etapa. María
+                traduce la ciencia a tu vida real, con un plan hecho para ti. Solo
+                abre unas pocas plazas al mes.
+              </p>
+              <a href="/consulta-nutricionista" class="btn-card btn-card-premium">
+                Reservar mi Asesoría con María
+              </a>
+            </div>
+
+            <div class="hp-card-premium-item">
+              <h3>Plato interactivo</h3>
+              <p class="hp-card-subtitle">Diabetes gestacional sin agobios</p>
+              <p>
+                ¿Otra vez sin saber qué cenar? Un simulador en pantalla para que dejes
+                de improvisar cada noche.
+              </p>
+              <a href="/plato" class="btn-card btn-card-premium btn-card-plato">
+                <span class="btn-card-plato-text">Acceder por</span>
+                <span
+                  class="btn-card-plato-price"
+                  aria-label={`${PLATO_PREMIUM_AMOUNT} euros`}
+                >
+                  <span class="btn-card-plato-amount">{PLATO_PREMIUM_AMOUNT}</span>
+                  <span class="btn-card-plato-currency">{PLATO_PREMIUM_CURRENCY}</span>
+                </span>
+              </a>
+            </div>
           </article>
         </div>
       </section>
@@ -495,7 +518,7 @@ const NEWSLETTER_TOKEN = "0-9bk82OxLw";
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
     gap: 24px;
-    align-items: start;
+    align-items: stretch;
   }
 
   .hp-card {
@@ -505,6 +528,7 @@ const NEWSLETTER_TOKEN = "0-9bk82OxLw";
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
     display: flex;
     flex-direction: column;
+    height: 100%;
     border: 2px solid transparent;
   }
 
@@ -530,16 +554,36 @@ const NEWSLETTER_TOKEN = "0-9bk82OxLw";
 
   .hp-card-premium .hp-card-label {
     color: var(--rusty-red);
+    margin-bottom: 20px;
   }
 
   .hp-card-free .hp-card-label {
     margin-bottom: 20px;
   }
 
+  .hp-card-premium-item + .hp-card-premium-item {
+    margin-top: auto;
+    padding-top: 36px;
+    border-top: 1px solid rgba(247, 111, 94, 0.2);
+  }
+
+  .hp-card-subtitle {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--deep-teal) !important;
+    margin: -4px 0 12px !important;
+  }
+
   .hp-card-free-item + .hp-card-free-item {
-    margin-top: 28px;
-    padding-top: 28px;
+    margin-top: auto;
+    padding-top: 36px;
     border-top: 1px solid rgba(50, 163, 152, 0.2);
+  }
+
+  .hp-card-free-item,
+  .hp-card-premium-item {
+    display: flex;
+    flex-direction: column;
   }
 
   .hp-card-free-item h3 {
@@ -548,10 +592,26 @@ const NEWSLETTER_TOKEN = "0-9bk82OxLw";
     margin: 0 0 12px;
   }
 
+  .hp-card-premium-item h3 {
+    font-size: 1.25rem;
+    color: var(--gunmetal);
+    margin: 0 0 12px;
+  }
+
   .hp-card-free-item p {
     line-height: 1.65;
     color: var(--dark-charcoal);
-    margin: 0 0 20px;
+    margin: 0 0 24px;
+  }
+
+  .hp-card-premium-item p {
+    line-height: 1.65;
+    color: var(--dark-charcoal);
+    margin: 0 0 24px;
+  }
+
+  .hp-card-premium-item .hp-card-subtitle {
+    margin: -4px 0 12px !important;
   }
 
   .hp-card h3 {
@@ -600,6 +660,44 @@ const NEWSLETTER_TOKEN = "0-9bk82OxLw";
 
   .btn-card-premium:hover {
     background-color: var(--deep-teal);
+  }
+
+  .btn-card-plato {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.35rem 0.5rem;
+    line-height: 1.2;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .btn-card-plato-text {
+    letter-spacing: 0.01em;
+  }
+
+  .btn-card-plato-price {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.2rem;
+    padding: 0.1rem 0.55rem;
+    border-radius: 0.5rem;
+    background-color: rgba(255, 255, 255, 0.2);
+    font-variant-numeric: tabular-nums;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+  }
+
+  .btn-card-plato-amount {
+    font-size: 1.2rem;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: 0.02em;
+  }
+
+  .btn-card-plato-currency {
+    font-size: 1rem;
+    font-weight: 800;
+    line-height: 1;
+    font-family: system-ui, "Segoe UI", sans-serif;
   }
 
   /* Social / Instagram */
