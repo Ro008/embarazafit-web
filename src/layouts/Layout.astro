@@ -56,8 +56,9 @@ const year = new Date().getFullYear();
           <li><a href="/blog">Blog</a></li>
           <li><a href="/regalo">Tu regalo</a></li>
           <li><a href="/consulta-nutricionista">Nutrición</a></li>
-          <li><a href="/plan-de-parto">Tu plan de parto</a></li>
+          <li><a href="/plan-de-parto">Plan de Parto</a></li>
         </ul>
+        <a href="/plato" class="main-nav-cta">🍱 Plato Interactivo</a>
       </nav>
       <button class="hamburger" id="hamburger">
         <span class="bar"></span>
@@ -116,6 +117,13 @@ const year = new Date().getFullYear();
         hamburger.addEventListener("click", () => {
           navMenu.classList.toggle("active");
           hamburger.classList.toggle("active");
+        });
+
+        navMenu.querySelectorAll("a").forEach((link) => {
+          link.addEventListener("click", () => {
+            navMenu.classList.remove("active");
+            hamburger.classList.remove("active");
+          });
         });
       }
     </script>
