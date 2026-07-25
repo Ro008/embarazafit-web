@@ -1,8 +1,16 @@
 import type { APIRoute } from 'astro';
 import Stripe from 'stripe';
+import {
+  platoAccessEmailHtml,
+  platoAccessEmailSubject,
+} from '../../../lib/plato-access-email';
 import { getEnv, getRequiredEnv } from '../../../lib/env';
+import { sendMailrelayEmail } from '../../../lib/mailrelay';
 import { PLATO_PRICE_CENTS } from '../../../lib/plato-config';
-import { insertPlatoCompra } from '../../../lib/supabase';
+import {
+  insertPlatoCompra,
+  markPlatoAccessEmailSent,
+} from '../../../lib/supabase';
 
 export const prerender = false;
 
@@ -22,7 +30,7 @@ export const GET: APIRoute = async () => {
 };
 
 /**
- * Webhook de Stripe: guarda compras del Plato Interactivo.
+ * Webhook de Stripe: guarda compras del Plato Interactivo + email de acceso.
  * Evento: checkout.session.completed (Payment Links).
  */
 export const POST: APIRoute = async ({ request }) => {
@@ -89,10 +97,35 @@ export const POST: APIRoute = async ({ request }) => {
         created_at: createdAt,
       });
 
+      if (
+        result.inserted &&
+        result.compra?.access_token &&
+        result.compra.email
+      ) {
+        try {
+          await sendMailrelayEmail({
+            to: result.compra.email,
+            toName: customerName ?? undefined,
+            subject: platoAccessEmailSubject(customerName),
+            html: platoAccessEmailHtml({
+              token: result.compra.access_token,
+              nombre: customerName,
+            }),
+          });
+          await markPlatoAccessEmailSent(result.compra.id);
+        } catch (mailErr) {
+          // La compra ya está guardada: no fallar el webhook (Stripe reintentaría)
+          console.error('stripe webhook access email error:', mailErr);
+        }
+      }
+
       return jsonOk({
         ok: true,
         inserted: result.inserted,
         sessionId: session.id,
+        emailSent: Boolean(
+          result.inserted && result.compra?.email && result.compra.access_token,
+        ),
       });
     } catch (err) {
       console.error('stripe webhook insert error:', err);

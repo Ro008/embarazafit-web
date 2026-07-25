@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import PlatoPremiumGate from '../components/PlatoPremiumGate.astro';
 import PlatoInteractivo from '../components/PlatoInteractivo.astro';
 import {
+  PLATO_ACCESS_PARAM,
   PLATO_PREMIUM_COOKIE,
   PLATO_PREMIUM_PARAM,
 } from '../lib/plato-config';
@@ -10,6 +11,7 @@ import {
 /**
  * Comprobación SSR del parámetro en la URL.
  * Si viene ?premium=true se activa el contenido.
+ * ?acceso=TOKEN se valida en el cliente contra la API.
  * La cookie se gestiona en el cliente (ver <script> abajo).
  */
 const url = new URL(Astro.request.url);
@@ -17,8 +19,8 @@ const hasParam = url.searchParams.get(PLATO_PREMIUM_PARAM) === 'true';
 
 /**
  * La comprobación de cookie es client-side. El servidor renderiza
- * el simulador si el parámetro está presente; de lo contrario, el
- * <script> lo decide según la cookie antes de que el usuario vea nada.
+ * el simulador si el parámetro premium está presente; de lo contrario, el
+ * <script> lo decide según la cookie / magic link antes de que el usuario vea nada.
  */
 const renderSimulator = hasParam;
 ---
@@ -70,11 +72,6 @@ const renderSimulator = hasParam;
       color: #2e303399;
     }
 
-    /* Región que contiene gate o simulador */
-    #plato-content {
-      /* sin display:none; el JS lo controla */
-    }
-
     /* Loader invisible mientras JS decide */
     #plato-loading {
       display: flex;
@@ -111,7 +108,7 @@ const renderSimulator = hasParam;
         ) : (
           <>
             {/* Si el servidor no tiene el param, renderizamos ambas variantes
-                y JS decide cuál mostrar según la cookie */}
+                y JS decide cuál mostrar según la cookie / magic link */}
             <div id="plato-simulator" hidden>
               <PlatoInteractivo />
             </div>
@@ -125,11 +122,20 @@ const renderSimulator = hasParam;
   </div>
 </Layout>
 
-<script define:vars={{ PLATO_PREMIUM_COOKIE, PLATO_PREMIUM_PARAM, renderSimulator }}>
+<script
+  define:vars={{
+    PLATO_PREMIUM_COOKIE,
+    PLATO_PREMIUM_PARAM,
+    PLATO_ACCESS_PARAM,
+    renderSimulator,
+  }}
+>
   /**
    * Lógica de acceso premium:
-   * 1. Si el servidor ya detectó el parámetro, solo guardamos la cookie.
-   * 2. Si no, comprobamos la cookie para decidir qué mostrar.
+   * 1. ?premium=true (Stripe success) → cookie
+   * 2. Cookie existente → acceso
+   * 3. ?acceso=TOKEN (email) → valida API → cookie
+   * 4. Evento plato:unlock (formulario «Ya compré») → cookie
    */
 
   const COOKIE_NAME = PLATO_PREMIUM_COOKIE;
@@ -147,37 +153,85 @@ const renderSimulator = hasParam;
     document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/; SameSite=Lax`;
   }
 
-  // ── Comprobar si tiene acceso ───────────────────────────
-  const urlParam = new URLSearchParams(location.search).get(PLATO_PREMIUM_PARAM);
-  const hasCookie = getCookie(COOKIE_NAME) === 'true';
-  const hasAccess = urlParam === 'true' || hasCookie || renderSimulator;
-
-  if (hasAccess) {
-    // Persistir la cookie si vino por URL
-    if (urlParam === 'true' && !hasCookie) {
-      setCookie(COOKIE_NAME, 'true', COOKIE_DAYS);
+  function cleanAccessParams() {
+    const url = new URL(location.href);
+    let changed = false;
+    if (url.searchParams.has(PLATO_PREMIUM_PARAM)) {
+      url.searchParams.delete(PLATO_PREMIUM_PARAM);
+      changed = true;
     }
-    // Limpiar el param de la URL sin recargar (URL canónica limpia)
-    if (urlParam === 'true') {
-      const clean = location.pathname;
-      history.replaceState(null, '', clean);
+    if (url.searchParams.has(PLATO_ACCESS_PARAM)) {
+      url.searchParams.delete(PLATO_ACCESS_PARAM);
+      changed = true;
+    }
+    if (changed) {
+      history.replaceState(null, '', url.pathname + url.search + url.hash);
     }
   }
 
-  // ── Mostrar la variante correcta ───────────────────────
-  const loading = document.getElementById('plato-loading');
-  const content = document.getElementById('plato-content');
-  const simulator = document.getElementById('plato-simulator');
-  const gate = document.getElementById('plato-gate');
+  function showAccess(hasAccess) {
+    const loading = document.getElementById('plato-loading');
+    const content = document.getElementById('plato-content');
+    const simulator = document.getElementById('plato-simulator');
+    const gate = document.getElementById('plato-gate');
 
-  if (loading) loading.hidden = true;
-  if (content) content.hidden = false;
+    if (loading) loading.hidden = true;
+    if (content) content.hidden = false;
 
-  if (hasAccess) {
-    if (simulator) simulator.hidden = false;
-    if (gate) gate.hidden = true;
-  } else {
-    if (simulator) simulator.hidden = true;
-    if (gate) gate.hidden = false;
+    if (hasAccess) {
+      if (simulator) simulator.hidden = false;
+      if (gate) gate.hidden = true;
+    } else {
+      if (simulator) simulator.hidden = true;
+      if (gate) gate.hidden = false;
+    }
   }
+
+  function unlockAccess() {
+    setCookie(COOKIE_NAME, 'true', COOKIE_DAYS);
+    cleanAccessParams();
+    showAccess(true);
+  }
+
+  async function init() {
+    const params = new URLSearchParams(location.search);
+    const urlParam = params.get(PLATO_PREMIUM_PARAM);
+    const accessToken = params.get(PLATO_ACCESS_PARAM);
+    const hasCookie = getCookie(COOKIE_NAME) === 'true';
+
+    if (urlParam === 'true' || hasCookie || renderSimulator) {
+      if (urlParam === 'true' && !hasCookie) {
+        setCookie(COOKIE_NAME, 'true', COOKIE_DAYS);
+      }
+      cleanAccessParams();
+      showAccess(true);
+      return;
+    }
+
+    if (accessToken) {
+      try {
+        const res = await fetch('/api/plato/access', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token: accessToken }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (res.ok && data.ok) {
+          unlockAccess();
+          return;
+        }
+        console.error('plato access token rejected:', data.error);
+      } catch (err) {
+        console.error('plato access token error:', err);
+      }
+    }
+
+    showAccess(false);
+  }
+
+  window.addEventListener('plato:unlock', () => {
+    unlockAccess();
+  });
+
+  init();
 </script>

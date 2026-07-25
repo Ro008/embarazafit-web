@@ -45,7 +45,7 @@ import {
     </li>
     <li class="flex gap-3">
       <span class="mt-0.5 text-deep-teal" aria-hidden="true">✓</span>
-      <span>Sin registro: acceso inmediato tras la compra</span>
+      <span>Acceso inmediato tras la compra + enlace por email para otros dispositivos</span>
     </li>
   </ul>
 
@@ -61,8 +61,37 @@ import {
   </a>
 
   <p class="mt-4 text-xs text-gunmetal/60">
-  Pago único · Acceso permanente en este dispositivo
+    Pago único · Te enviamos el acceso por email
   </p>
+
+  <div class="plato-recover">
+    <p class="plato-recover-title">¿Ya lo compraste?</p>
+    <p class="plato-recover-hint">
+      Usa el mismo email del pago. También te reenviamos el enlace de acceso.
+    </p>
+    <form id="plato-recover-form" class="plato-recover-form">
+      <label class="sr-only" for="plato-recover-email">Email de la compra</label>
+      <input
+        id="plato-recover-email"
+        name="email"
+        type="email"
+        autocomplete="email"
+        required
+        placeholder="Tu email de la compra"
+        class="plato-recover-input"
+      />
+      <button type="submit" class="plato-recover-btn" id="plato-recover-btn">
+        Abrir mi acceso
+      </button>
+    </form>
+    <p
+      id="plato-recover-msg"
+      class="plato-recover-msg"
+      role="status"
+      aria-live="polite"
+      hidden
+    ></p>
+  </div>
 </section>
 
 <style>
@@ -125,4 +154,162 @@ import {
     border-bottom: none;
     box-shadow: 0 2px 8px rgba(50, 163, 152, 0.35);
   }
+
+  .plato-recover {
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(210, 183, 189, 0.55);
+    text-align: left;
+  }
+
+  .plato-recover-title {
+    margin: 0 0 6px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #2e3033;
+    text-align: center;
+  }
+
+  .plato-recover-hint {
+    margin: 0 0 14px;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    color: #2e303399;
+    text-align: center;
+  }
+
+  .plato-recover-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .plato-recover-input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px 14px;
+    border: 1.5px solid rgba(46, 48, 51, 0.18);
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 1rem;
+    color: #2e3033;
+    background: #fff;
+  }
+
+  .plato-recover-input:focus {
+    outline: 2px solid #32a398;
+    outline-offset: 1px;
+    border-color: #32a398;
+  }
+
+  .plato-recover-btn {
+    width: 100%;
+    padding: 12px 18px;
+    border: none;
+    border-radius: 9999px;
+    background-color: #32a398;
+    color: #f7f4ef;
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  .plato-recover-btn:hover:not(:disabled) {
+    background-color: #2a8a81;
+  }
+
+  .plato-recover-btn:disabled {
+    opacity: 0.7;
+    cursor: wait;
+  }
+
+  .plato-recover-msg {
+    margin: 12px 0 0;
+    font-size: 0.88rem;
+    line-height: 1.5;
+    text-align: center;
+  }
+
+  .plato-recover-msg.is-error {
+    color: #b42318;
+  }
+
+  .plato-recover-msg.is-ok {
+    color: #1a7a4c;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
 </style>
+
+<script>
+  const form = document.getElementById('plato-recover-form');
+  const emailInput = document.getElementById('plato-recover-email');
+  const btn = document.getElementById('plato-recover-btn');
+  const msg = document.getElementById('plato-recover-msg');
+
+  function showMsg(text, ok) {
+    if (!msg) return;
+    msg.hidden = false;
+    msg.textContent = text;
+    msg.classList.toggle('is-ok', ok);
+    msg.classList.toggle('is-error', !ok);
+  }
+
+  form?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const email = emailInput instanceof HTMLInputElement ? emailInput.value.trim() : '';
+    if (!email) {
+      showMsg('Introduce el email de la compra.', false);
+      return;
+    }
+
+    if (btn instanceof HTMLButtonElement) {
+      btn.disabled = true;
+      btn.textContent = 'Comprobando…';
+    }
+
+    try {
+      const res = await fetch('/api/plato/access', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok || !data.ok) {
+        showMsg(
+          data.error ||
+            'No encontramos una compra con ese email. Revisa que sea el mismo del pago o escríbeme a contacto@embarazafit.com.',
+          false,
+        );
+        return;
+      }
+
+      // Avisa a plato.astro para poner cookie y mostrar el simulador
+      window.dispatchEvent(new CustomEvent('plato:unlock', { detail: { source: 'email' } }));
+      showMsg(
+        '¡Listo! Acceso abierto. Te hemos reenviado el enlace por email.',
+        true,
+      );
+    } catch {
+      showMsg('No se pudo comprobar el acceso. Inténtalo de nuevo.', false);
+    } finally {
+      if (btn instanceof HTMLButtonElement) {
+        btn.disabled = false;
+        btn.textContent = 'Abrir mi acceso';
+      }
+    }
+  });
+</script>

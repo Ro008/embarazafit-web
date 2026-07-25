@@ -2,6 +2,10 @@ import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import { getRequiredEnv } from './env';
 import type { Lead, Pago } from './leads';
 import type { PlatoCompra } from './plato-compras';
+import {
+  generatePlatoAccessToken,
+  normalizePlatoEmail,
+} from './plato-compras';
 
 let client: SupabaseClient | null = null;
 
@@ -123,9 +127,16 @@ export async function insertPlatoCompra(data: {
   currency: string;
   created_at?: string;
 }): Promise<{ inserted: boolean; compra?: PlatoCompra }> {
+  const email = data.email ? normalizePlatoEmail(data.email) : null;
+  const access_token = generatePlatoAccessToken();
+
   const { data: compra, error } = await getSupabase()
     .from(PLATO_COMPRAS_TABLE)
-    .insert(data)
+    .insert({
+      ...data,
+      email,
+      access_token,
+    })
     .select()
     .single();
 
@@ -138,6 +149,75 @@ export async function insertPlatoCompra(data: {
   }
 
   return { inserted: true, compra: compra as PlatoCompra };
+}
+
+export async function markPlatoAccessEmailSent(
+  id: string,
+): Promise<void> {
+  const { error } = await getSupabase()
+    .from(PLATO_COMPRAS_TABLE)
+    .update({ access_email_sent_at: new Date().toISOString() })
+    .eq('id', id);
+
+  if (error) throw error;
+}
+
+export async function findPlatoCompraByToken(
+  token: string,
+): Promise<PlatoCompra | null> {
+  const trimmed = token.trim();
+  if (!trimmed) return null;
+
+  const { data, error } = await getSupabase()
+    .from(PLATO_COMPRAS_TABLE)
+    .select('*')
+    .eq('access_token', trimmed)
+    .maybeSingle();
+
+  if (error) throw error;
+  return (data as PlatoCompra | null) ?? null;
+}
+
+export async function findPlatoCompraByEmail(
+  email: string,
+): Promise<PlatoCompra | null> {
+  const normalized = normalizePlatoEmail(email);
+  if (!normalized) return null;
+
+  // ilike sin wildcards = igualdad case-insensitive; escapamos % y _
+  const pattern = normalized
+    .replace(/\\/g, '\\\\')
+    .replace(/%/g, '\\%')
+    .replace(/_/g, '\\_');
+
+  const { data, error } = await getSupabase()
+    .from(PLATO_COMPRAS_TABLE)
+    .select('*')
+    .ilike('email', pattern)
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (error) throw error;
+  return (data as PlatoCompra | null) ?? null;
+}
+
+/** Asegura que la compra tenga token (compras antiguas o edge cases). */
+export async function ensurePlatoAccessToken(
+  compra: PlatoCompra,
+): Promise<PlatoCompra> {
+  if (compra.access_token) return compra;
+
+  const access_token = generatePlatoAccessToken();
+  const { data, error } = await getSupabase()
+    .from(PLATO_COMPRAS_TABLE)
+    .update({ access_token })
+    .eq('id', compra.id)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data as PlatoCompra;
 }
 
 export async function fetchPlatoCompras(): Promise<PlatoCompra[]> {

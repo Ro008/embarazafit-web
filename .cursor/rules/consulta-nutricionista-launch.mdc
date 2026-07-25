@@ -24,6 +24,6 @@ Para ventas del Plato: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` (ver `docs/P
 
 ## Supabase
 
-Proyecto propio Embarazafit: `https://vysngzqpcwnharrifmdp.supabase.co`. Ejecutar `supabase/schema.sql` si hace falta recrear tablas. Para el Plato, al menos `supabase/plato-compras.sql`.
+Proyecto propio Embarazafit: `https://vysngzqpcwnharrifmdp.supabase.co`. Ejecutar `supabase/schema.sql` si hace falta recrear tablas. Para el Plato, al menos `supabase/plato-compras.sql` (o `plato-acceso.sql` si la tabla ya existía y solo faltan columnas de acceso).
 
 Guía completa: `docs/CONSULTA-NUTRICIONISTA.md` · Plato: `docs/PLATO-INTERACTIVO.md`
