@@ -50,7 +50,7 @@ export function notificationEmailHtml(
     <p>Hola Ro,</p>
     <p>Has recibido una nueva solicitud de consulta con María desde Embarazafit.</p>
     ${leadDetailsHtml(data)}
-    <p>Puedes ver el registro en tu dashboard: /dashboard</p>
+    <p>Puedes ver el registro en tu dashboard: <a href="https://www.embarazafit.com/dashboard">https://www.embarazafit.com/dashboard</a></p>
     ${testNote}
   `;
 }
