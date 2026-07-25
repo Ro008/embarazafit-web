@@ -50,7 +50,7 @@ export function notificationEmailHtml(
     <p>Hola Ro,</p>
     <p>Has recibido una nueva solicitud de consulta con María desde Embarazafit.</p>
     ${leadDetailsHtml(data)}
-    <p>Puedes ver el registro en tu dashboard: /dashboard</p>
+    <p>Puedes ver el registro en tu dashboard: <a href="https://www.embarazafit.com/dashboard">https://www.embarazafit.com/dashboard</a></p>
     ${testNote}
   `;
 }
@@ -81,20 +81,14 @@ export function leadConfirmationEmailHtml(nombre: string): string {
       a tu vida real.
     </p>
     <p>En las próximas horas te escribirá por WhatsApp para que charléis tranquilas.</p>
-    <p><strong>Mientras tanto, te dejo dos recursos que te pueden ayudar:</strong></p>
-    <ul>
-      <li>
-        👶 <strong>Mi Plan de Parto Interactivo:</strong> Para organizar tus decisiones de forma
-        visual y sin agobios:
-        <a href="https://www.embarazafit.com/plan-de-parto">https://www.embarazafit.com/plan-de-parto</a>.
-      </li>
-      <li>
-        📸 <strong>Comunidad en Instagram:</strong> Nos vemos en
-        <a href="https://www.instagram.com/embarazafit">@embarazafit</a>
-        donde hablo de las cositas buenas y no tan buenas de la maternidad. Porque estar
-        embarazada es maravilloso, pero a veces es un poquito una 💩.
-      </li>
-    </ul>
+    <p>
+      Mientras tanto, si quieres empezar a organizarte desde hoy mismo, te dejo esto por aquí:
+    </p>
+    <p>
+      🥗 <strong>El Plato Interactivo:</strong> La herramienta visual para montar tus comidas de
+      forma fácil, rápida y mantener tu glucosa a raya sin pensar demasiado:
+      <a href="https://www.embarazafit.com/plato">https://www.embarazafit.com/plato</a>
+    </p>
     <p>Hasta pronto,</p>
     <p><strong>Rocío</strong><br><em>Creadora de EmbarazaFit</em></p>
   `;
