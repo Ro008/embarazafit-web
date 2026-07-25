@@ -55,11 +55,22 @@ Montar **Vitest** solo cuando toque. Empezar por **unitarios** (rápidos, barato
 | 2 | `validateLeadPayload()` | Puerta de entrada de todos los leads |
 | 3 | `validateNewPago()` | Dinero / comisiones; reglas estrictas |
 | 4 | `commissionForAmount()` | Cálculo del 17 % |
+| 5 | `handlePlatoAccess()` | Magic link + «Ya compré» del Plato |
 
 **Después** (solo si hace falta):
 
 - Test de integración del API con Supabase/Mailrelay **mockeados**
 - **Playwright E2E**: rellenar formulario en navegador (lento; último recurso)
+
+### Plato — acceso híbrido (ya montado)
+
+```bash
+npm test
+```
+
+Cubre `src/lib/plato-access-api.ts` (token inválido/válido, email inexistente, recover + reenvío, Mailrelay caído) y helpers de token/email. **No** abre el navegador ni comprueba cookies: para eso, checklist manual («si no ves el paywall, el test no vale»).
+
+**CI:** en cada push a `main` y en cada pull request, GitHub Actions ejecuta `npm test` (`.github/workflows/test.yml`). Si fallan, el check del PR queda en rojo.
 
 ---
 
