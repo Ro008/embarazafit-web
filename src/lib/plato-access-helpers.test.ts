@@ -3,7 +3,12 @@ import {
   generatePlatoAccessToken,
   normalizePlatoEmail,
 } from './plato-compras';
-import { PLATO_ACCESS_PARAM, platoAccessUrl } from './plato-config';
+import {
+  PLATO_ACCESS_PARAM,
+  PLATO_SESSION_PARAM,
+  PLATO_STRIPE_SUCCESS_URL,
+  platoAccessUrl,
+} from './plato-config';
 
 describe('normalizePlatoEmail', () => {
   it('recorta y pasa a minúsculas', () => {
@@ -27,5 +32,14 @@ describe('platoAccessUrl', () => {
     expect(url).toBe(
       `https://www.embarazafit.com/plato?${PLATO_ACCESS_PARAM}=tok_abc`,
     );
+  });
+});
+
+describe('PLATO_STRIPE_SUCCESS_URL', () => {
+  it('usa session_id y el placeholder de Stripe', () => {
+    expect(PLATO_STRIPE_SUCCESS_URL).toBe(
+      `https://www.embarazafit.com/plato?${PLATO_SESSION_PARAM}={CHECKOUT_SESSION_ID}`,
+    );
+    expect(PLATO_STRIPE_SUCCESS_URL).not.toContain('premium=true');
   });
 });
