@@ -46,26 +46,32 @@ const year = new Date().getFullYear();
     </script>
   </head>
   <body>
-    <header class="main-header" id="main-header">
+    <div class="site-header-wrap main-header" id="main-header" role="banner">
       <a href="/" class="home-link">
         <h1>EmbarazaFit</h1>
         <p>Ni antojos ni cuentos: 🥩 Proteína y mancuernas 🏋️‍♀️</p>
       </a>
-      <nav class="main-nav" id="main-nav">
+      <nav class="main-nav" id="main-nav" aria-label="Principal">
         <ul>
-          <li><a href="/blog">Blog</a></li>
           <li><a href="/regalo">Tu regalo</a></li>
-          <li><a href="/consulta-nutricionista">Nutrición</a></li>
           <li><a href="/plan-de-parto">Plan de Parto</a></li>
+          <li><a href="/consulta-nutricionista">Nutrición</a></li>
         </ul>
         <a href="/plato" class="main-nav-cta">🍱 Plato Interactivo</a>
       </nav>
-      <button class="hamburger" id="hamburger">
+      <button
+        class="hamburger"
+        id="hamburger"
+        type="button"
+        aria-expanded="false"
+        aria-controls="main-nav"
+        aria-label="Abrir menú"
+      >
         <span class="bar"></span>
         <span class="bar"></span>
         <span class="bar"></span>
       </button>
-    </header>
+    </div>
     <main>
       <slot />
     </main>
@@ -73,6 +79,7 @@ const year = new Date().getFullYear();
       <div class="footer-content">
         <p>&copy; {year} Embarazafit. Todos los derechos reservados.</p>
         <div class="footer-links">
+          <a href="/blog" class="footer-link">Blog</a>
           <a href="/fuentes" class="footer-link">Fuentes</a>
           <a
             href="https://www.instagram.com/embarazafit/"
@@ -95,15 +102,30 @@ const year = new Date().getFullYear();
     ></script>
 
     <script>
-      // Lógica para el efecto sticky del menú
+      // Lógica para el efecto sticky del menú (solo escritorio)
       document.addEventListener("DOMContentLoaded", function () {
         const header = document.getElementById("main-header");
+        const desktopNav = window.matchMedia("(min-width: 769px)");
+
+        function updateHeaderScrolled() {
+          if (!header || !desktopNav.matches) return;
+          if (window.scrollY > 50) {
+            header.classList.add("scrolled");
+          } else {
+            header.classList.remove("scrolled");
+          }
+        }
+
         if (header) {
-          window.addEventListener("scroll", function () {
-            if (window.scrollY > 50) {
-              header.classList.add("scrolled");
-            } else {
+          updateHeaderScrolled();
+          window.addEventListener("scroll", updateHeaderScrolled, {
+            passive: true,
+          });
+          desktopNav.addEventListener("change", () => {
+            if (!desktopNav.matches) {
               header.classList.remove("scrolled");
+            } else {
+              updateHeaderScrolled();
             }
           });
         }
@@ -112,18 +134,73 @@ const year = new Date().getFullYear();
       // Lógica para el menú de hamburguesa
       const hamburger = document.getElementById("hamburger");
       const navMenu = document.getElementById("main-nav");
+      const headerEl = document.getElementById("main-header");
+      let scrollLockY = 0;
+      let touchMoveBlocker = null;
+
+      function setMobileMenuOpen(open) {
+        if (open) {
+          scrollLockY = window.scrollY;
+          document.body.classList.add("mobile-nav-open");
+          document.body.style.position = "fixed";
+          document.body.style.top = `-${scrollLockY}px`;
+          document.body.style.left = "0";
+          document.body.style.right = "0";
+          document.body.style.width = "100%";
+          headerEl?.classList.remove("scrolled");
+
+          touchMoveBlocker = (event) => {
+            if (navMenu && navMenu.contains(event.target)) return;
+            event.preventDefault();
+          };
+          document.addEventListener("touchmove", touchMoveBlocker, {
+            passive: false,
+          });
+        } else {
+          document.body.classList.remove("mobile-nav-open");
+          document.body.style.position = "";
+          document.body.style.top = "";
+          document.body.style.left = "";
+          document.body.style.right = "";
+          document.body.style.width = "";
+          window.scrollTo(0, scrollLockY);
+
+          if (touchMoveBlocker) {
+            document.removeEventListener("touchmove", touchMoveBlocker);
+            touchMoveBlocker = null;
+          }
+        }
+      }
+
+      function closeMobileMenu() {
+        navMenu?.classList.remove("active");
+        hamburger?.classList.remove("active");
+        hamburger?.setAttribute("aria-expanded", "false");
+        hamburger?.setAttribute("aria-label", "Abrir menú");
+        setMobileMenuOpen(false);
+      }
 
       if (hamburger && navMenu) {
         hamburger.addEventListener("click", () => {
-          navMenu.classList.toggle("active");
-          hamburger.classList.toggle("active");
+          const isOpen = !navMenu.classList.contains("active");
+          navMenu.classList.toggle("active", isOpen);
+          hamburger.classList.toggle("active", isOpen);
+          hamburger.setAttribute("aria-expanded", String(isOpen));
+          hamburger.setAttribute(
+            "aria-label",
+            isOpen ? "Cerrar menú" : "Abrir menú",
+          );
+          setMobileMenuOpen(isOpen);
         });
 
         navMenu.querySelectorAll("a").forEach((link) => {
-          link.addEventListener("click", () => {
-            navMenu.classList.remove("active");
-            hamburger.classList.remove("active");
-          });
+          link.addEventListener("click", closeMobileMenu);
+        });
+
+        window.addEventListener("resize", () => {
+          if (window.innerWidth > 768 && navMenu.classList.contains("active")) {
+            closeMobileMenu();
+          }
         });
       }
     </script>

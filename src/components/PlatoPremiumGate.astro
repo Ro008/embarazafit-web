@@ -1,4 +1,5 @@
 ---
+import PlatoAvalMaria from './PlatoAvalMaria.astro';
 import {
   PLATO_CHECKOUT_URL,
   PLATO_PREMIUM_AMOUNT,
@@ -48,6 +49,10 @@ import {
       <span>Acceso inmediato tras la compra + enlace por email para otros dispositivos</span>
     </li>
   </ul>
+
+  <div class="mb-8 text-left">
+    <PlatoAvalMaria />
+  </div>
 
   <a
     href={PLATO_CHECKOUT_URL}
