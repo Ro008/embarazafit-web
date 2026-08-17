@@ -1,21 +1,15 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import MenuRegaloForm from "../components/MenuRegaloForm.astro";
 ---
 
 <Layout title="Tu regalo | Embarazafit">
   <div class="banner-movil" id="banner-movil">
     <p>
       ¿Diabetes gestacional? 👉
-      <button
-        type="button"
-        class="btn-descarga-banner ipz-button"
-        data-host="embarazafit.ipzmarketing.com"
-        data-protocol="https"
-        data-token="0-9bk82OxLw"
-        id="btn-descarga-banner-link"
-      >
+      <a href="#menu-form" class="btn-descarga-banner" id="btn-descarga-banner-link">
         Descarga mi menú gratis
-      </button>
+      </a>
     </p>
     <button class="cerrar-banner" id="cerrar-banner">×</button>
   </div>
@@ -27,24 +21,19 @@ import Layout from "../layouts/Layout.astro";
           ¿Te han diagnosticado diabetes gestacional? Mi menú semanal es para
           ti.
         </h2>
-        <div class="acordeon-content">
+        <div class="acordeon-content active" id="menu-form">
           <p>
             Recibir el diagnóstico de diabetes gestacional puede ser abrumador.
             Yo pasé por ahí y sé lo que se siente. Por eso, he creado una guía
             gratuita con el menú semanal que a mí me ayudó a controlar mis
             niveles de glucosa de forma deliciosa y sin sentirme limitada.
           </p>
-          <button
-            type="button"
-            class="btn-descarga ipz-button"
-            data-host="embarazafit.ipzmarketing.com"
-            data-protocol="https"
-            data-token="0-9bk82OxLw"
-            id="btn-descarga-menu"
-            data-location="main_content"
-          >
-            Descargar mi guía gratuita
-          </button>
+          <MenuRegaloForm
+            variant="page"
+            includeName={true}
+            submitLabel="Descargar gratis el menú"
+            footnote="Te enviaré un email para que confirmes. Cuando lo hagas, te llega el menú y entras en la newsletter. Puedes darte de baja cuando quieras."
+          />
         </div>
       </div>
     </section>
@@ -117,6 +106,7 @@ import Layout from "../layouts/Layout.astro";
       transition: max-height 0.2s ease-out;
       padding: 0 20px;
       background-color: var(--baby-powder);
+      scroll-margin-top: 72px;
     }
 
     .acordeon-content.active {
@@ -163,7 +153,7 @@ import Layout from "../layouts/Layout.astro";
   }
 
   .banner-movil .btn-descarga-banner,
-  .banner-movil button.btn-descarga-banner {
+  .banner-movil a.btn-descarga-banner {
     color: var(--dark-charcoal);
     font-weight: bold;
     text-decoration: underline;
@@ -173,6 +163,7 @@ import Layout from "../layouts/Layout.astro";
     padding: 0;
     cursor: pointer;
     font-family: "Poppins";
+    border-bottom: none;
   }
 
   .banner-movil .cerrar-banner {
@@ -212,21 +203,6 @@ import Layout from "../layouts/Layout.astro";
     boton.addEventListener("click", function () {
       var contenido = this.nextElementSibling;
       contenido.classList.toggle("active");
-    });
-  });
-
-  document.addEventListener("DOMContentLoaded", function () {
-    var buttonsToTrack = document.querySelectorAll("[data-location]");
-    buttonsToTrack.forEach(function (button) {
-      button.addEventListener("click", function () {
-        var location = this.getAttribute("data-location");
-        if (typeof gtag !== "undefined") {
-          gtag("event", "download_click", {
-            event_category: "Descargas",
-            event_label: location,
-          });
-        }
-      });
     });
   });
 </script>

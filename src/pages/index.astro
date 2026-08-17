@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import InstagramEmbed from "../components/InstagramEmbed.astro";
+import MenuRegaloForm from "../components/MenuRegaloForm.astro";
 import { PLATO_PREMIUM_AMOUNT, PLATO_PREMIUM_CURRENCY } from "../lib/plato-config";
 
 const instagramReels = [
@@ -8,9 +9,6 @@ const instagramReels = [
   "https://www.instagram.com/embarazafit/reel/DMiLD1EN_Ss/",
   "https://www.instagram.com/embarazafit/reel/DMDfuzFNP-i/",
 ];
-
-const MAILRELAY_HOST = "embarazafit.ipzmarketing.com";
-const NEWSLETTER_TOKEN = "0-9bk82OxLw";
 ---
 
 <Layout title="Embarazafit | Proteína y mancuernas">
@@ -114,28 +112,11 @@ const NEWSLETTER_TOKEN = "0-9bk82OxLw";
           te puedes dar de baja cuando quieras.
         </p>
 
-        <form
-          class="hp-newsletter-form ipz-form"
-          data-host={MAILRELAY_HOST}
-          data-protocol="https"
-          data-token={NEWSLETTER_TOKEN}
-          method="post"
-        >
-          <div class="hp-newsletter-row">
-            <input
-              type="email"
-              name="email"
-              placeholder="Tu email aquí..."
-              required
-              autocomplete="email"
-              aria-label="Tu email"
-            />
-            <button type="submit">Unirme 💚</button>
-          </div>
-          <p class="hp-newsletter-footnote">
-            De regalo te llevas un menú para la diabetes gestacional.
-          </p>
-        </form>
+        <MenuRegaloForm
+          variant="homepage"
+          submitLabel="Unirme 💚"
+          footnote="De regalo te llevas un menú para la diabetes gestacional. Te llega al confirmar el email."
+        />
       </section>
 
       <!-- 4. Recursos -->
@@ -430,74 +411,6 @@ const NEWSLETTER_TOKEN = "0-9bk82OxLw";
     color: var(--dark-charcoal);
   }
 
-  .hp-newsletter-footnote {
-    font-size: 0.78rem;
-    color: var(--dark-charcoal);
-    opacity: 0.65;
-    margin: 32px 0 0;
-    padding: 0 0 0 18px;
-    width: 100%;
-    text-align: left;
-    line-height: 1.4;
-    white-space: nowrap;
-  }
-
-  .hp-newsletter-form {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0;
-    max-width: 560px;
-    margin: 28px auto 0;
-    width: 100%;
-  }
-
-  .hp-newsletter-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    width: 100%;
-  }
-
-  .hp-newsletter-form input[type="email"] {
-    flex: 1 1 220px;
-    min-width: 0;
-    width: auto;
-    padding: 14px 18px;
-    border: 2px solid rgba(50, 163, 152, 0.3);
-    border-radius: 50px;
-    font-family: "Poppins", sans-serif;
-    font-size: 1rem;
-    line-height: 1.4;
-    background: #fff;
-    color: var(--dark-charcoal);
-    outline: none;
-    transition: border-color 0.2s ease;
-    box-sizing: border-box;
-  }
-
-  .hp-newsletter-form input[type="email"]:focus {
-    border-color: var(--deep-teal);
-  }
-
-  .hp-newsletter-form button {
-    padding: 14px 24px;
-    flex-shrink: 0;
-    background-color: var(--deep-teal);
-    color: var(--pale-sand);
-    border: none;
-    border-radius: 50px;
-    font-family: "Poppins", sans-serif;
-    font-weight: bold;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    white-space: nowrap;
-  }
-
-  .hp-newsletter-form button:hover {
-    background-color: var(--rusty-red);
-  }
 
   /* Recursos */
   .hp-recursos {
@@ -748,23 +661,6 @@ const NEWSLETTER_TOKEN = "0-9bk82OxLw";
     .hp-about-photo {
       max-width: 320px;
       margin: 0 auto;
-    }
-
-    .hp-newsletter-row {
-      flex-direction: column;
-    }
-
-    .hp-newsletter-form input[type="email"] {
-      flex: none;
-      width: 100%;
-    }
-
-    .hp-newsletter-form button {
-      width: 100%;
-    }
-
-    .hp-newsletter-footnote {
-      white-space: normal;
     }
 
     .btn-card {

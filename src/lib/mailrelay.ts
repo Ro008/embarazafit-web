@@ -7,6 +7,26 @@ interface SendEmailOptions {
   html: string;
 }
 
+export interface SyncSubscriberOptions {
+  email: string;
+  name?: string;
+  groupIds?: number[];
+  status?: 'active' | 'inactive';
+}
+
+export type MailrelaySubscriber = {
+  id: number;
+  status?: string;
+  email?: string;
+};
+
+function mailrelayApi() {
+  return {
+    apiUrl: getRequiredEnv('MAILRELAY_API_URL').replace(/\/$/, ''),
+    apiKey: getRequiredEnv('MAILRELAY_API_KEY'),
+  };
+}
+
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -22,9 +42,91 @@ function isRetryableMailrelayError(err: unknown): boolean {
   );
 }
 
+/** Crea o actualiza un suscriptor (no pisa grupos existentes). */
+export async function syncMailrelaySubscriber(
+  options: SyncSubscriberOptions,
+): Promise<MailrelaySubscriber> {
+  const { apiUrl, apiKey } = mailrelayApi();
+  const payload: Record<string, unknown> = {
+    email: options.email,
+    status: options.status ?? 'inactive',
+    restore_if_deleted: false,
+    replace_groups: false,
+    locale: 'es',
+  };
+  if (options.name) payload.name = options.name;
+  if (options.groupIds && options.groupIds.length > 0) {
+    payload.group_ids = options.groupIds;
+  }
+
+  const response = await fetch(`${apiUrl}/api/v1/subscribers/sync`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-AUTH-TOKEN': apiKey,
+    },
+    body: JSON.stringify(payload),
+  });
+
+  const text = await response.text();
+  if (!response.ok) {
+    throw new Error(
+      `Mailrelay subscriber sync error (${response.status}): ${text}`,
+    );
+  }
+
+  let data: unknown;
+  try {
+    data = JSON.parse(text) as unknown;
+  } catch {
+    throw new Error('Mailrelay subscriber sync: respuesta no válida');
+  }
+
+  const subscriber = unwrapSubscriber(data);
+  return subscriber;
+}
+
+function unwrapSubscriber(data: unknown): MailrelaySubscriber {
+  if (!data || typeof data !== 'object') {
+    throw new Error('Mailrelay subscriber sync: respuesta no válida');
+  }
+  const obj = data as Record<string, unknown>;
+  const inner =
+    obj.data && typeof obj.data === 'object'
+      ? (obj.data as Record<string, unknown>)
+      : obj;
+  const id = Number(inner.id);
+  if (!Number.isInteger(id) || id <= 0) {
+    throw new Error('Mailrelay subscriber sync: falta el id del suscriptor');
+  }
+  return {
+    id,
+    status: typeof inner.status === 'string' ? inner.status : undefined,
+    email: typeof inner.email === 'string' ? inner.email : undefined,
+  };
+}
+
+/** Email de confirmación (doble opt-in). Solo para suscriptoras inactivas. */
+export async function resendMailrelayConfirmation(id: number): Promise<void> {
+  const { apiUrl, apiKey } = mailrelayApi();
+  const response = await fetch(
+    `${apiUrl}/api/v1/subscribers/${id}/resend_confirmation_email`,
+    {
+      method: 'POST',
+      headers: { 'X-AUTH-TOKEN': apiKey },
+    },
+  );
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(
+      `Mailrelay confirmation email error (${response.status}): ${text}`,
+    );
+  }
+}
+
 async function sendMailrelayEmailOnce(options: SendEmailOptions): Promise<void> {
-  const apiUrl = getRequiredEnv('MAILRELAY_API_URL').replace(/\/$/, '');
-  const apiKey = getRequiredEnv('MAILRELAY_API_KEY');
+  const { apiUrl, apiKey } = mailrelayApi();
   const fromEmail = getRequiredEnv('MAILRELAY_FROM_EMAIL');
   const fromName = getRequiredEnv('MAILRELAY_FROM_NAME');
 

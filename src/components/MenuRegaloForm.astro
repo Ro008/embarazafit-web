@@ -1,0 +1,328 @@
+---
+interface Props {
+  variant?: 'page' | 'homepage';
+  includeName?: boolean;
+  submitLabel: string;
+  footnote?: string;
+}
+
+const {
+  variant = 'page',
+  includeName = false,
+  submitLabel,
+  footnote,
+} = Astro.props;
+
+const formClass =
+  variant === 'homepage' ? 'hp-newsletter-form' : 'menu-regalo-form';
+---
+
+<form class={formClass} data-menu-form method="post" novalidate>
+  <input
+    type="text"
+    name="hp_field"
+    class="menu-hp"
+    tabindex="-1"
+    autocomplete="off"
+    aria-hidden="true"
+  />
+
+  {
+    includeName && (
+      <label class="menu-field">
+        <span>Tu nombre</span>
+        <input type="text" name="nombre" autocomplete="name" />
+      </label>
+    )
+  }
+
+  {
+    variant === 'homepage' ? (
+      <div class="hp-newsletter-row">
+        <input
+          type="email"
+          name="email"
+          placeholder="Tu email aquí..."
+          required
+          autocomplete="email"
+          aria-label="Tu email"
+        />
+        <button type="submit">{submitLabel}</button>
+      </div>
+    ) : (
+      <label class="menu-field">
+        <span>Tu email</span>
+        <input
+          type="email"
+          name="email"
+          required
+          autocomplete="email"
+          placeholder="tu@email.com"
+        />
+      </label>
+    )
+  }
+
+  <p class="menu-form-error" hidden role="alert"></p>
+
+  {variant === 'page' && <button type="submit" class="btn-descarga">{submitLabel}</button>}
+
+  {
+    footnote && variant === 'homepage' && (
+      <p class="hp-newsletter-footnote">{footnote}</p>
+    )
+  }
+  {
+    footnote && variant === 'page' && (
+      <p class="menu-form-footnote">{footnote}</p>
+    )
+  }
+
+  <div class="menu-form-success" hidden>
+    <p class="menu-form-success-title">¡Revisa tu email! 📬</p>
+    <p>
+      Te he enviado un enlace de confirmación. En cuanto lo pulses, te llega el
+      menú a esa misma bandeja. Si no lo ves, mira en spam.
+    </p>
+  </div>
+</form>
+
+<style>
+  .menu-hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .menu-regalo-form {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 8px;
+    max-width: 420px;
+  }
+
+  .menu-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-weight: 700;
+    color: var(--gunmetal);
+  }
+
+  .menu-field input {
+    padding: 12px 16px;
+    border: 2px solid rgba(50, 163, 152, 0.3);
+    border-radius: 12px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    background: #fff;
+    color: var(--dark-charcoal);
+  }
+
+  .menu-field input:focus {
+    outline: none;
+    border-color: var(--deep-teal);
+  }
+
+  .menu-form-error {
+    margin: 0;
+    padding: 10px 14px;
+    background-color: #fdecea;
+    border: 1px solid var(--vibrant-coral);
+    border-radius: 8px;
+    color: var(--dark-charcoal);
+    font-size: 0.95rem;
+  }
+
+  .menu-form-footnote {
+    margin: 0;
+    font-size: 0.82rem;
+    line-height: 1.4;
+    color: var(--dark-charcoal);
+    opacity: 0.7;
+  }
+
+  .menu-form-success {
+    padding: 16px;
+    background: #fff;
+    border: 2px solid var(--deep-teal);
+    border-radius: 10px;
+    text-align: center;
+  }
+
+  .menu-form-success-title {
+    font-weight: 700;
+    color: var(--deep-teal);
+    margin: 0 0 8px;
+  }
+
+  .hp-newsletter-form {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    max-width: 560px;
+    margin: 28px auto 0;
+    width: 100%;
+  }
+
+  .hp-newsletter-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .hp-newsletter-form input[type='email'] {
+    flex: 1 1 220px;
+    min-width: 0;
+    width: auto;
+    padding: 14px 18px;
+    border: 2px solid rgba(50, 163, 152, 0.3);
+    border-radius: 50px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    line-height: 1.4;
+    background: #fff;
+    color: var(--dark-charcoal);
+    outline: none;
+    transition: border-color 0.2s ease;
+    box-sizing: border-box;
+  }
+
+  .hp-newsletter-form input[type='email']:focus {
+    border-color: var(--deep-teal);
+  }
+
+  .hp-newsletter-form button[type='submit'] {
+    padding: 14px 24px;
+    flex-shrink: 0;
+    background-color: var(--deep-teal);
+    color: var(--pale-sand);
+    border: none;
+    border-radius: 50px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    white-space: nowrap;
+  }
+
+  .hp-newsletter-form button[type='submit']:hover {
+    background-color: var(--rusty-red);
+  }
+
+  .hp-newsletter-footnote {
+    font-size: 0.78rem;
+    color: var(--dark-charcoal);
+    opacity: 0.65;
+    margin: 32px 0 0;
+    padding: 0 0 0 18px;
+    width: 100%;
+    text-align: left;
+    line-height: 1.4;
+  }
+
+  .hp-newsletter-form .menu-form-error {
+    margin-top: 12px;
+  }
+
+  .hp-newsletter-form .menu-form-success {
+    margin-top: 16px;
+  }
+
+  @media (max-width: 768px) {
+    .hp-newsletter-row {
+      flex-direction: column;
+    }
+
+    .hp-newsletter-form input[type='email'] {
+      flex: none;
+      width: 100%;
+    }
+
+    .hp-newsletter-form button[type='submit'] {
+      width: 100%;
+    }
+  }
+</style>
+
+<script>
+  document.querySelectorAll('[data-menu-form]').forEach((formEl) => {
+    const form = formEl as HTMLFormElement;
+    if (form.dataset.bound === 'true') return;
+    form.dataset.bound = 'true';
+
+    const errorEl = form.querySelector('.menu-form-error') as HTMLElement | null;
+    const successEl = form.querySelector(
+      '.menu-form-success',
+    ) as HTMLElement | null;
+    const submitBtn = form.querySelector(
+      'button[type="submit"]',
+    ) as HTMLButtonElement | null;
+    const defaultLabel = submitBtn?.textContent ?? '';
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (errorEl) errorEl.hidden = true;
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Enviando…';
+      }
+
+      const data = Object.fromEntries(new FormData(form).entries());
+
+      try {
+        const res = await fetch('/api/menu-regalo', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+        const body = (await res.json().catch(() => ({}))) as {
+          error?: string;
+        };
+
+        if (!res.ok) {
+          throw new Error(body.error || 'No se pudo enviar. Inténtalo de nuevo.');
+        }
+
+        Array.from(form.children).forEach((child) => {
+          if (child !== successEl) {
+            (child as HTMLElement).hidden = true;
+          }
+        });
+        if (successEl) successEl.hidden = false;
+
+        const gtagFn = (
+          window as Window & { gtag?: (...args: unknown[]) => void }
+        ).gtag;
+        if (typeof gtagFn === 'function') {
+          gtagFn('event', 'download_click', {
+            event_category: 'Descargas',
+            event_label: 'menu_regalo',
+          });
+        }
+      } catch (err) {
+        if (errorEl) {
+          errorEl.textContent =
+            err instanceof Error
+              ? err.message
+              : 'No se pudo enviar. Inténtalo de nuevo.';
+          errorEl.hidden = false;
+        }
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = defaultLabel;
+        }
+      }
+    });
+  });
+</script>
