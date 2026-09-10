@@ -82,7 +82,7 @@ Es típico que las visitas traigan cajas de bombones o dulces al hospital. **Es 
 
 No necesitas pesar la comida eternamente, pero sí mantener los **pilares que aprendiste** durante el diagnóstico:
 
-1. **Mantén la “escolta”:** no vuelvas a comer carbohidratos solos. Acompaña siempre tu pan o fruta con **grasas saludables o proteínas** (nueces, queso, aguacate) para evitar picos de fatiga.
+1. **Mantén la “escolta”:** no vuelvas a comer carbohidratos solos. Acompaña siempre tu pan o fruta con **grasas saludables o proteínas** (nueces, queso, aguacate) para evitar picos de fatiga. El mismo criterio del embarazo sigue valiendo: [cómo escoltar los carbohidratos](/blog/peligro-quitar-carbohidratos-diabetes-gestacional) y [armar el plato a ojo](/blog/guia-visual-platos-diabetes-gestacional).
 2. **Actividad física:** no hace falta ir al gimnasio tras parir, pero **mantenerte activa** (caminar con el carrito) ayuda a que tus músculos consuman glucosa sin depender tanto de la insulina.
 3. **Huye de los “falsos amigos”:** no caigas en los productos tipo Special K o postres lácteos que se venden como saludables pero están cargados de azúcar y aditivos.
 4. **Usa el vinagre y la canela:** sigue usando estos “hacks” en tus comidas y yogures para mejorar la sensibilidad a la insulina de forma natural.

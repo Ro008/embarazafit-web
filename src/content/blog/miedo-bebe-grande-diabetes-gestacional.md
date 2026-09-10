@@ -1,6 +1,6 @@
 ---
-title: '¿Miedo a un "bebé grande"? La verdad sobre el peso y la diabetes gestacional'
-description: Qué dice la evidencia sobre el peso del bebé con diabetes gestacional controlada, el margen de error de la ecografía y por qué no hay que inducir por miedo.
+title: "¿Bebé grande por diabetes gestacional? Mitos, riesgos y realidades"
+description: "Miedo a un bebé grande con diabetes gestacional: qué dice la evidencia, por qué la ecografía falla ±500 g y cuándo no hace falta inducir."
 pubDate: 2026-07-18T14:00:00
 ---
 
@@ -42,7 +42,7 @@ A menudo se asusta con la **distocia de hombros** (que el bebé se atasque al sa
 No tienes que “tratar” al bebé; tienes que gestionar tu glucosa. Si tus niveles están bien, tu bebé crecerá de forma proporcionada.
 
 - **Mide y anota:** la única forma de tener el control es medir tu glucosa **4 veces al día** (en ayunas y una hora después de las comidas). Esto te dará la paz mental de saber que lo estás haciendo bien.
-- **Escolta tus carbohidratos:** no comas pasta o pan solos. Acompáñalos siempre con **fibra (verduras), grasas saludables (aguacate, nueces) y proteínas (pollo, pescado, huevos)**. Esto actúa como un freno para que el azúcar no pase de golpe al bebé.
+- **Escolta tus carbohidratos:** no comas pasta o pan solos. Acompáñalos siempre con **fibra (verduras), grasas saludables (aguacate, nueces) y proteínas (pollo, pescado, huevos)**. Esto actúa como un freno para que el azúcar no pase de golpe al bebé. Si quieres verlo en el plato, aquí tienes la [guía visual para armar tus comidas](/blog/guia-visual-platos-diabetes-gestacional).
 - **Muévete tras comer:** un paseo de 15–20 minutos después de las comidas principales ayuda a que tus músculos consuman esa glucosa sobrante.
 - **El truco del vinagre:** añadir vinagre o limón a tus platos ayuda a reducir el impacto del azúcar en tu sangre.
 

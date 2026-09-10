@@ -6,7 +6,7 @@ pubDate: 2026-07-18T10:00:00
 
 Te acaban de dar el diagnóstico y es normal que sientas que la comida se ha vuelto tu enemiga. Pero aquí va la primera dosis de realidad: **no estás enferma**, tu cuerpo simplemente está pasando por una resistencia hormonal temporal y necesita un manual de instrucciones diferente para gestionar la energía.
 
-La clave no es dejar de comer carbohidratos, sino aprender a “escoltarlos” para que no disparen tu azúcar. Aquí tienes la guía práctica para que vuelvas a disfrutar de tu plato sin temblar cada vez que te pinchas el dedo.
+La clave no es dejar de comer carbohidratos, sino aprender a “escoltarlos” para que no disparen tu azúcar (si te tienta el “hachazo” radical, lee antes [el peligro de quitarlos del todo](/blog/peligro-quitar-carbohidratos-diabetes-gestacional)). Aquí tienes la guía práctica para que vuelvas a disfrutar de tu plato sin temblar cada vez que te pinchas el dedo.
 
 ## 1. La “escolta”: nunca comas un carbohidrato solo
 
