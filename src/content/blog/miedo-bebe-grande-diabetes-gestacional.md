@@ -1,6 +1,6 @@
 ---
-title: '¿Bebé grande por diabetes gestacional? Mitos, riesgos y realidades'
-description: Miedo a un bebé grande con diabetes gestacional: qué dice la evidencia, por qué la ecografía falla ±500 g y cuándo no hace falta inducir.
+title: "¿Bebé grande por diabetes gestacional? Mitos, riesgos y realidades"
+description: "Miedo a un bebé grande con diabetes gestacional: qué dice la evidencia, por qué la ecografía falla ±500 g y cuándo no hace falta inducir."
 pubDate: 2026-07-18T14:00:00
 ---
 
