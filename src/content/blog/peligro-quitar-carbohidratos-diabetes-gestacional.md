@@ -67,7 +67,7 @@ El error número uno es pensar que el pan, el arroz o la fruta son ahora “vene
 
 Incluso un carbohidrato saludable puede darte un susto en el glucómetro si lo comes solo. Un trozo de fruta a media mañana o un plato de pasta integral sin nada más son autopistas directas hacia un pico de azúcar.
 
-- **La solución: “escolta” tus carbohidratos.** Cada vez que comas algo que contenga azúcar o almidón, acompáñalo siempre de **proteína, grasas saludables o mucha fibra**. Estos elementos actúan como un freno que ralentiza la entrada de glucosa en tu sangre.
+- **La solución: “escolta” tus carbohidratos.** Cada vez que comas algo que contenga azúcar o almidón, acompáñalo siempre de **proteína, grasas saludables o mucha fibra**. Estos elementos actúan como un freno que ralentiza la entrada de glucosa en tu sangre. En la [guía visual de platos](/blog/guia-visual-platos-diabetes-gestacional) lo ves en proporción: 50 % verdura, 25 % proteína, 25 % carbohidrato.
 - **Ejemplo práctico:** si vas a comer una manzana, no la comas sola; añádele un puñado de nueces o almendras.
 
 ## Error 3: obsesionarse con las cantidades y olvidar la cocina
