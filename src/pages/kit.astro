@@ -1,0 +1,195 @@
+---
+import Layout from '../layouts/Layout.astro';
+import {
+  KIT_CHECKOUT_URL,
+  KIT_DISCLAIMER,
+  KIT_PRICE_LAUNCH,
+  KIT_PRICE_REGULAR,
+} from '../lib/kit-config';
+
+const ready = KIT_CHECKOUT_URL.length > 0;
+---
+
+<Layout
+  title="Kit Primera Semana para diabetes gestacional | Embarazafit"
+  description="Plato visual, 4 semanas de menús con lista de la compra, registro de glucosa y respuestas a las dudas más comunes. Información de una madre que pasó por lo mismo, no un plan médico."
+>
+  <style>
+    :global(main) {
+      max-width: 720px;
+      padding: 0 16px;
+    }
+    .kit {
+      padding: 32px 0 64px;
+      color: #2e3033;
+    }
+    .kit-aviso {
+      margin: 0 0 28px;
+      padding: 12px 16px;
+      font-size: 0.85rem;
+      line-height: 1.55;
+      background: #32a39812;
+      border-left: 4px solid #32a398;
+      border-radius: 8px;
+    }
+    .kit-label {
+      display: inline-block;
+      margin-bottom: 10px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #32a398;
+      background: #32a39815;
+      border-radius: 20px;
+      padding: 3px 14px;
+    }
+    .kit h1 {
+      margin: 0 0 12px;
+      font-size: clamp(1.6rem, 5vw, 2.2rem);
+      line-height: 1.2;
+    }
+    .kit h2 {
+      margin: 40px 0 12px;
+      font-size: 1.3rem;
+    }
+    .kit p,
+    .kit li {
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+    .kit-sub {
+      color: #2e303399;
+      font-size: 1.05rem;
+    }
+    .kit ul {
+      padding-left: 1.2rem;
+    }
+    .kit li {
+      margin-bottom: 8px;
+    }
+    .kit-precio {
+      margin-top: 40px;
+      padding: 24px;
+      text-align: center;
+      border: 2px solid #32a398;
+      border-radius: 16px;
+    }
+    .kit-precio__old {
+      color: #2e303370;
+      text-decoration: line-through;
+      font-size: 1.1rem;
+    }
+    .kit-precio__now {
+      display: block;
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: #32a398;
+    }
+    .kit-precio small {
+      display: block;
+      margin: 4px 0 16px;
+      color: #2e303399;
+    }
+    .kit-btn {
+      display: inline-block;
+      padding: 14px 28px;
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: #fff;
+      background: #32a398;
+      border-radius: 999px;
+      text-decoration: none;
+    }
+    .kit-btn[aria-disabled='true'] {
+      background: #b9c4c2;
+      cursor: not-allowed;
+    }
+    .kit-precio .kit-aviso {
+      margin: 20px 0 0;
+      text-align: left;
+    }
+    .kit details {
+      margin-bottom: 10px;
+      padding: 12px 16px;
+      border: 1px solid #2e303322;
+      border-radius: 10px;
+    }
+    .kit summary {
+      cursor: pointer;
+      font-weight: 700;
+    }
+    .kit details p {
+      margin: 10px 0 0;
+    }
+  </style>
+
+  <article class="kit">
+    <p class="kit-aviso" role="note"><strong>Aviso:</strong> {KIT_DISCLAIMER}</p>
+
+    <span class="kit-label">Kit Primera Semana</span>
+    <h1>Acabas de recibir el diagnóstico de diabetes gestacional. Empieza por aquí.</h1>
+    <p class="kit-sub">
+      Menús, plato visual y registro de glucosa para tus primeras semanas, hechos por una madre
+      que pasó por lo mismo, no por una nutricionista. No sustituyen el seguimiento médico.
+    </p>
+
+    <h2>El problema</h2>
+    <p>
+      Te lo dicen en la consulta, sales con un folleto y llegas a casa sin saber qué cenar esta
+      noche. Todo el mundo opina, internet te asusta y el glucómetro te da números que no
+      entiendes. A mí me pasó igual. Por eso hice esto.
+    </p>
+
+    <h2>Qué te llevas</h2>
+    <ul>
+      <li><strong>El Plato Interactivo:</strong> arma tu comida con 50 % verduras, 25 % proteína y 25 % carbohidratos.</li>
+      <li><strong>4 semanas de menús</strong> con su lista de la compra.</li>
+      <li><strong>Un registro de glucosa</strong> para llevar a tu consulta, en PDF.</li>
+      <li><strong>Las 15 dudas</strong> que más me habéis preguntado, respondidas sin dramas.</li>
+    </ul>
+
+    <h2>Quién lo hace</h2>
+    <p>
+      Soy Rocío. No soy médico, ni nutricionista, ni entrenadora: soy programadora, madre y
+      alguien que tuvo diabetes gestacional. Lo que cuento viene de mi experiencia y de la
+      ciencia que cito en <a href="/fuentes">Fuentes</a>. Por eso no te doy un plan personal ni
+      pautas médicas: te doy información y herramientas, y las decisiones sobre tu glucosa, tu
+      alimentación y tu tratamiento las tomas con tu equipo médico.
+    </p>
+
+    <section class="kit-precio" aria-label="Precio">
+      <span class="kit-precio__old">{KIT_PRICE_REGULAR}</span>
+      <span class="kit-precio__now">{KIT_PRICE_LAUNCH}</span>
+      <small>Pago único. Precio de lanzamiento esta semana. Acceso inmediato tras el pago.</small>
+      {
+        ready ? (
+          <a class="kit-btn" href={KIT_CHECKOUT_URL}>Quiero mi kit por {KIT_PRICE_LAUNCH}</a>
+        ) : (
+          <a class="kit-btn" aria-disabled="true" role="link">Disponible muy pronto</a>
+        )
+      }
+    </section>
+
+    <h2>Garantía</h2>
+    <p>Si en 14 días sientes que no te ha servido, escríbeme y te devuelvo el dinero.</p>
+
+    <h2>Preguntas frecuentes</h2>
+    <details>
+      <summary>¿Sirve si me van a poner insulina?</summary>
+      <p>Sí, el registro y el plato siguen siendo útiles. La pauta la marca tu médico.</p>
+    </details>
+    <details>
+      <summary>¿Es un plan personalizado?</summary>
+      <p>
+        No. No soy nutricionista y esto no es un plan personal ni sustituye tu seguimiento
+        médico. Si quieres un acompañamiento individual, mira el <a href="/consulta-nutricionista">programa CÍCLICAS con María</a>.
+      </p>
+    </details>
+    <details>
+      <summary>¿Cómo accedo?</summary>
+      <p>Con el email de la compra, desde cualquier dispositivo.</p>
+    </details>
+
+  </article>
+</Layout>
