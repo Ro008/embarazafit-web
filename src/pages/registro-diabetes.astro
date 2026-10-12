@@ -16,6 +16,8 @@ const disclaimer =
     <meta name="apple-mobile-web-app-title" content="Mis mediciones" />
     <title>Mis mediciones · EmbarazaFit</title>
     <link rel="icon" href="/favicon.svg" />
+    <link rel="manifest" href="/registro.webmanifest" />
+    <link rel="apple-touch-icon" href="/registro-apple-touch-icon.png" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" />
     <style is:global>
       :root { --sand:#f7f4ef; --teal:#32a398; --coral:#f76f5e; --rose:#d2b7bd; --ink:#2e3033; }
@@ -72,6 +74,11 @@ const disclaimer =
         <button class="btn sec" id="export">Guardar copia de seguridad</button>
         <button class="btn sec" id="import">Recuperar copia de seguridad</button>
         <input type="file" id="file" accept="application/json" hidden />
+      </div>
+      <div class="card" id="install" hidden>
+        <strong>Ten esta página siempre a mano</strong>
+        <p class="small" id="install-text"></p>
+        <button class="btn full" id="install-btn" hidden>Añadir a la pantalla de inicio</button>
       </div>
       <p class="small">
         Tus datos se guardan solo en este móvil, en este navegador. No los vemos ni los
@@ -176,6 +183,27 @@ const disclaimer =
           };
           rd.readAsText(f);
         };
+
+        // Acceso directo tipo app
+        var standalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+        if (!standalone) {
+          var box = document.getElementById('install'), txt = document.getElementById('install-text'), btn = document.getElementById('install-btn');
+          var ua = navigator.userAgent, ios = /iPhone|iPad|iPod/.test(ua);
+          var deferred = null;
+          window.addEventListener('beforeinstallprompt', function (e) {
+            e.preventDefault(); deferred = e; btn.hidden = false;
+            txt.textContent = 'Pulsa el botón y tendrás un icono en tu móvil que abre tus mediciones, como una app.';
+            box.hidden = false;
+          });
+          btn.onclick = function () { if (deferred) { deferred.prompt(); deferred = null; btn.hidden = true; } };
+          if (ios) {
+            txt.textContent = 'En Safari, toca el botón Compartir (el cuadrado con la flecha) y elige «Añadir a pantalla de inicio». Tendrás un icono que abre tus mediciones, como una app.';
+            box.hidden = false;
+          } else {
+            txt.textContent = txt.textContent || 'En el menú del navegador (los tres puntos) elige «Añadir a pantalla de inicio» o «Instalar aplicación».';
+            box.hidden = false;
+          }
+        }
 
         render();
       })();
