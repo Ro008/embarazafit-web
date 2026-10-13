@@ -33,9 +33,10 @@ const disclaimer =
       .card { background:#fff; border-radius:14px; padding:14px; margin:12px 0; box-shadow:0 1px 3px rgba(0,0,0,.06); }
       .card .top { display:flex; justify-content:space-between; align-items:center; gap:8px; }
       .card input[type=date] { font:inherit; font-weight:600; border:0; background:transparent; color:var(--ink); padding:0; }
-      .grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px; }
+      .grid { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:10px; margin-top:12px; }
+      .grid > div { min-width:0; }
       label { font-size:.75rem; color:#5a5d61; display:block; }
-      input[type=number], textarea { width:100%; font:inherit; font-size:1rem; padding:10px; border:1.5px solid var(--rose); border-radius:10px; background:var(--sand); color:var(--ink); }
+      input[type=text], textarea { width:100%; font:inherit; font-size:1rem; padding:10px; border:1.5px solid var(--rose); border-radius:10px; background:var(--sand); color:var(--ink); }
       input:focus, textarea:focus { outline:2px solid var(--teal); border-color:var(--teal); }
       textarea { resize:vertical; min-height:64px; }
       details { margin-top:12px; }
@@ -46,8 +47,9 @@ const disclaimer =
       .empty { text-align:center; color:#5a5d61; padding:24px 0; }
       #print-view { display:none; }
       @media print {
+        @page { margin: 14mm; }
         body { background:#fff; }
-        .wrap > *:not(#print-view) { display:none !important; }
+        .screen { display:none !important; }
         #print-view { display:block; }
         #print-view h1 { font-size:18pt; margin:0 0 4pt; }
         #print-view table { width:100%; border-collapse:collapse; font-size:9pt; }
@@ -58,7 +60,7 @@ const disclaimer =
     </style>
   </head>
   <body>
-    <div class="wrap">
+    <div class="wrap screen">
       <header>
         <h1>Mis mediciones</h1>
         <p>Anota tus glucemias del día y llévalas a la consulta.</p>
@@ -71,7 +73,8 @@ const disclaimer =
       <div id="list"></div>
 
       <div class="actions">
-        <button class="btn" id="print">Preparar para la consulta (imprimir / PDF)</button>
+        <button class="btn" id="print">Preparar para la consulta (PDF)</button>
+        <p class="small" style="margin:-2px 0 0">Se abrirá la pantalla de impresión: en «Elige una impresora» selecciona <strong>Guardar como PDF</strong> y podrás enseñarlo o enviarlo desde el móvil.</p>
         <button class="btn sec" id="export">Guardar copia de seguridad</button>
         <button class="btn sec" id="import">Recuperar copia de seguridad</button>
         <input type="file" id="file" accept="application/json" hidden />
@@ -90,7 +93,7 @@ const disclaimer =
       <p class="small">Valores en mg/dL.</p>
     </div>
 
-    <section id="print-view" class="wrap">
+    <section id="print-view">
       <h1>Registro de glucosa</h1>
       <table>
         <thead>
