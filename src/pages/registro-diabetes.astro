@@ -1,0 +1,245 @@
+---
+// Registro de mediciones de glucosa. Los datos se guardan SOLO en el móvil de
+// cada usuaria (localStorage): no se envía nada a ningún servidor.
+const disclaimer =
+  'No soy nutricionista ni médico. Esta herramienta es solo para anotar y llevar tus mediciones a la consulta: no sustituye el seguimiento médico. Mide cuando y como te indique tu equipo sanitario.';
+---
+
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#32a398" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Mis mediciones" />
+    <title>Mis mediciones · EmbarazaFit</title>
+    <link rel="icon" href="/favicon.svg" />
+    <link rel="manifest" href="/registro.webmanifest" />
+    <link rel="apple-touch-icon" href="/registro-apple-touch-icon.png" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" />
+    <style is:global>
+      :root { --sand:#f7f4ef; --teal:#32a398; --coral:#f76f5e; --rose:#d2b7bd; --ink:#2e3033; }
+      * { box-sizing: border-box; }
+      body { margin:0; background:var(--sand); color:var(--ink); font-family:'Poppins',system-ui,sans-serif; line-height:1.5; }
+      .wrap { max-width:640px; margin:0 auto; padding:16px; }
+      header h1 { margin:8px 0 2px; font-size:1.5rem; }
+      header p { margin:0; color:#5a5d61; font-size:.9rem; }
+      .aviso { background:#fff; border-left:4px solid var(--coral); padding:10px 12px; border-radius:8px; font-size:.8rem; margin:14px 0; }
+      .btn { font:inherit; font-weight:600; border:0; border-radius:999px; padding:12px 18px; cursor:pointer; background:var(--teal); color:#fff; }
+      .btn.sec { background:#fff; color:var(--ink); border:1.5px solid var(--rose); }
+      .btn.full { width:100%; }
+      .card { background:#fff; border-radius:14px; padding:14px; margin:12px 0; box-shadow:0 1px 3px rgba(0,0,0,.06); }
+      .card .top { display:flex; justify-content:space-between; align-items:center; gap:8px; }
+      .card input[type=date] { font:inherit; font-weight:600; border:0; background:transparent; color:var(--ink); padding:0; }
+      .grid { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:10px; margin-top:12px; }
+      .grid > div { min-width:0; }
+      label { font-size:.75rem; color:#5a5d61; display:block; }
+      input[type=text], textarea { width:100%; font:inherit; font-size:1rem; padding:10px; border:1.5px solid var(--rose); border-radius:10px; background:var(--sand); color:var(--ink); }
+      input:focus, textarea:focus { outline:2px solid var(--teal); border-color:var(--teal); }
+      textarea { resize:vertical; min-height:64px; }
+      details { margin-top:12px; }
+      summary { cursor:pointer; font-size:.85rem; color:var(--teal); font-weight:600; }
+      .del { background:none; border:0; color:#8a8d91; font-size:.8rem; cursor:pointer; text-decoration:underline; }
+      .actions { display:grid; gap:10px; margin:18px 0; }
+      .small { font-size:.78rem; color:#5a5d61; }
+      .empty { text-align:center; color:#5a5d61; padding:24px 0; }
+      #print-view { display:none; }
+      @media print {
+        @page { margin: 14mm; }
+        body { background:#fff; }
+        .screen { display:none !important; }
+        #print-view { display:block; }
+        #print-view h1 { font-size:18pt; margin:0 0 4pt; }
+        #print-view table { width:100%; border-collapse:collapse; font-size:9pt; }
+        #print-view th, #print-view td { border:1px solid #999; padding:4pt 5pt; text-align:left; vertical-align:top; }
+        #print-view th { background:#eee; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap screen">
+      <header>
+        <h1>Mis mediciones</h1>
+        <p>Anota tus glucemias del día y llévalas a la consulta.</p>
+      </header>
+
+      <p class="aviso">{disclaimer}</p>
+
+      <div id="toast" role="alert" hidden style="position:fixed;left:16px;right:16px;bottom:16px;max-width:608px;margin:0 auto;background:#2e3033;color:#fff;padding:12px 14px;border-radius:12px;font-size:.85rem;z-index:10"></div>
+      <button class="btn full" id="add">+ Añadir día</button>
+      <div id="list"></div>
+
+      <div class="actions">
+        <button class="btn" id="print">Preparar para la consulta (PDF)</button>
+        <p class="small" style="margin:-2px 0 0">Se abrirá la pantalla de impresión: en «Elige una impresora» selecciona <strong>Guardar como PDF</strong> y podrás enseñarlo o enviarlo desde el móvil.</p>
+        <button class="btn sec" id="export">Guardar copia de seguridad</button>
+        <button class="btn sec" id="import">Recuperar copia de seguridad</button>
+        <input type="file" id="file" accept="application/json" hidden />
+      </div>
+      <div class="card" id="install" hidden>
+        <strong>Ten esta página siempre a mano</strong>
+        <p class="small" id="install-text"></p>
+        <button class="btn full" id="install-btn" hidden>Añadir a la pantalla de inicio</button>
+      </div>
+      <p class="small">
+        Tus datos se guardan solo en este móvil, en este navegador. No los vemos ni los
+        enviamos a ningún sitio. Si borras los datos del navegador o cambias de móvil
+        los perderás, así que guarda una copia de vez en cuando. Para tenerla a mano,
+        añade esta página a la pantalla de inicio.
+      </p>
+      <p class="small">Valores en mg/dL.</p>
+    </div>
+
+    <section id="print-view">
+      <h1>Registro de glucosa</h1>
+      <table>
+        <thead>
+          <tr><th>Fecha</th><th>En ayunas</th><th>1 h tras desayuno</th><th>1 h tras comida</th><th>1 h tras cena</th><th>Comidas / notas</th></tr>
+        </thead>
+        <tbody id="print-body"></tbody>
+      </table>
+    </section>
+
+    <script is:inline>
+      (function () {
+        var KEY = 'embarazafit_registro_v1';
+        var FIELDS = [
+          ['ayunas', 'En ayunas'],
+          ['desayuno', '1 h tras desayuno'],
+          ['comida', '1 h tras comida'],
+          ['cena', '1 h tras cena'],
+        ];
+        var rows = [];
+        try { rows = JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) { rows = []; }
+        if (!Array.isArray(rows)) rows = [];
+        // Limpia valores guardados que no sean plausibles (p. ej. de pruebas anteriores)
+        rows.forEach(function (r) {
+          ['ayunas', 'desayuno', 'comida', 'cena'].forEach(function (k) {
+            var n = parseInt(r[k], 10);
+            if (r[k] !== '' && r[k] != null && (!/^\d{1,3}$/.test(String(r[k])) || n < 20 || n > 600)) r[k] = '';
+          });
+        });
+
+        function save() { try { localStorage.setItem(KEY, JSON.stringify(rows)); } catch (e) {} }
+        function today() {
+          var d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+          return d.toISOString().slice(0, 10);
+        }
+        function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+        function fmt(d) { var p = (d || '').split('-'); return p.length === 3 ? p[2] + '/' + p[1] + '/' + p[0] : d; }
+
+        function render() {
+          var list = document.getElementById('list');
+          var sorted = rows.slice().sort(function (a, b) { return a.fecha < b.fecha ? 1 : -1; });
+          if (!sorted.length) { list.innerHTML = '<p class="empty">Aún no hay mediciones. Pulsa «Añadir día» para empezar.</p>'; }
+          else {
+            list.innerHTML = sorted.map(function (r) {
+              var inputs = FIELDS.map(function (f) {
+                return '<div><label>' + f[1] + '</label><input type="text" inputmode="numeric" maxlength="3" autocomplete="off" data-num="1" data-id="' + r.id + '" data-k="' + f[0] + '" value="' + esc(r[f[0]]) + '" /></div>';
+              }).join('');
+              return '<div class="card"><div class="top"><input type="date" max="' + today() + '" data-id="' + r.id + '" data-k="fecha" value="' + esc(r.fecha) + '" /><button class="del" data-del="' + r.id + '">Borrar</button></div>' +
+                '<div class="grid">' + inputs + '</div>' +
+                '<details' + (r.notas ? ' open' : '') + '><summary>Comidas y notas</summary><textarea data-id="' + r.id + '" data-k="notas" placeholder="Qué comiste, sueño, estrés, paseo…">' + esc(r.notas) + '</textarea></details></div>';
+            }).join('');
+          }
+        }
+
+        document.getElementById('add').onclick = function () {
+          var t = today();
+          var exists = rows.some(function (r) { return r.fecha === t; });
+          if (exists && !confirm('Ya hay un día con la fecha de hoy. ¿Añadir otro igualmente?')) return;
+          rows.push({ id: String(Date.now()), fecha: t, ayunas: '', desayuno: '', comida: '', cena: '', notas: '' });
+          save(); render();
+        };
+
+        var MIN = 20, MAX = 600;
+        var tt;
+        function toast(msg) {
+          var t = document.getElementById('toast'); t.textContent = msg; t.hidden = false;
+          clearTimeout(tt); tt = setTimeout(function () { t.hidden = true; }, 4000);
+        }
+        document.getElementById('list').addEventListener('input', function (e) {
+          var el = e.target, id = el.getAttribute('data-id'); if (!id) return;
+          if (el.getAttribute('data-num')) {
+            var clean = el.value.replace(/\D/g, '').slice(0, 3);
+            if (clean !== el.value) el.value = clean;
+            el.style.borderColor = '';
+            var n = parseInt(clean, 10);
+            if (clean && (n < MIN || n > MAX)) return; // no se guarda mientras no sea plausible
+          }
+          if (el.getAttribute('data-k') === 'fecha' && el.value > today()) return;
+          var r = rows.find(function (x) { return x.id === id; }); if (!r) return;
+          r[el.getAttribute('data-k')] = el.value; save();
+        });
+        document.getElementById('list').addEventListener('focusout', function (e) {
+          var el = e.target; if (!el.getAttribute || !el.getAttribute('data-num')) return;
+          var n = parseInt(el.value, 10);
+          if (el.value && (n < MIN || n > MAX)) {
+            var id = el.getAttribute('data-id'), r = rows.find(function (x) { return x.id === id; });
+            el.value = r ? r[el.getAttribute('data-k')] : '';
+            el.style.borderColor = '#f76f5e';
+            toast('Ese valor no parece correcto. Escribe un número entre ' + MIN + ' y ' + MAX + ' mg/dL.');
+          }
+        });
+        document.getElementById('list').addEventListener('click', function (e) {
+          var id = e.target.getAttribute && e.target.getAttribute('data-del'); if (!id) return;
+          if (!confirm('¿Borrar este día?')) return;
+          rows = rows.filter(function (x) { return x.id !== id; }); save(); render();
+        });
+
+        document.getElementById('print').onclick = function () {
+          var sorted = rows.slice().sort(function (a, b) { return a.fecha > b.fecha ? 1 : -1; });
+          document.getElementById('print-body').innerHTML = sorted.map(function (r) {
+            return '<tr><td>' + fmt(r.fecha) + '</td>' + FIELDS.map(function (f) { return '<td>' + esc(r[f[0]]) + '</td>'; }).join('') + '<td>' + esc(r.notas) + '</td></tr>';
+          }).join('');
+          window.print();
+        };
+
+        document.getElementById('export').onclick = function () {
+          var blob = new Blob([JSON.stringify(rows)], { type: 'application/json' });
+          var a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+          a.download = 'mis-mediciones-' + today() + '.json'; a.click();
+        };
+        document.getElementById('import').onclick = function () { document.getElementById('file').click(); };
+        document.getElementById('file').onchange = function (e) {
+          var f = e.target.files[0]; if (!f) return;
+          var rd = new FileReader();
+          rd.onload = function () {
+            try {
+              var data = JSON.parse(rd.result);
+              if (!Array.isArray(data)) throw new Error('formato');
+              if (!confirm('Esto reemplazará lo que hay ahora en este móvil. ¿Continuar?')) return;
+              rows = data; save(); render();
+            } catch (err) { alert('No he podido leer ese archivo.'); }
+          };
+          rd.readAsText(f);
+        };
+
+        // Acceso directo tipo app
+        var standalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+        if (!standalone) {
+          var box = document.getElementById('install'), txt = document.getElementById('install-text'), btn = document.getElementById('install-btn');
+          var ua = navigator.userAgent, ios = /iPhone|iPad|iPod/.test(ua);
+          var deferred = null;
+          window.addEventListener('beforeinstallprompt', function (e) {
+            e.preventDefault(); deferred = e; btn.hidden = false;
+            txt.textContent = 'Pulsa el botón y tendrás un icono en tu móvil que abre tus mediciones, como una app.';
+            box.hidden = false;
+          });
+          btn.onclick = function () { if (deferred) { deferred.prompt(); deferred = null; btn.hidden = true; } };
+          if (ios) {
+            txt.textContent = 'En Safari, toca el botón Compartir (el cuadrado con la flecha) y elige «Añadir a pantalla de inicio». Tendrás un icono que abre tus mediciones, como una app.';
+            box.hidden = false;
+          } else {
+            txt.textContent = txt.textContent || 'En el menú del navegador (los tres puntos) elige «Añadir a pantalla de inicio» o «Instalar aplicación».';
+            box.hidden = false;
+          }
+        }
+
+        render();
+      })();
+    </script>
+  </body>
+</html>
