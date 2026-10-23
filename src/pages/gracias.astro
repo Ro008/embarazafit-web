@@ -1,0 +1,85 @@
+---
+// Página de confirmación de la encuesta de un clic de la newsletter.
+// El parámetro ?r= solo sirve para que Mailrelay cuente los clics por opción.
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>¡Gracias! | Embarazafit</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f7f4ef;
+        color: #2e3033;
+        font-family: "Poppins", system-ui, sans-serif;
+        padding: 24px;
+        box-sizing: border-box;
+      }
+      main {
+        max-width: 460px;
+        text-align: center;
+      }
+      h1 {
+        font-size: 1.6rem;
+        margin: 0 0 12px;
+        color: #32a398;
+      }
+      p {
+        line-height: 1.6;
+        margin: 0 0 16px;
+      }
+      a.btn {
+        display: inline-block;
+        background: #32a398;
+        color: #fff;
+        text-decoration: none;
+        padding: 12px 20px;
+        border-radius: 10px;
+        font-weight: 600;
+      }
+      .extra {
+        display: none;
+        margin-top: 8px;
+      }
+      .extra a {
+        color: #f76f5e;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>¡Anotado, gracias! 💛</h1>
+      <p>
+        Tu respuesta me ayuda a decidir de qué escribir y qué preparar. No tienes
+        que hacer nada más.
+      </p>
+      <p class="extra" id="extra-dg">
+        Por si te sirve mientras tanto:
+        <a href="/registro-diabetes">mi registro de glucosa gratuito</a> para
+        llevar tus mediciones desde el móvil.
+      </p>
+      <a class="btn" href="/">Ir a EmbarazaFit</a>
+    </main>
+    <script is:inline>
+      try {
+        var r = new URLSearchParams(location.search).get("r");
+        if (r === "dg") document.getElementById("extra-dg").style.display = "block";
+      } catch (e) {}
+    </script>
+  </body>
+</html>
